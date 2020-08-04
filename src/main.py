@@ -35,6 +35,7 @@ form_class = uic.loadUiType(ui_file)[0]
 
 command_model = QStandardItemModel()
 
+
 class WindowClass(QMainWindow, form_class):
 
     def __init__(self):
@@ -91,6 +92,9 @@ class WindowClass(QMainWindow, form_class):
 
         self.btn_test_start.clicked.connect(self.func_test_start_clicked)
 
+        # initialize
+        self.func_level_command_interface()
+        self.func_color_command_interface()
     # menubar functions
 
     def func_import_device(self):
@@ -141,15 +145,58 @@ class WindowClass(QMainWindow, form_class):
             except Exception:
                 QMessageBox.about(self, "message", Exception)
 
+    def func_layout_clear(self, layout):
+        for i in reversed(range(layout.count())):
+            layout.itemAt(i).widget().close()
+            layout.takeAt(i)
+
     # handling command interface
     def func_onoff_command_interface(self):
         print(self.onoff_commands.currentText())
 
     def func_color_command_interface(self):
-        print(self.color_commands.currentText())
+        selected_command = self.color_commands.currentText()
+        self.func_layout_clear(self.layout_color_payload)
 
     def func_level_command_interface(self):
-        print(self.level_commands.currentText())
+        selected_command = self.level_commands.currentText()
+        self.func_layout_clear(self.layout_level_payload)
+
+        if selected_command == "MOVE TO" or selected_command == "MOVE TO ONOFF":
+            self.label_level = QLabel("밝기")
+            self.lineEdit_brightness = QLineEdit()
+
+            self.layout_level_payload.addWidget(self.label_level)
+            self.layout_level_payload.addWidget(self.lineEdit_brightness)
+            self.lineEdit_brightness.setPlaceholderText("0~254 사이의 밝기")
+        
+
+        elif selected_command == "MOVE" or selected_command == "MOVE ONOFF":
+            self.label_level = QLabel("최대/최소")
+            self.comboBox_minmax = QComboBox()
+            self.comboBox_minmax.addItem("최대")
+            self.comboBox_minmax.addItem("최소")
+
+            self.layout_level_payload.addWidget(self.label_level)
+            self.layout_level_payload.addWidget(self.comboBox_minmax)
+
+        elif selected_command == "STEP" or selected_command == "STEP ONOFF":
+            self.label_mode = QLabel("방향")
+            self.comboBox_level_mode = QComboBox()
+            self.comboBox_level_mode.addItem("증가")
+            self.comboBox_level_mode.addItem("감소")
+            self.label_level = QLabel("단계")
+            self.spin_step = QSpinBox()
+            self.spin_step.setMaximum(254)
+
+            self.layout_level_payload.addWidget(self.label_mode)
+            self.layout_level_payload.addWidget(self.comboBox_level_mode)
+            self.layout_level_payload.addWidget(self.label_level)
+            self.layout_level_payload.addWidget(self.spin_step)
+
+        elif selected_command == "STOP" or selected_command == "STOP ONOFF":
+            pass
+
 
     # command generate
     def func_cmd_gen_clicked(self):
@@ -157,48 +204,61 @@ class WindowClass(QMainWindow, form_class):
         groups = self.tabWidget.currentWidget().findChildren(QGroupBox)
         for group in groups:
             if "onoff" in group.objectName():  # on/off
-                if group.findChild(QSpinBox).objectName() == "count_onoff":
-                    # commands are always created as a req/resp pair
-                    for i in range(group.findChild(QSpinBox).value()):
-                        req_cmd = {}
-                        req_cmd['cluster'] = ON_OFF_CLUSTER
-                        req_cmd['command'] = config.ONOFF_COMMAND_LIST[self.onoff_commands.currentText(
-                        )]
-                        req_cmd['payloads'] = None
-                        req_cmd['duration'] = config.DEFAULT_DURATION
-                        req_cmd['task_kind'] = config.TASK_CMD
-                        commands.append(req_cmd)
-
-                        # resp_cmd = {}
-                        # resp_cmd['cluster'] = ON_OFF_CLUSTER
-                        # resp_cmd['attr_id'] = ON_OFF_ONOFF_ATTR
-                        # resp_cmd['duration'] = config.DEFAULT_DURATION
-                        # resp_cmd['task_kind'] = config.TASK_READ
-                        # commands.append(req_cmd)
-
-                    print(commands)
+                for i in range(self.count_onoff.value()):
+                    req_cmd = {}
+                    req_cmd['cluster'] = ON_OFF_CLUSTER
+                    req_cmd['command'] = config.ONOFF_COMMAND_LIST[self.onoff_commands.currentText(
+                    )]
+                    req_cmd['payloads'] = None
+                    req_cmd['duration'] = config.DEFAULT_DURATION
+                    req_cmd['task_kind'] = config.TASK_CMD
+                    commands.append(req_cmd)
 
             elif "color" in group.objectName():  # color
-                if group.findChild(QSpinBox).value() > 0 and group.findChild(QSpinBox).objectName() == "count_color":
-                    for i in range(group.findChild(QSpinBox).value()):
-                        cmd = {}
-                        value = config.RANGE_FUNC() if group.findChild(
-                            QLineEdit).text() == "" else int(group.findChild(QLineEdit).text())
-                        cmd['cluster'] = COLOR_CTRL_CLUSTER
-                        cmd['command'] = config.ONOFF_COMMAND_LIST[self.onoff_commands.currentText()]
-                        cmd['payloads'] = [[value, '0x21'], [0, '0x21']]
-                        commands.append(cmd)
+                for i in range(self.count_color.value()):
+                    req_cmd = {}
+                    value = config.RANGE_FUNC() if group.findChild(
+                        QLineEdit).text() == "" else int(group.findChild(QLineEdit).text())
+                    req_cmd['cluster'] = COLOR_CTRL_CLUSTER
+                    req_cmd['command'] = config.ONOFF_COMMAND_LIST[self.onoff_commands.currentText()]
+                    req_cmd['payloads'] = [[value, '0x21'], [0, '0x21']]
+                    commands.append(cmd)
 
             elif "level" in group.objectName():  # level
-                if group.findChild(QSpinBox).value() > 0:
-                    for i in range(group.findChild(QSpinBox).value()):
-                        cmd = {}
-                        value = config.RANGE_FUNC() if group.findChild(
-                            QLineEdit).text() == "" else int(group.findChild(QLineEdit).text())
-                        cmd['cluster'] = '0x0008'
-                        cmd['command'] = '0x04'
-                        cmd['payloads'] = [[value, '0x21'], [0, '0x21']]
-                        commands.append(cmd)
+                for i in range(self.count_level.value()):
+                    req_cmd = {}
+                    value = config.RANGE_FUNC() if group.findChild(
+                        QLineEdit).text() == "" else int(group.findChild(QLineEdit).text())
+                    req_cmd['cluster'] = LVL_CTRL_CLUSTER
+                    req_cmd['command'] = config.LEVEL_COMMAND_LIST[self.level_commands.currentText(
+                    )]
+                    command = self.level_commands.currentText()
+                    if 'MOVE' in command: # 2 payloads
+                        if  'TO' in command:
+                            req_cmd['payloads'] = [[int(self.lineEdit_brightness.text()), TYPES.UINT8], [int(self.transit_level.value()), TYPES.UINT16]]
+                        else:
+                            req_cmd['payloads'] = [[int(self.lineEdit_brightness.text()), TYPES.UINT8], [int(self.transit_level.value()), TYPES.UINT16]]
+                        
+                    elif 'STEP' in command: # 3 payloads
+                        if self.comboBox_level_mode.currentText() == "증가":
+                            mode = (0x00, TYPES.ENUM8)
+                        else:
+                            mode = (0x01, TYPES.ENUM8)
+                        
+                        step_size = (self.spin_step.value(), TYPES.UINT8)
+                        transition_time = (int(self.transit_level.value()), TYPES.UINT16)
+
+                        req_cmd['payloads'] = [mode, step_size, transition_time]
+                        
+
+                    elif 'STOP' in command: # 0 payloads
+                        req_cmd['payloads'] = None
+
+
+                    req_cmd['duration'] = self.wait_level.value() if self.wait_level.value() > 0 else config.DEFAULT_DURATION
+                    req_cmd['task_kind'] = config.TASK_CMD
+
+                    commands.append(req_cmd)
 
         for command in commands:
             self.list_gen_cmd.addItem(json.dumps(command))
@@ -239,6 +299,7 @@ class WindowClass(QMainWindow, form_class):
         row = self.table_current_result.rowCount()
         self.table_current_result.setRowCount(row+1)
         result = msg.split('\t')
+        print(result)
         for col in range(self.table_current_result.columnCount()):
             print(row, col, result[col])
             self.table_current_result.setItem(row, col, QTableWidgetItem(result[col]))
@@ -386,6 +447,38 @@ class Worker(QThread):
 
                             result = "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
                                 cluster, cmd, attr_name, attr_value, payload, transition_time, wait_time, okng)
+
+                        elif task.cluster is constants.LVL_CTRL_CLUSTER:
+                            cluster = "LEVEL"
+                            cmd = [k for k, v in config.LEVEL_COMMAND_LIST.items() if v == task.command][0]
+                            attr_name = returned_attr.name
+                            attr_value = returned_attr.value
+                            wait_time = task.duration
+                            okng = ""
+                            if cmd == "MOVE TO":
+                                transition_time = task.payloads[1][0]
+                                payload = task.payloads[0][0]
+                                if attr_value == payload:
+                                    okng = "OK"
+                                else:
+                                    okng = "NG"
+                            elif cmd == "STEP" or cmd == "STEP ONOFF":
+                                payload = task.payloads[1][0]
+                                transition_time = task.payloads[2][0]
+                                expected = previous_value + payload if task.payloads[0][0] == 0 else previous_value - payload
+                                attr_name = "{}-{}".format("UP", previous_value) if task.payloads[0][0] == 0 else "{}-{}".format("DOWN", previous_value)
+                                if attr_value == expected:
+                                    okng = "OK"
+                                else:
+                                    okng = "NG"
+
+                            result = "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
+                                cluster, cmd, attr_name, attr_value, payload, transition_time, wait_time, okng)
+
+
+                        elif task.cluster is constants.COLOR_CTRL_CLUSTER:
+                            pass
+
 
                     elif task.task_kind == config.TASK_READ:
                         param_attr = Attribute(task.cluster, task.attr_id, task.attr_type)

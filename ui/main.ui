@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1860</width>
-    <height>1147</height>
+    <width>1867</width>
+    <height>973</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -236,7 +236,7 @@
      <rect>
       <x>10</x>
       <y>290</y>
-      <width>291</width>
+      <width>311</width>
       <height>561</height>
      </rect>
     </property>
@@ -316,7 +316,7 @@
        <rect>
         <x>10</x>
         <y>130</y>
-        <width>261</width>
+        <width>281</width>
         <height>191</height>
        </rect>
       </property>
@@ -336,7 +336,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_21">
           <item>
-           <widget class="QLabel" name="label_17">
+           <widget class="QLabel" name="label_command">
             <property name="text">
              <string>명령어</string>
             </property>
@@ -348,22 +348,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
-          <item>
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>값          </string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="text_color">
-            <property name="placeholderText">
-             <string>공백시 임의의 값</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <layout class="QHBoxLayout" name="layout_color_payload"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -415,7 +400,7 @@
        <rect>
         <x>10</x>
         <y>330</y>
-        <width>261</width>
+        <width>281</width>
         <height>191</height>
        </rect>
       </property>
@@ -447,22 +432,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_9">
-          <item>
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>값          </string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="text_level">
-            <property name="placeholderText">
-             <string>공백시 임의의 값</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <layout class="QHBoxLayout" name="layout_level_payload"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -503,6 +473,64 @@
           </item>
           <item>
            <widget class="QDoubleSpinBox" name="transit_level"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="group_onoff_2">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>20</y>
+        <width>101</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>임의값</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget_4">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>2</width>
+         <height>2</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_20"/>
+      </widget>
+      <widget class="QWidget" name="layoutWidget_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>81</width>
+         <height>62</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_24">
+          <item>
+           <widget class="QCheckBox" name="checkBox">
+            <property name="text">
+             <string>정상</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QCheckBox" name="checkBox_2">
+            <property name="text">
+             <string>비정상</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -1147,7 +1175,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1860</width>
+     <width>1867</width>
      <height>26</height>
     </rect>
    </property>
