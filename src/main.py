@@ -157,6 +157,61 @@ class WindowClass(QMainWindow, form_class):
     def func_color_command_interface(self):
         selected_command = self.color_commands.currentText()
         self.func_layout_clear(self.layout_color_payload)
+        self.func_layout_clear(self.layout_color_payload2)
+
+        if selected_command == "MOVE TO COLOR" or selected_command == "MOVE COLOR" or selected_command == "STEP COLOR":
+            self.label_color_x = QLabel("Color X")
+            self.spin_color_x = QSpinBox()
+            self.label_color_y = QLabel("Color Y")
+            self.spin_color_y = QSpinBox()
+
+            self.layout_color_payload.addWidget(self.label_color_x)
+            self.layout_color_payload.addWidget(self.spin_color_x)
+    
+            self.layout_color_payload.addWidget(self.label_color_y)
+            self.layout_color_payload.addWidget(self.spin_color_y)
+
+        elif selected_command == "MOVE TO COLOR & TEMPERATURE":
+            self.label_temperature = QLabel("온도")
+            self.spin_temperature = QSpinBox()
+
+            self.layout_color_payload.addWidget(self.label_temperature)
+            self.layout_color_payload.addWidget(self.spin_temperature)
+
+        elif selected_command == "MOVE COLOR & TEMPERATURE" or selected_command == "STEP COLOR & TEMPERATURE":
+            self.label_mood = QLabel("색감")
+            self.comboBox_mood = QComboBox()
+            self.comboBox_mood.addItem("Warm")
+            self.comboBox_mood.addItem("Cold")
+            
+            if selected_command == "MOVE COLOR & TEMPERATURE":
+                self.label_temperature_rate = QLabel("Rate")
+            else:
+                self.label_temperature_rate = QLabel("Step")
+
+            self.spin_temperature_rate = QSpinBox()
+
+            self.layout_color_payload.addWidget(self.label_mood)
+            self.layout_color_payload.addWidget(self.comboBox_mood)
+
+            self.layout_color_payload.addWidget(self.label_temperature_rate)
+            self.layout_color_payload.addWidget(self.spin_temperature_rate)
+
+            self.label_temperature_max = QLabel("최대 온도")
+            self.spin_temperature_max = QSpinBox()
+            self.label_temperature_min = QLabel("최소 온도")
+            self.spin_temperature_min = QSpinBox()
+
+            self.layout_color_payload2.addWidget(self.label_temperature_max)
+            self.layout_color_payload2.addWidget(self.spin_temperature_max)
+
+            self.layout_color_payload2.addWidget(self.label_temperature_min)
+            self.layout_color_payload2.addWidget(self.spin_temperature_min)
+
+
+        elif selected_command == "STOP MOVE STEP":
+            pass
+
 
     def func_level_command_interface(self):
         selected_command = self.level_commands.currentText()
@@ -217,12 +272,51 @@ class WindowClass(QMainWindow, form_class):
             elif "color" in group.objectName():  # color
                 for i in range(self.count_color.value()):
                     req_cmd = {}
-                    value = config.RANGE_FUNC() if group.findChild(
-                        QLineEdit).text() == "" else int(group.findChild(QLineEdit).text())
+                    command = self.color_commands.currentText()
+
                     req_cmd['cluster'] = COLOR_CTRL_CLUSTER
-                    req_cmd['command'] = config.ONOFF_COMMAND_LIST[self.onoff_commands.currentText()]
-                    req_cmd['payloads'] = [[value, '0x21'], [0, '0x21']]
-                    commands.append(cmd)
+                    req_cmd['command'] = config.COLOR_COMMAND_LIST[self.color_commands.currentText()]
+
+                    if command == "MOVE TO COLOR" or command == "STEP COLOR":
+                        value_x = (self.spin_color_x.value(), TYPES.UINT16)
+                        value_y = (self.spin_color_y.value(), TYPES.UINT16)
+                        transition_time = (int(self.transit_color.value()), TYPES.UINT16)
+                        req_cmd['payloads'] = [value_x, value_y, transition_time]
+                    
+                    elif command == "MOVE COLOR":
+                        value_x = (self.spin_color_x.value(), TYPES.UINT16)
+                        value_y = (self.spin_color_y.value(), TYPES.UINT16)
+                        req_cmd['payloads'] = [value_x, value_y]
+
+                    elif command == "MOVE TO COLOR & TEMPERATURE":
+                        temperature = (self.spin_temperature.value(), TYPES.UINT16)
+                        transition_time = (int(self.transit_color.value()), TYPES.UINT16)
+                        req_cmd['payloads'] = [temperature, transition_time]
+
+                    elif command == "MOVE COLOR & TEMPERATURE" or command == "STEP COLOR & TEMPERATURE":
+                        if self.comboBox_mood.currentText() == "Warm":
+                            mood = (0x01, TYPES.MAP8)
+                        else:
+                            mood = (0x03, TYPES.MAP8)   
+                        
+                        rate = (self.spin_temperature_rate.value(), TYPES.UINT16)
+                        max_temperature = (self.spin_temperature_max.value(), TYPES.UINT16)
+                        min_temperature = (self.spin_temperature_min.value(), TYPES.UINT16)
+
+                        if command == "STEP COLOR & TEMPERATURE":
+                            req_cmd['payloads'] = [mood, rate, min_temperature, max_temperature]
+                        else:
+                            transition_time = (int(self.transit_color.value()), TYPES.UINT16)
+                            req_cmd['payloads'] = [mood, rate, transition_time, min_temperature, max_temperature]
+                            
+                        
+                    elif command == "STOP MOVE STEP":
+                        req_cmd['payloads'] = None
+
+                    req_cmd['duration'] = self.wait_level.value() if self.wait_level.value() > 0 else config.DEFAULT_DURATION
+                    req_cmd['task_kind'] = config.TASK_CMD
+
+                    commands.append(req_cmd)
 
             elif "level" in group.objectName():  # level
                 for i in range(self.count_level.value()):
@@ -387,7 +481,6 @@ class Worker(QThread):
                 for task in self.task_list:
                     result = ""
                     if task.task_kind == config.TASK_CMD:
-
                         # read first
                         attr_id, attr_type = get_attr_element(
                             task.cluster, task.command)
@@ -462,6 +555,7 @@ class Worker(QThread):
                                     okng = "OK"
                                 else:
                                     okng = "NG"
+
                             elif cmd == "STEP" or cmd == "STEP ONOFF":
                                 payload = task.payloads[1][0]
                                 transition_time = task.payloads[2][0]
@@ -475,10 +569,14 @@ class Worker(QThread):
                             result = "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
                                 cluster, cmd, attr_name, attr_value, payload, transition_time, wait_time, okng)
 
-
                         elif task.cluster is constants.COLOR_CTRL_CLUSTER:
-                            pass
+                            cluster = "COLOR"
+                            cmd = [k for k, v in config.COLOR_COMMAND_LIST.items() if v == task.command][0]
+                            attr_name = returned_attr.name
+                            attr_value = returned_attr.value
+                            wait_time = task.duration
 
+                    
 
                     elif task.task_kind == config.TASK_READ:
                         param_attr = Attribute(task.cluster, task.attr_id, task.attr_type)

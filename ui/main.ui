@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1867</width>
+    <width>1838</width>
     <height>973</height>
    </rect>
   </property>
@@ -349,6 +349,9 @@
         </item>
         <item>
          <layout class="QHBoxLayout" name="layout_color_payload"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="layout_color_payload2"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -1175,7 +1178,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1867</width>
+     <width>1838</width>
      <height>26</height>
     </rect>
    </property>
