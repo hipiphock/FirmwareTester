@@ -49,13 +49,16 @@ class WindowClass(QMainWindow, form_class):
 
         # add command combo box
         for name, command in config.ONOFF_COMMAND_LIST.items():  # for on/off
-            self.onoff_commands.addItem(name)
+            self.combobox_single_onoff_command.addItem(name)
+            self.combobox_entire_onoff_command.addItem(name)
 
         for name, command in config.COLOR_COMMAND_LIST.items():  # for color
-            self.color_commands.addItem(name)
+            self.combobox_single_color_command.addItem(name)
+            self.combobox_entire_color_command.addItem(name)
 
         for name, command in config.LEVEL_COMMAND_LIST.items():  # for level
-            self.level_commands.addItem(name)
+            self.combobox_single_level_command.addItem(name)
+            self.combobox_entire_level_command.addItem(name)
 
         # register event handler of each objects
         # menubar import
@@ -69,12 +72,20 @@ class WindowClass(QMainWindow, form_class):
         self.btn_cmd_gen.clicked.connect(self.func_cmd_gen_clicked)
 
         # handle interface according to command
-        self.onoff_commands.currentIndexChanged.connect(
-            self.func_onoff_command_interface)
-        self.color_commands.currentIndexChanged.connect(
-            self.func_color_command_interface)
-        self.level_commands.currentIndexChanged.connect(
-            self.func_level_command_interface)
+
+        self.combobox_single_onoff_command.currentIndexChanged.connect(
+            self.func_single_onoff_command_interface)
+        self.combobox_single_color_command.currentIndexChanged.connect(
+            self.func_single_color_command_interface)
+        self.combobox_single_level_command.currentIndexChanged.connect(
+            self.func_single_level_command_interface)
+
+        self.combobox_entire_onoff_command.currentIndexChanged.connect(
+            self.func_entire_onoff_command_interface)
+        self.combobox_entire_color_command.currentIndexChanged.connect(
+            self.func_entire_color_command_interface)
+        self.combobox_entire_level_command.currentIndexChanged.connect(
+            self.func_entire_level_command_interface)
 
         # reset command list
         self.btn_cmd_reset.clicked.connect(self.func_cmd_reset_clicked)
@@ -93,9 +104,19 @@ class WindowClass(QMainWindow, form_class):
         self.btn_test_start.clicked.connect(self.func_test_start_clicked)
 
         # initialize
-        self.func_level_command_interface()
-        self.func_color_command_interface()
+        self.func_single_level_command_interface()
+        self.func_single_color_command_interface()
+
+        self.func_entire_level_command_interface()
+        self.func_entire_color_command_interface()
+
+        self.btn_result_reset.clicked.connect(self.func_result_reset_clicked)
+
     # menubar functions
+
+    def func_result_reset_clicked(self):
+        self.table_current_result.clear()
+        self.func_layout_clear(self.list_result)
 
     def func_import_device(self):
         file_name = QFileDialog.getOpenFileName(self, 'Open File', './')
@@ -151,215 +172,443 @@ class WindowClass(QMainWindow, form_class):
             layout.takeAt(i)
 
     # handling command interface
-    def func_onoff_command_interface(self):
-        print(self.onoff_commands.currentText())
+    def func_single_onoff_command_interface(self):
+        pass
 
-    def func_color_command_interface(self):
-        selected_command = self.color_commands.currentText()
-        self.func_layout_clear(self.layout_color_payload)
-        self.func_layout_clear(self.layout_color_payload2)
+    def func_single_color_command_interface(self):
+        selected_command = self.combobox_single_color_command.currentText()
+        self.func_layout_clear(self.hlayout_single_color_payload1)
+        self.func_layout_clear(self.hlayout_single_color_payload2)
 
         if selected_command == "MOVE TO COLOR" or selected_command == "MOVE COLOR" or selected_command == "STEP COLOR":
-            self.label_color_x = QLabel("Color X")
-            self.spin_color_x = QSpinBox()
-            self.label_color_y = QLabel("Color Y")
-            self.spin_color_y = QSpinBox()
+            self.label_single_color_x = QLabel("Color X")
+            self.spinbox_single_color_x = QSpinBox()
+            self.label_single_color_y = QLabel("Color Y")
+            self.spinbox_single_color_y = QSpinBox()
 
-            self.layout_color_payload.addWidget(self.label_color_x)
-            self.layout_color_payload.addWidget(self.spin_color_x)
-    
-            self.layout_color_payload.addWidget(self.label_color_y)
-            self.layout_color_payload.addWidget(self.spin_color_y)
+            self.hlayout_single_color_payload1.addWidget(
+                self.label_single_color_x)
+            self.hlayout_single_color_payload1.addWidget(
+                self.spinbox_single_color_x)
+
+            self.hlayout_single_color_payload1.addWidget(
+                self.label_single_color_y)
+            self.hlayout_single_color_payload1.addWidget(
+                self.spinbox_single_color_y)
+
+            if selected_command == "MOVE COLOR":
+                self.spinbox_single_color_transition.setDisabled(True)
 
         elif selected_command == "MOVE TO COLOR & TEMPERATURE":
-            self.label_temperature = QLabel("온도")
-            self.spin_temperature = QSpinBox()
+            self.label_single_color_temperature = QLabel("온도")
+            self.spinbox_single_color_temperature = QSpinBox()
 
-            self.layout_color_payload.addWidget(self.label_temperature)
-            self.layout_color_payload.addWidget(self.spin_temperature)
+            self.hlayout_single_color_payload1.addWidget(
+                self.label_single_color_temperature)
+            self.hlayout_single_color_payload1.addWidget(
+                self.spinbox_single_color_temperature)
 
         elif selected_command == "MOVE COLOR & TEMPERATURE" or selected_command == "STEP COLOR & TEMPERATURE":
-            self.label_mood = QLabel("색감")
-            self.comboBox_mood = QComboBox()
-            self.comboBox_mood.addItem("Warm")
-            self.comboBox_mood.addItem("Cold")
-            
+            self.label_single_color_mood = QLabel("색감")
+            self.combobox_single_color_mood = QComboBox()
+            self.combobox_single_color_mood.addItem("Warm")
+            self.combobox_single_color_mood.addItem("Cold")
+
             if selected_command == "MOVE COLOR & TEMPERATURE":
-                self.label_temperature_rate = QLabel("Rate")
+                self.label_single_color_temperature_rate = QLabel("Rate")
+                self.spinbox_single_color_transition.setDisabled(True)
+
             else:
-                self.label_temperature_rate = QLabel("Step")
+                self.label_single_color_temperature_rate = QLabel("Step")
 
-            self.spin_temperature_rate = QSpinBox()
+            self.spinbox_single_color_temperature_rate = QSpinBox()
 
-            self.layout_color_payload.addWidget(self.label_mood)
-            self.layout_color_payload.addWidget(self.comboBox_mood)
+            self.hlayout_single_color_payload1.addWidget(
+                self.label_single_color_mood)
+            self.hlayout_single_color_payload1.addWidget(
+                self.combobox_single_color_mood)
 
-            self.layout_color_payload.addWidget(self.label_temperature_rate)
-            self.layout_color_payload.addWidget(self.spin_temperature_rate)
+            self.hlayout_single_color_payload1.addWidget(
+                self.label_single_color_temperature_rate)
+            self.hlayout_single_color_payload1.addWidget(
+                self.spinbox_single_color_temperature_rate)
 
-            self.label_temperature_max = QLabel("최대 온도")
-            self.spin_temperature_max = QSpinBox()
-            self.label_temperature_min = QLabel("최소 온도")
-            self.spin_temperature_min = QSpinBox()
+            self.label_single_color_temperature_max = QLabel("최대 온도")
+            self.spinbox_single_color_temperature_max = QSpinBox()
+            self.label_single_color_temperature_min = QLabel("최소 온도")
+            self.spinbox_single_color_temperature_min = QSpinBox()
 
-            self.layout_color_payload2.addWidget(self.label_temperature_max)
-            self.layout_color_payload2.addWidget(self.spin_temperature_max)
+            self.hlayout_single_color_payload2.addWidget(
+                self.label_single_color_temperature_max)
+            self.hlayout_single_color_payload2.addWidget(
+                self.spinbox_single_color_temperature_max)
 
-            self.layout_color_payload2.addWidget(self.label_temperature_min)
-            self.layout_color_payload2.addWidget(self.spin_temperature_min)
-
+            self.hlayout_single_color_payload2.addWidget(
+                self.label_single_color_temperature_min)
+            self.hlayout_single_color_payload2.addWidget(
+                self.spinbox_single_color_temperature_min)
 
         elif selected_command == "STOP MOVE STEP":
             pass
 
-
-    def func_level_command_interface(self):
-        selected_command = self.level_commands.currentText()
-        self.func_layout_clear(self.layout_level_payload)
+    def func_single_level_command_interface(self):
+        selected_command = self.combobox_single_level_command.currentText()
+        self.func_layout_clear(self.hlayout_single_level_payload)
 
         if selected_command == "MOVE TO" or selected_command == "MOVE TO ONOFF":
-            self.label_level = QLabel("밝기")
-            self.lineEdit_brightness = QLineEdit()
+            self.label_single_level_brightness = QLabel("밝기")
+            self.spinbox_single_level_brightness = QSpinBox()
+            self.spinbox_single_level_brightness.setMaximum(254)
 
-            self.layout_level_payload.addWidget(self.label_level)
-            self.layout_level_payload.addWidget(self.lineEdit_brightness)
-            self.lineEdit_brightness.setPlaceholderText("0~254 사이의 밝기")
-        
+            self.hlayout_single_level_payload.addWidget(
+                self.label_single_level_brightness)
+            self.hlayout_single_level_payload.addWidget(
+                self.spinbox_single_level_brightness)
 
         elif selected_command == "MOVE" or selected_command == "MOVE ONOFF":
-            self.label_level = QLabel("최대/최소")
-            self.comboBox_minmax = QComboBox()
-            self.comboBox_minmax.addItem("최대")
-            self.comboBox_minmax.addItem("최소")
+            self.label_single_level_minmax = QLabel("최대/최소")
+            self.combobox_single_level_minmax = QComboBox()
+            self.combobox_single_level_minmax.addItem("최대")
+            self.combobox_single_level_minmax.addItem("최소")
 
-            self.layout_level_payload.addWidget(self.label_level)
-            self.layout_level_payload.addWidget(self.comboBox_minmax)
+            self.hlayout_single_level_payload.addWidget(self.label_level)
+            self.hlayout_single_level_payload.addWidget(self.comboBox_minmax)
+
+            self.spinbox_single_level_transition.setDisabled(True)
 
         elif selected_command == "STEP" or selected_command == "STEP ONOFF":
-            self.label_mode = QLabel("방향")
-            self.comboBox_level_mode = QComboBox()
-            self.comboBox_level_mode.addItem("증가")
-            self.comboBox_level_mode.addItem("감소")
-            self.label_level = QLabel("단계")
-            self.spin_step = QSpinBox()
-            self.spin_step.setMaximum(254)
+            self.label_single_level_mode = QLabel("방향")
+            self.combobox_single_level_mode = QComboBox()
+            self.combobox_single_level_mode.addItem("증가")
+            self.combobox_single_level_mode.addItem("감소")
+            self.label_single_level_step = QLabel("단계")
+            self.spinbox_single_level_step = QSpinBox()
+            self.spinbox_single_level_step.setMaximum(254)
 
-            self.layout_level_payload.addWidget(self.label_mode)
-            self.layout_level_payload.addWidget(self.comboBox_level_mode)
-            self.layout_level_payload.addWidget(self.label_level)
-            self.layout_level_payload.addWidget(self.spin_step)
+            self.hlayout_single_level_payload.addWidget(self.label_mode)
+            self.hlayout_single_level_payload.addWidget(
+                self.comboBox_level_mode)
+            self.hlayout_single_level_payload.addWidget(self.label_level)
+            self.hlayout_single_level_payload.addWidget(self.spin_step)
 
         elif selected_command == "STOP" or selected_command == "STOP ONOFF":
             pass
 
 
+    def func_entire_onoff_command_interface(self):
+        pass
+
+    def func_entire_color_command_interface(self):
+        selected_command = self.combobox_entire_color_command.currentText()
+        self.func_layout_clear(self.hlayout_entire_color_payload1)
+        self.func_layout_clear(self.hlayout_entire_color_payload2)
+
+        if selected_command == "MOVE TO COLOR" or selected_command == "MOVE COLOR" or selected_command == "STEP COLOR":
+            self.label_entire_color_x = QLabel("Color X")
+            self.spinbox_entire_color_x = QSpinBox()
+            self.label_entire_color_y = QLabel("Color Y")
+            self.spinbox_entire_color_y = QSpinBox()
+
+            self.hlayout_entire_color_payload1.addWidget(self.label_entire_color_x)
+            self.hlayout_entire_color_payload1.addWidget(self.spinbox_entire_color_x)
+    
+            self.hlayout_entire_color_payload1.addWidget(self.label_entire_color_y)
+            self.hlayout_entire_color_payload1.addWidget(self.spinbox_entire_color_y)
+
+            if selected_command == "MOVE COLOR":
+                self.spinbox_entire_color_transition.setDisabled(True)
+
+
+        elif selected_command == "MOVE TO COLOR & TEMPERATURE":
+            self.label_entire_color_temperature = QLabel("온도")
+            self.spinbox_entire_color_temperature = QSpinBox()
+
+            self.hlayout_entire_color_payload1.addWidget(self.label_entire_color_temperature)
+            self.hlayout_entire_color_payload1.addWidget(self.spinbox_entire_color_temperature)
+
+        elif selected_command == "MOVE COLOR & TEMPERATURE" or selected_command == "STEP COLOR & TEMPERATURE":
+            self.label_entire_color_mood = QLabel("색감")
+            self.combobox_entire_color_mood = QComboBox()
+            self.combobox_entire_color_mood.addItem("Warm")
+            self.combobox_entire_color_mood.addItem("Cold")
+            
+            if selected_command == "MOVE COLOR & TEMPERATURE":
+                self.label_entire_color_temperature_rate = QLabel("Rate")
+                self.spinbox_entire_color_transition.setDisabled(True)
+
+            else:
+                self.label_entire_color_temperature_rate = QLabel("Step")
+
+            self.spinbox_entire_color_temperature_rate = QSpinBox()
+
+            self.hlayout_entire_color_payload1.addWidget(self.label_entire_color_mood)
+            self.hlayout_entire_color_payload1.addWidget(self.combobox_entire_color_mood)
+
+            self.hlayout_entire_color_payload1.addWidget(self.label_entire_color_temperature_rate)
+            self.hlayout_entire_color_payload1.addWidget(self.spinbox_entire_color_temperature_rate)
+
+            self.label_entire_color_temperature_max = QLabel("최대 온도")
+            self.spinbox_entire_color_temperature_max = QSpinBox()
+            self.label_entire_color_temperature_min = QLabel("최소 온도")
+            self.spinbox_entire_color_temperature_min = QSpinBox()
+
+            self.hlayout_entire_color_payload2.addWidget(self.label_entire_color_temperature_max)
+            self.hlayout_entire_color_payload2.addWidget(self.spinbox_entire_color_temperature_max)
+
+            self.hlayout_entire_color_payload2.addWidget(self.label_entire_color_temperature_min)
+            self.hlayout_entire_color_payload2.addWidget(self.spinbox_entire_color_temperature_min)
+
+
+        elif selected_command == "STOP MOVE STEP":
+            pass
+
+    def func_entire_level_command_interface(self):
+        selected_command = self.combobox_entire_level_command.currentText()
+        self.func_layout_clear(self.hlayout_entire_level_payload)
+
+        if selected_command == "MOVE TO" or selected_command == "MOVE TO ONOFF":
+            self.label_entire_level_brightness = QLabel("밝기")
+            self.spinbox_entire_level_brightness = QSpinBox()
+            self.spinbox_entire_level_brightness.setMaximum(254)
+
+            self.hlayout_entire_level_payload.addWidget(self.label_entire_level_brightness)
+            self.hlayout_entire_level_payload.addWidget(self.spinbox_entire_level_brightness)
+        
+
+        elif selected_command == "MOVE" or selected_command == "MOVE ONOFF":
+            self.label_entire_level_minmax = QLabel("최대/최소")
+            self.combobox_entire_level_minmax = QComboBox()
+            self.combobox_entire_level_minmax.addItem("최대")
+            self.combobox_entire_level_minmax.addItem("최소")
+
+            self.hlayout_entire_level_payload.addWidget(self.label_level)
+            self.hlayout_entire_level_payload.addWidget(self.comboBox_minmax)
+
+            self.spinbox_entire_level_transition.setDisabled(True)
+
+
+        elif selected_command == "STEP" or selected_command == "STEP ONOFF":
+            self.label_entire_level_mode = QLabel("방향")
+            self.combobox_entire_level_mode = QComboBox()
+            self.combobox_entire_level_mode.addItem("증가")
+            self.combobox_entire_level_mode.addItem("감소")
+            self.label_entire_level_step = QLabel("단계")
+            self.spinbox_entire_level_step = QSpinBox()
+            self.spinbox_entire_level_step.setMaximum(254)
+
+            self.hlayout_entire_level_payload.addWidget(self.label_mode)
+            self.hlayout_entire_level_payload.addWidget(self.comboBox_level_mode)
+            self.hlayout_entire_level_payload.addWidget(self.label_level)
+            self.hlayout_entire_level_payload.addWidget(self.spin_step)
+
+        elif selected_command == "STOP" or selected_command == "STOP ONOFF":
+            pass
+
     # command generate
     def func_cmd_gen_clicked(self):
         commands = []
         groups = self.tabWidget.currentWidget().findChildren(QGroupBox)
-        for group in groups:
-            if "onoff" in group.objectName():  # on/off
-                for i in range(self.count_onoff.value()):
-                    req_cmd = {}
-                    req_cmd['cluster'] = ON_OFF_CLUSTER
-                    req_cmd['command'] = config.ONOFF_COMMAND_LIST[self.onoff_commands.currentText(
-                    )]
-                    req_cmd['payloads'] = None
-                    req_cmd['duration'] = config.DEFAULT_DURATION
-                    req_cmd['task_kind'] = config.TASK_CMD
-                    commands.append(req_cmd)
+        print(self.tabWidget.currentWidget().objectName())
+        
+        if self.tabWidget.currentWidget().objectName() == "single":
+            for group in groups:
+                if "onoff" in group.objectName():  # on/off
+                    for i in range(self.spinbox_single_onoff_count.value()):
+                        req_cmd = {}
+                        req_cmd['cluster'] = ON_OFF_CLUSTER
+                        req_cmd['command'] = config.ONOFF_COMMAND_LIST[self.combobox_single_onoff_command.currentText()]
+                        req_cmd['payloads'] = None
+                        req_cmd['duration'] = config.DEFAULT_DURATION
+                        req_cmd['task_kind'] = config.TASK_CMD
+                        commands.append(req_cmd)
 
-            elif "color" in group.objectName():  # color
-                for i in range(self.count_color.value()):
-                    req_cmd = {}
-                    command = self.color_commands.currentText()
+                elif "color" in group.objectName():  # color
+                    for i in range(self.spinbox_single_color_count.value()):
+                        req_cmd = {}
+                        selected_command = self.combobox_single_color_command.currentText()
 
-                    req_cmd['cluster'] = COLOR_CTRL_CLUSTER
-                    req_cmd['command'] = config.COLOR_COMMAND_LIST[self.color_commands.currentText()]
+                        req_cmd['cluster'] = COLOR_CTRL_CLUSTER
+                        req_cmd['command'] = config.COLOR_COMMAND_LIST[selected_command]
 
-                    if command == "MOVE TO COLOR" or command == "STEP COLOR":
-                        value_x = (self.spin_color_x.value(), TYPES.UINT16)
-                        value_y = (self.spin_color_y.value(), TYPES.UINT16)
-                        transition_time = (int(self.transit_color.value()), TYPES.UINT16)
-                        req_cmd['payloads'] = [value_x, value_y, transition_time]
-                    
-                    elif command == "MOVE COLOR":
-                        value_x = (self.spin_color_x.value(), TYPES.UINT16)
-                        value_y = (self.spin_color_y.value(), TYPES.UINT16)
-                        req_cmd['payloads'] = [value_x, value_y]
-
-                    elif command == "MOVE TO COLOR & TEMPERATURE":
-                        temperature = (self.spin_temperature.value(), TYPES.UINT16)
-                        transition_time = (int(self.transit_color.value()), TYPES.UINT16)
-                        req_cmd['payloads'] = [temperature, transition_time]
-
-                    elif command == "MOVE COLOR & TEMPERATURE" or command == "STEP COLOR & TEMPERATURE":
-                        if self.comboBox_mood.currentText() == "Warm":
-                            mood = (0x01, TYPES.MAP8)
-                        else:
-                            mood = (0x03, TYPES.MAP8)   
+                        if selected_command == "MOVE TO COLOR" or selected_command == "STEP COLOR":
+                            value_x = (self.spinbox_single_color_x.value(), TYPES.UINT16)
+                            value_y = (self.spinbox_single_color_y.value(), TYPES.UINT16)
+                            transition_time = (int(self.spinbox_single_color_transition.value()), TYPES.UINT16)
+                            req_cmd['payloads'] = [value_x, value_y, transition_time]
                         
-                        rate = (self.spin_temperature_rate.value(), TYPES.UINT16)
-                        max_temperature = (self.spin_temperature_max.value(), TYPES.UINT16)
-                        min_temperature = (self.spin_temperature_min.value(), TYPES.UINT16)
+                        elif selected_command == "MOVE COLOR":
+                            value_x = (self.spinbox_single_color_x.value(), TYPES.UINT16)
+                            value_y = (self.spinbox_single_color_x.value(), TYPES.UINT16)
+                            req_cmd['payloads'] = [value_x, value_y]
 
-                        if command == "STEP COLOR & TEMPERATURE":
-                            req_cmd['payloads'] = [mood, rate, min_temperature, max_temperature]
-                        else:
-                            transition_time = (int(self.transit_color.value()), TYPES.UINT16)
-                            req_cmd['payloads'] = [mood, rate, transition_time, min_temperature, max_temperature]
+                        elif selected_command == "MOVE TO COLOR & TEMPERATURE":
+                            temperature = (self.spinbox_single_color_temperature.value(), TYPES.UINT16)
+                            transition_time = (int(self.spinbox_single_color_transition.value()), TYPES.UINT16)
+                            req_cmd['payloads'] = [temperature, transition_time]
+
+                        elif selected_command == "MOVE COLOR & TEMPERATURE" or selected_command == "STEP COLOR & TEMPERATURE":
+                            if self.combobox_single_color_mood.currentText() == "Warm":
+                                mood = (0x01, TYPES.MAP8)
+                            else:
+                                mood = (0x03, TYPES.MAP8)   
                             
-                        
-                    elif command == "STOP MOVE STEP":
+                            rate = (self.spinbox_single_color_temperature_rate.value(), TYPES.UINT16)
+                            max_temperature = (self.spinbox_single_color_temperature_max.value(), TYPES.UINT16)
+                            min_temperature = (self.spinbox_single_color_temperature_min.value(), TYPES.UINT16)
+
+                            if selected_command == "STEP COLOR & TEMPERATURE":
+                                req_cmd['payloads'] = [mood, rate, min_temperature, max_temperature]
+                            else:
+                                transition_time = (int(self.spinbox_single_color_transition.value()), TYPES.UINT16)
+                                req_cmd['payloads'] = [mood, rate, transition_time, min_temperature, max_temperature]
+                                
+                            
+                        elif selected_command == "STOP MOVE STEP":
+                            req_cmd['payloads'] = None
+
+                        req_cmd['duration'] = self.spinbox_single_color_wait.value() if self.spinbox_single_color_wait.value() > 0 else config.DEFAULT_DURATION
+                        req_cmd['task_kind'] = config.TASK_CMD
+
+                        commands.append(req_cmd)
+
+                elif "level" in group.objectName():  # level
+                    for i in range(self.spinbox_single_level_count.value()):
+                        req_cmd = {}
+                        selected_command = self.combobox_single_level_command.currentText()
+
+                        req_cmd['cluster'] = LVL_CTRL_CLUSTER
+                        req_cmd['command'] = config.LEVEL_COMMAND_LIST[selected_command]
+
+                        if 'MOVE' in selected_command: # 2 payloads
+                            if  'TO' in selected_command:
+                                req_cmd['payloads'] = [[self.spinbox_single_level_brightness.value(), TYPES.UINT8], [int(self.spinbox_single_level_transition.value()), TYPES.UINT16]]
+                            else:
+                                req_cmd['payloads'] = [[int(self.lineEdit_brightness.text()), TYPES.UINT8], [int(self.transit_level.value()), TYPES.UINT16]]
+                            
+                        elif 'STEP' in selected_command: # 3 payloads
+                            if self.combobox_single_level_mode.currentText() == "증가":
+                                mode = (0x00, TYPES.ENUM8)
+                            else:
+                                mode = (0x01, TYPES.ENUM8)
+                            
+                            step_size = (self.spinbox_single_level_step.value(), TYPES.UINT8)
+                            transition_time = (int(self.spinbox_single_level_transition.value()), TYPES.UINT16)
+
+                            req_cmd['payloads'] = [mode, step_size, transition_time]
+                            
+                        elif 'STOP' in selected_command: # 0 payloads
+                            req_cmd['payloads'] = None
+
+
+                        req_cmd['duration'] = self.spinbox_single_level_wait.value() if self.spinbox_single_level_wait.value() > 0 else config.DEFAULT_DURATION
+                        req_cmd['task_kind'] = config.TASK_CMD
+
+                        commands.append(req_cmd)
+            for command in commands:
+                self.list_gen_cmd.addItem(json.dumps(command))
+        else:
+            for group in groups:
+                if "onoff" in group.objectName():  # on/off
+                    for i in range(self.spinbox_entire_onoff_count.value()):
+                        req_cmd = {}
+                        req_cmd['cluster'] = ON_OFF_CLUSTER
+                        req_cmd['command'] = config.ONOFF_COMMAND_LIST[self.combobox_entire_onoff_command.currentText()]
                         req_cmd['payloads'] = None
+                        req_cmd['duration'] = config.DEFAULT_DURATION
+                        req_cmd['task_kind'] = config.TASK_CMD
+                        commands.append(req_cmd)
 
-                    req_cmd['duration'] = self.wait_level.value() if self.wait_level.value() > 0 else config.DEFAULT_DURATION
-                    req_cmd['task_kind'] = config.TASK_CMD
+                elif "color" in group.objectName():  # color
+                    for i in range(self.spinbox_entire_color_count.value()):
+                        req_cmd = {}
+                        selected_command = self.combobox_entire_color_command.currentText()
 
-                    commands.append(req_cmd)
+                        req_cmd['cluster'] = COLOR_CTRL_CLUSTER
+                        req_cmd['command'] = config.COLOR_COMMAND_LIST[selected_command]
 
-            elif "level" in group.objectName():  # level
-                for i in range(self.count_level.value()):
-                    req_cmd = {}
-                    value = config.RANGE_FUNC() if group.findChild(
-                        QLineEdit).text() == "" else int(group.findChild(QLineEdit).text())
-                    req_cmd['cluster'] = LVL_CTRL_CLUSTER
-                    req_cmd['command'] = config.LEVEL_COMMAND_LIST[self.level_commands.currentText(
-                    )]
-                    command = self.level_commands.currentText()
-                    if 'MOVE' in command: # 2 payloads
-                        if  'TO' in command:
-                            req_cmd['payloads'] = [[int(self.lineEdit_brightness.text()), TYPES.UINT8], [int(self.transit_level.value()), TYPES.UINT16]]
-                        else:
-                            req_cmd['payloads'] = [[int(self.lineEdit_brightness.text()), TYPES.UINT8], [int(self.transit_level.value()), TYPES.UINT16]]
+                        if selected_command == "MOVE TO COLOR" or selected_command == "STEP COLOR":
+                            value_x = (self.spinbox_entire_color_x.value(), TYPES.UINT16)
+                            value_y = (self.spinbox_entire_color_y.value(), TYPES.UINT16)
+                            transition_time = (int(self.spinbox_entire_color_transition.value()), TYPES.UINT16)
+                            req_cmd['payloads'] = [value_x, value_y, transition_time]
                         
-                    elif 'STEP' in command: # 3 payloads
-                        if self.comboBox_level_mode.currentText() == "증가":
-                            mode = (0x00, TYPES.ENUM8)
-                        else:
-                            mode = (0x01, TYPES.ENUM8)
-                        
-                        step_size = (self.spin_step.value(), TYPES.UINT8)
-                        transition_time = (int(self.transit_level.value()), TYPES.UINT16)
+                        elif selected_command == "MOVE COLOR":
+                            value_x = (self.spinbox_entire_color_x.value(), TYPES.UINT16)
+                            value_y = (self.spinbox_entire_color_y.value(), TYPES.UINT16)
+                            req_cmd['payloads'] = [value_x, value_y]
 
-                        req_cmd['payloads'] = [mode, step_size, transition_time]
-                        
+                        elif selected_command == "MOVE TO COLOR & TEMPERATURE":
+                            temperature = (self.spinbox_entire_color_temperature.value(), TYPES.UINT16)
+                            transition_time = (int(self.spinbox_entire_color_transition.value()), TYPES.UINT16)
+                            req_cmd['payloads'] = [temperature, transition_time]
 
-                    elif 'STOP' in command: # 0 payloads
-                        req_cmd['payloads'] = None
+                        elif selected_command == "MOVE COLOR & TEMPERATURE" or selected_command == "STEP COLOR & TEMPERATURE":
+                            if self.combobox_entire_color_mood.currentText() == "Warm":
+                                mood = (0x01, TYPES.MAP8)
+                            else:
+                                mood = (0x03, TYPES.MAP8)   
+                            
+                            rate = (self.spinbox_entire_color_temperature_rate.value(), TYPES.UINT16)
+                            max_temperature = (self.spinbox_entire_color_temperature_max.value(), TYPES.UINT16)
+                            min_temperature = (self.spinbox_entire_color_temperature_min.value(), TYPES.UINT16)
+
+                            if selected_command == "STEP COLOR & TEMPERATURE":
+                                req_cmd['payloads'] = [mood, rate, min_temperature, max_temperature]
+                            else:
+                                transition_time = (int(self.spinbox_entire_color_transition.value()), TYPES.UINT16)
+                                req_cmd['payloads'] = [mood, rate, transition_time, min_temperature, max_temperature]
+                                
+                            
+                        elif selected_command == "STOP MOVE STEP":
+                            req_cmd['payloads'] = None
+
+                        req_cmd['duration'] = self.spinbox_entire_color_wait.value() if self.spinbox_entire_color_wait.value() > 0 else config.DEFAULT_DURATION
+                        req_cmd['task_kind'] = config.TASK_CMD
+
+                        commands.append(req_cmd)
+
+                elif "level" in group.objectName():  # level
+                    for i in range(self.spinbox_entire_level_count.value()):
+                        req_cmd = {}
+                        selected_command = self.combobox_entire_level_command.currentText()
+
+                        req_cmd['cluster'] = LVL_CTRL_CLUSTER
+                        req_cmd['command'] = config.LEVEL_COMMAND_LIST[selected_command]
+
+                        if 'MOVE' in selected_command: # 2 payloads
+                            if  'TO' in selected_command:
+                                req_cmd['payloads'] = [[self.spinbox_entire_level_brightness.value(), TYPES.UINT8], [int(self.spinbox_entire_level_transition.value()), TYPES.UINT16]]
+                            else:
+                                req_cmd['payloads'] = [[int(self.lineEdit_brightness.text()), TYPES.UINT8], [int(self.transit_level.value()), TYPES.UINT16]]
+                            
+                        elif 'STEP' in selected_command: # 3 payloads
+                            if self.combobox_entire_level_mode.currentText() == "증가":
+                                mode = (0x00, TYPES.ENUM8)
+                            else:
+                                mode = (0x01, TYPES.ENUM8)
+                            
+                            step_size = (self.spinbox_entire_level_step.value(), TYPES.UINT8)
+                            transition_time = (int(self.spinbox_entire_level_transition.value()), TYPES.UINT16)
+
+                            req_cmd['payloads'] = [mode, step_size, transition_time]
+                            
+                        elif 'STOP' in selected_command: # 0 payloads
+                            req_cmd['payloads'] = None
 
 
-                    req_cmd['duration'] = self.wait_level.value() if self.wait_level.value() > 0 else config.DEFAULT_DURATION
-                    req_cmd['task_kind'] = config.TASK_CMD
+                        req_cmd['duration'] = self.spinbox_entire_level_wait.value() if self.spinbox_entire_level_wait.value() > 0 else config.DEFAULT_DURATION
+                        req_cmd['task_kind'] = config.TASK_CMD
 
-                    commands.append(req_cmd)
+                        commands.append(req_cmd)
+            
+            for i in range(self.spinbox_entire_iter.value()):
+                for command in commands:
+                    self.list_gen_cmd.addItem(json.dumps(command))
 
-        for command in commands:
-            self.list_gen_cmd.addItem(json.dumps(command))
 
         if not self.btn_test_start.isEnabled() and self.list_gen_cmd.count() > 0:
             self.btn_test_start.setEnabled(True)
-
+        
     # handling command list - remove only
 
     def func_cmd_list_double_clicked(self):
@@ -440,7 +689,7 @@ class WindowClass(QMainWindow, form_class):
         for index in range(self.list_gen_cmd.count()):
             commands['tasks'].append(self.list_gen_cmd.item(index).text())
 
-        iter_count = self.entire_iter.value()
+        iter_count = self.spinbox_entire_iter.value()
         if iter_count < 2:
             iter_count = 1
         current_port = self.combo_port_select.currentText();
@@ -579,7 +828,7 @@ class Worker(QThread):
                                 cluster, cmd, attr_name, attr_value, payload, transition_time, wait_time, okng)
 
                         else:
-                        #elif task.cluster is constants.COLOR_CTRL_CLUSTER:
+                        # elif task.cluster is constants.COLOR_CTRL_CLUSTER:
                             cluster = "COLOR"
                             cmd = [k for k, v in config.COLOR_COMMAND_LIST.items() if v == task.command][0]
                             # attr_name = returned_attr.name

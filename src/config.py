@@ -18,11 +18,11 @@ ONOFF_COMMAND_LIST = {
 
 LEVEL_COMMAND_LIST = {
     "MOVE TO" : constants.LVL_CTRL_MV_TO_LVL_CMD,
-    "MOVE" : constants.LVL_CTRL_MOVE_CMD,
+    # "MOVE" : constants.LVL_CTRL_MOVE_CMD,
     "STEP" : constants.LVL_CTRL_STEP_CMD,
     "STOP" : constants.LVL_CTRL_STOP_CMD,
     "MOVE TO ONOFF" : constants.LVL_CTRL_MV_TO_LVL_ONOFF_CMD,
-    "MOVE ONOFF" : constants.LVL_CTRL_MOVE_ONOFF_CMD,
+    # "MOVE ONOFF" : constants.LVL_CTRL_MOVE_ONOFF_CMD,
     "STEP ONOFF" : constants.LVL_CTRL_STEP_ONOFF_CMD,
     "STOP ONOFF" : constants.LVL_CTRL_STOP_ONOFF_CMD
 }
