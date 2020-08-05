@@ -393,7 +393,6 @@ class WindowClass(QMainWindow, form_class):
         row = self.table_current_result.rowCount()
         self.table_current_result.setRowCount(row+1)
         result = msg.split('\t')
-        print(result)
         for col in range(self.table_current_result.columnCount()):
             print(row, col, result[col])
             self.table_current_result.setItem(row, col, QTableWidgetItem(result[col]))
@@ -466,7 +465,6 @@ class Worker(QThread):
 
     def __init__(self, device, task_list, iter_count, port, parent=None):
         super().__init__()
-        print(port)
         self.main = parent
         self.working = True
         self.device = device
@@ -481,14 +479,18 @@ class Worker(QThread):
                 for task in self.task_list:
                     result = ""
                     if task.task_kind == config.TASK_CMD:
-                        # read first
-                        attr_id, attr_type = get_attr_element(
-                            task.cluster, task.command)
-                        param_attr = Attribute(task.cluster, attr_id, attr_type)
-                        previous_attr = self.cli_instance.zcl.readattr(
-                            self.device.addr, param_attr, ep=self.device.ep        
-                        )
-                        previous_value = previous_attr.value
+                        attr_list = task.get_dependent_attr_list()
+                        previous_attr_list = []
+                        for attr_id in attr_list:
+                            attr = ReadAttr(task.cluster, attr_id, 0)
+                            attr_param = Attribute(attr.cluster, attr.attr_id, attr.attr_type)
+                            returned_attr = self.cli_instance.zcl.readattr(self.device.addr, attr_param, ep=self.device.ep)
+                            previous_attr_list.append(returned_attr)
+
+                        if len(previous_attr_list) == 1:
+                            previous_attr = previous_attr_list[0]
+                            previous_value = previous_attr.value
+
 
                         if task.payloads == None:
                             self.cli_instance.zcl.generic(
@@ -507,12 +509,19 @@ class Worker(QThread):
                                 payload=task.payloads)
 
                         time.sleep(task.duration)
-                        attr_id, attr_type = get_attr_element(
-                            task.cluster, task.command)
-                        param_attr = Attribute(task.cluster, attr_id, attr_type)
-                        returned_attr = self.cli_instance.zcl.readattr(
-                            self.device.addr, param_attr, ep=self.device.ep)
+                        attr_list = task.get_dependent_attr_list()
+                        returned_attr_list = []
+                        for attr_id in attr_list:
+                            attr = ReadAttr(task.cluster, attr_id, 0)
+                            attr_param = Attribute(attr.cluster, attr.attr_id, attr.attr_type)
+                            returned_attr = self.cli_instance.zcl.readattr(self.device.addr, attr_param, ep=self.device.ep)
+                            returned_attr_list.append(returned_attr)
+                            time.sleep(task.duration)
+
                         
+                        if len(returned_attr_list) == 1:
+                            returned_attr = returned_attr_list[0]                           
+
                         if task.cluster is constants.ON_OFF_CLUSTER:
                             cluster = "ON/OFF"
                             cmd = [k for k, v in config.ONOFF_COMMAND_LIST.items() if v == task.command][0]
@@ -569,14 +578,78 @@ class Worker(QThread):
                             result = "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
                                 cluster, cmd, attr_name, attr_value, payload, transition_time, wait_time, okng)
 
-                        elif task.cluster is constants.COLOR_CTRL_CLUSTER:
+                        else:
+                        #elif task.cluster is constants.COLOR_CTRL_CLUSTER:
                             cluster = "COLOR"
                             cmd = [k for k, v in config.COLOR_COMMAND_LIST.items() if v == task.command][0]
-                            attr_name = returned_attr.name
-                            attr_value = returned_attr.value
+                            # attr_name = returned_attr.name
+                            # attr_value = returned_attr.value
                             wait_time = task.duration
+                            
+                            # @hipiphock
+                            if cmd == "MOVE TO COLOR":
+                                attr_name = "{},{}".format("x", "y")
+                                payload_x, payload_y = task.payloads[0][0], task.payloads[1][0]
+                                transition_time = task.payloads[2][0]
+                                payload = "{},{}".format(payload_x, payload_y)
+                                attr_value = "{},{}".format(returned_attr_list[0].value, returned_attr_list[1].value)
+                                if returned_attr_list[0].value == payload_x and returned_attr_list[1].value == payload_y:
+                                    okng = "OK"
+                                else:
+                                    okng = "NG"
+                            elif cmd == "MOVE COLOR":
+                                pass
+                            elif cmd == "STEP COLOR":
+                                # previous value settings
+                                attr_name = "{},{}".format("x", "y")
+                                prevous_x, previous_y = previous_attr_list[1].value, previous_attr_list[2].value
+                                payload_x, payload_y = task.payloads[0][0], task.payloads[1][0]
+                                
+                                payload = "{},{}".format(payload_x, payload_y)
+                                attr_value = "{},{}".format(returned_attr_list[0].value, returned_attr_list[1].value)
 
-                    
+                                transition_time = task.payloads[2][0]
+                                expected_x, expected_y = previous_x + payload_x, previous_y + payload_y
+                                if returned_attr_list[0].value == expected_x and returned_attr_list[1].value == expected_y:
+                                    okng = "OK"
+                                else:
+                                    okng = "NG"
+                            elif cmd == "STOP MOVE STEP":
+                                attr_name = "{}".format("temperature")
+                                payload = task.payloads
+                                if returned_attr.value == 0:
+                                    okng = "OK"
+                            elif cmd == "MOVE TO COLOR & TEMPERATURE":
+                                attr_name = "{}".format("temperature")
+                                payload = task.payloads[0][0]
+                                attr_value = returned_attr_list.value
+                                transition_time = task.payloads[1][0]
+                                if returned_attr.value == payload:
+                                    okng = "OK"
+                                else:
+                                    okng = "NG"
+                            elif cmd == "MOVE COLOR & TEMPERATURE":
+                                pass
+                            elif cmd == "STEP COLOR & TEMPERATURE":
+                                previous_value = previous_attr_list[2].value
+                                payload_size = task.payloads[1][0]
+                                transition_time = task.payloads[2][0]
+                                payload_min_temp = task.payloads[3][0]
+                                payload_max_temp = task.payloads[4][0]
+                                
+                                attr_name = "{},{},{},{}".format("mode", "step", "min", "max")
+                                attr_value = "{},{},{}".format(returned_attr_list[2].value, returned_attr_list[3].value, returned_attr_list[4].value)
+                                payload = "{},{},{}".format(payload_size, payload_min_temp, payload_max_temp)
+                                if returned_attr_list[2].value == payload_size + previous_value and\
+                                        returned_attr[3].value == payload_min_temp and\
+                                        returned_attr[4].value == payload_max_temp:
+                                    okng = "OK"
+                                else:
+                                    okng = "NG"                      
+                            
+                            result = "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
+                                cluster, cmd, attr_name, attr_value, payload, transition_time, wait_time, okng)
+                            
 
                     elif task.task_kind == config.TASK_READ:
                         param_attr = Attribute(task.cluster, task.attr_id, task.attr_type)

@@ -64,7 +64,6 @@ def parse_task_list(file_name):
             if task_kind == COMMAND_TASK:
                 command = parsed_task['command']
                 payloads = parsed_task['payloads']
-                print(payloads, type(payloads), type(None))
                 cmd_task = Cmd(cluster, command, payloads, duration)
                 task_list.append(cmd_task)
             elif task_kind == READ_ATTRIBUTE_TASK:

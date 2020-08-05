@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1838</width>
-    <height>973</height>
+    <height>1291</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -237,11 +237,11 @@
       <x>10</x>
       <y>290</y>
       <width>311</width>
-      <height>561</height>
+      <height>631</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="each">
      <attribute name="title">
@@ -545,292 +545,11 @@
      <attribute name="title">
       <string>전체</string>
      </attribute>
-     <widget class="QGroupBox" name="group_level_3">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>290</y>
-        <width>231</width>
-        <height>141</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>LEVEL</string>
-      </property>
-      <widget class="QWidget" name="layoutWidget_67">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>211</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_70">
-        <item>
-         <widget class="QLabel" name="label_61">
-          <property name="text">
-           <string>값          </string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="text_level_7">
-          <property name="placeholderText">
-           <string>공백시 임의의 값</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_68">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>210</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_71">
-        <item>
-         <widget class="QLabel" name="label_62">
-          <property name="text">
-           <string>반복 횟수</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spin_level_7"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_69">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>210</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_72">
-        <item>
-         <widget class="QLabel" name="label_63">
-          <property name="text">
-           <string>대기 (ms)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_27"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_70">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>210</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_73">
-        <item>
-         <widget class="QLabel" name="label_64">
-          <property name="text">
-           <string>전환 (ms)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_28"/>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="group_color_3">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>140</y>
-        <width>231</width>
-        <height>141</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>COLOR</string>
-      </property>
-      <widget class="QWidget" name="layoutWidget_63">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>211</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_66">
-        <item>
-         <widget class="QLabel" name="label_57">
-          <property name="text">
-           <string>값          </string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="text_color_7">
-          <property name="placeholderText">
-           <string>공백시 임의의 값</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_64">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>210</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_67">
-        <item>
-         <widget class="QLabel" name="label_58">
-          <property name="text">
-           <string>반복 횟수</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spin_color_7"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_65">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>210</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_68">
-        <item>
-         <widget class="QLabel" name="label_59">
-          <property name="text">
-           <string>대기 (ms)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_25"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_66">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>210</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_69">
-        <item>
-         <widget class="QLabel" name="label_60">
-          <property name="text">
-           <string>전환 (ms)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_26"/>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="group_onoff_3">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>231</width>
-        <height>111</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>ON/OFF</string>
-      </property>
-      <widget class="QWidget" name="layoutWidget_61">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>103</width>
-         <height>82</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_8">
-        <item>
-         <widget class="QCheckBox" name="chkbox_on_7">
-          <property name="text">
-           <string>ON</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="chkbox_off_7">
-          <property name="text">
-           <string>OFF</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="chkbox_toggle_7">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>TOGGLE</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_62">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>30</y>
-         <width>138</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_65">
-        <item>
-         <widget class="QLabel" name="label_spin_onoff_7">
-          <property name="text">
-           <string>반복 횟수</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spin_onoff_7"/>
-        </item>
-       </layout>
-      </widget>
-     </widget>
      <widget class="QGroupBox" name="group_level_4">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>440</y>
+        <y>530</y>
         <width>231</width>
         <height>61</height>
        </rect>
@@ -857,6 +576,299 @@
         </item>
         <item>
          <widget class="QSpinBox" name="entire_iter"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="group_level_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>330</y>
+        <width>281</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>LEVEL</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget_17">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>247</width>
+         <height>164</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_14">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_48">
+          <item>
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>명령어</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="level_commands_3"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="layout_level_payload_3"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_49">
+          <item>
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>반복 횟수</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="count_level_3"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_50">
+          <item>
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>대기 (ms)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="wait_level_3"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_51">
+          <item>
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>전환 (ms)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="transit_level_3"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="group_onoff_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>181</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>ON/OFF</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget_12">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>2</width>
+         <height>2</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_38"/>
+      </widget>
+      <widget class="QWidget" name="layoutWidget_13">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>159</width>
+         <height>62</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_11">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_39">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>명령어</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="onoff_commands_3"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_40">
+          <item>
+           <widget class="QLabel" name="label_spinbox_onoff_3">
+            <property name="text">
+             <string>반복 횟수</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="count_onoff_3"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="group_color_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>281</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>COLOR</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget_16">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>247</width>
+         <height>164</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_13">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_44">
+          <item>
+           <widget class="QLabel" name="label_command_3">
+            <property name="text">
+             <string>명령어</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="color_commands_3"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="layout_color_payload_4"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="layout_color_payload2_3"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_45">
+          <item>
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>반복 횟수</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="count_color_3"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_46">
+          <item>
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>대기 (ms)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="wait_color_3"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_47">
+          <item>
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>전환 (ms)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="transit_color_3"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="group_onoff_4">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>20</y>
+        <width>101</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>임의값</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget_14">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>2</width>
+         <height>2</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_41"/>
+      </widget>
+      <widget class="QWidget" name="layoutWidget_15">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>81</width>
+         <height>62</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_12">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_42">
+          <item>
+           <widget class="QCheckBox" name="checkBox_5">
+            <property name="text">
+             <string>정상</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_43">
+          <item>
+           <widget class="QCheckBox" name="checkBox_6">
+            <property name="text">
+             <string>비정상</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -1030,8 +1042,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>870</y>
+      <x>100</x>
+      <y>930</y>
       <width>491</width>
       <height>61</height>
      </rect>
