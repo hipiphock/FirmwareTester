@@ -7,241 +7,24 @@
     <x>0</x>
     <y>0</y>
     <width>1916</width>
-    <height>1065</height>
+    <height>773</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>50</y>
-      <width>491</width>
-      <height>211</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QGroupBox" name="group_device">
-     <property name="geometry">
-      <rect>
-       <x>225</x>
-       <y>20</y>
-       <width>261</width>
-       <height>161</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>장치 정보</string>
-     </property>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>221</width>
-        <height>131</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>장치 이름  </string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="text_name">
-           <property name="text">
-            <string>Ultra Thin Wafer</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>장치 UUID </string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="text_uuid">
-           <property name="text">
-            <string>0x8e89bed6</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>장치 주소  </string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="text_address">
-           <property name="text">
-            <string>0xFFFE88571D018E53</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Entry Point</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="text_entrypoint">
-           <property name="text">
-            <string>8</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QGroupBox" name="group_module">
-     <property name="geometry">
-      <rect>
-       <x>5</x>
-       <y>20</y>
-       <width>211</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>모듈 선택</string>
-     </property>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>209</width>
-        <height>26</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>모듈 선택</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="combo_module_select">
-         <item>
-          <property name="text">
-           <string>ZigBee HA</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>ZigBee 3.0</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>BLE</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>UART</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QPushButton" name="btn_dev_gen">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>170</y>
-       <width>111</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>장치 저장</string>
-     </property>
-    </widget>
-    <widget class="QGroupBox" name="group_module_2">
-     <property name="geometry">
-      <rect>
-       <x>5</x>
-       <y>80</y>
-       <width>211</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Dongle Interface</string>
-     </property>
-     <widget class="QWidget" name="layoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>182</width>
-        <height>26</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_14">
-       <item>
-        <widget class="QLabel" name="label_12">
-         <property name="text">
-          <string>포트 선택</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="combo_port_select"/>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-   </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>290</y>
+      <y>10</y>
       <width>311</width>
       <height>631</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="single">
      <attribute name="title">
@@ -370,20 +153,6 @@
         <item>
          <layout class="QHBoxLayout" name="hlayout_single_color_wait">
           <item>
-           <widget class="QLabel" name="label_single_color_wait">
-            <property name="text">
-             <string>대기 (ms)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spinbox_single_color_wait"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="hlayout_single_color_transition">
-          <item>
            <widget class="QLabel" name="label_single_color_transition">
             <property name="text">
              <string>전환 (ms)</string>
@@ -391,7 +160,35 @@
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinbox_single_color_transition"/>
+           <widget class="QSpinBox" name="spinbox_single_color_transition">
+            <property name="minimum">
+             <number>510</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="hlayout_single_color_transition">
+          <item>
+           <widget class="QLabel" name="label_single_color_wait">
+            <property name="text">
+             <string>대기 (ms)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinbox_single_color_wait">
+            <property name="minimum">
+             <number>510</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -454,20 +251,6 @@
         <item>
          <layout class="QHBoxLayout" name="hlayout_single_level_wait">
           <item>
-           <widget class="QLabel" name="label_single_level_wait">
-            <property name="text">
-             <string>대기 (ms)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spinbox_single_level_wait"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="hlayout_single_level_transition">
-          <item>
            <widget class="QLabel" name="label_single_level_transition">
             <property name="text">
              <string>전환 (ms)</string>
@@ -475,7 +258,35 @@
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinbox_single_level_transition"/>
+           <widget class="QSpinBox" name="spinbox_single_level_transition">
+            <property name="minimum">
+             <number>510</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="hlayout_single_level_transition">
+          <item>
+           <widget class="QLabel" name="label_single_level_wait">
+            <property name="text">
+             <string>대기 (ms)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinbox_single_level_wait">
+            <property name="minimum">
+             <number>510</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -739,20 +550,6 @@
         <item>
          <layout class="QHBoxLayout" name="hlayout_entire_color_wait">
           <item>
-           <widget class="QLabel" name="label_entire_color_wait">
-            <property name="text">
-             <string>대기 (ms)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spinbox_entire_color_wait"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="hlayout_entire_color_transition">
-          <item>
            <widget class="QLabel" name="label_entire_color_transition">
             <property name="text">
              <string>전환 (ms)</string>
@@ -760,7 +557,38 @@
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinbox_entire_color_transition"/>
+           <widget class="QSpinBox" name="spinbox_entire_color_transition">
+            <property name="minimum">
+             <number>510</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="value">
+             <number>510</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="hlayout_entire_color_transition">
+          <item>
+           <widget class="QLabel" name="label_entire_color_wait">
+            <property name="text">
+             <string>대기 (ms)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinbox_entire_color_wait">
+            <property name="minimum">
+             <number>510</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -823,20 +651,6 @@
         <item>
          <layout class="QHBoxLayout" name="hlayout_entire_level_wait">
           <item>
-           <widget class="QLabel" name="label_entire_level_wait">
-            <property name="text">
-             <string>대기 (ms)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spinbox_entire_level_wait"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="hlayout_entire_level_transition">
-          <item>
            <widget class="QLabel" name="label_entire_level_transition">
             <property name="text">
              <string>전환 (ms)</string>
@@ -844,7 +658,35 @@
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinbox_entire_level_transition"/>
+           <widget class="QSpinBox" name="spinbox_entire_level_transition_2">
+            <property name="minimum">
+             <number>510</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="hlayout_entire_level_transition">
+          <item>
+           <widget class="QLabel" name="label_entire_level_wait">
+            <property name="text">
+             <string>대기 (ms)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinbox_entire_level_wait">
+            <property name="minimum">
+             <number>510</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -856,8 +698,8 @@
    <widget class="QGroupBox" name="group_executing">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>90</y>
+      <x>710</x>
+      <y>20</y>
       <width>1071</width>
       <height>341</height>
      </rect>
@@ -942,9 +784,9 @@
    <widget class="QGroupBox" name="group_result">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>490</y>
-      <width>821</width>
+      <x>710</x>
+      <y>380</y>
+      <width>1071</width>
       <height>421</height>
      </rect>
     </property>
@@ -956,7 +798,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>801</width>
+       <width>1041</width>
        <height>311</height>
       </rect>
      </property>
@@ -968,7 +810,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>799</width>
+        <width>1039</width>
         <height>309</height>
        </rect>
       </property>
@@ -977,7 +819,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>801</width>
+         <width>1041</width>
          <height>311</height>
         </rect>
        </property>
@@ -1030,9 +872,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>930</y>
-      <width>491</width>
+      <x>360</x>
+      <y>580</y>
+      <width>321</width>
       <height>61</height>
      </rect>
     </property>
@@ -1053,7 +895,7 @@
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>290</y>
+      <y>10</y>
       <width>381</width>
       <height>461</height>
      </rect>
@@ -1117,7 +959,7 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>760</y>
+      <y>490</y>
       <width>321</width>
       <height>71</height>
      </rect>

@@ -16,10 +16,14 @@ from DongleHandler import constants
 from DongleHandler import *
 from zb_cli_wrapper.zb_cli_dev import ZbCliDevice
 from zb_cli_wrapper.src.utils.zigbee_classes.clusters.attribute import Attribute
-
+from zb_cli_wrapper.src.utils.communicator import CommandError
 
 ui_file = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', 'ui', 'main.ui'))
+
+wizard_file = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '..', 'ui', 'connection_wizard.ui'))
+
 
 device_path = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', 'res', 'device'))
@@ -31,9 +35,86 @@ log_path = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', 'log'))
 
 
+print(wizard_file)
 form_class = uic.loadUiType(ui_file)[0]
-
+wizard_class = uic.loadUiType(wizard_file)[0]
 command_model = QStandardItemModel()
+
+
+class WizardClass(QWizard, wizard_class):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.dict_device = {}
+
+        self.pushButton_connect_zigbee_device.clicked.connect(self.connect_zigbee_device)
+        self.pushButton_save_zigbee_device.clicked.connect(self.save_zigbee_device)
+        self.pushButton_load_zigbee_device.clicked.connect(self.load_zigbee_device)
+
+        enabled_ports = common.serial_ports()
+        for port in enabled_ports:
+            self.comboBox_port.addItem(port)
+
+
+    def connect_zigbee_device(self):
+        try:
+            channel = (int(self.lineEdit_channel.text()))
+            cli_instance = ZbCliDevice('', '', self.comboBox_port.currentText())
+            cli_instance.bdb.channel = [channel]
+            cli_instance.bdb.role = 'zr'
+            cli_instance.bdb.start()
+        except ValueError:
+            print (ValueError)
+        except CommandError:
+            print(hex(cli_instance.zdo.short_addr))
+            if cli_instance.zdo.short_addr:
+                QMessageBox.about(self, "연결이 완료되었습니다",  "Short Address\t " + hex(cli_instance.zdo.short_addr))    
+            else:
+                QMessageBox.about(self, "동글을 다시 꽂아주세요",  CommandError)    
+        except TimeoutError:
+            print(TimeoutError)
+        except PermissionError:
+                QMessageBox.about(self, "포트가 사용중입니다.",  PermissionError)    
+
+
+
+    def save_zigbee_device(self):
+        print('save zigbee')
+        file_name = QFileDialog.getSaveFileName(self, 'Save file', '', 'JSON (*.json)')
+        self.dict_device['module'] = "Zigbee HA"
+        self.dict_device['channel'] = int(self.lineEdit_channel.text()) if len(self.lineEdit_channel.text()) > 0 else 0# save as integer
+        self.dict_device['name'] = self.lineEdit_name.text()
+        self.dict_device['address'] = self.lineEdit_zigbeeid.text()
+        self.dict_device['ep'] = 8 # this is hard coded
+        self.dict_device['port'] = self.comboBox_port.currentText()
+
+
+        print(file_name)
+        
+        with open(file_name[0], 'w') as f:
+            try:
+                f.write(json.dumps(self.dict_device))
+                QMessageBox.about(
+                    self, "message", file_name[0] + " is saved")
+            except Exception:
+                QMessageBox.about(self, "message", Exception)
+        
+
+    
+    def load_zigbee_device(self):
+        print('load zigbee')
+        file_name = QFileDialog.getOpenFileName(self, 'Open File', './')
+        if file_name[0]:
+            with open(file_name[0]) as json_file:
+                json_data = json.load(json_file)
+                if json_data["module"] == "Zigbee HA":
+                    self.lineEdit_name.setText(json_data["name"])
+                    # self.text_uuid.setText(json_data["uuid"])
+                    self.lineEdit_channel.setText(str(json_data['channel']))
+                    self.lineEdit_zigbeeid.setText(json_data["address"])
+                else:
+                    QMessageBox.about(self, "장치 정보 불러오기 실패", "장치 파일이 아닙니다.")
 
 
 class WindowClass(QMainWindow, form_class):
@@ -66,7 +147,11 @@ class WindowClass(QMainWindow, form_class):
         self.action_import_command.triggered.connect(self.func_import_command)
 
         # save device as json file
-        self.btn_dev_gen.clicked.connect(self.func_dev_gen_clicked)
+        self.btn_dev_gen.clicked.connect(self.func_export_device)
+
+        self.btn_dev_load.clicked.connect(self.func_import_device)
+
+        self.btn_dev_connect.clicked.connect(self.func_connect_device)
 
         # create command
         self.btn_cmd_gen.clicked.connect(self.func_cmd_gen_clicked)
@@ -115,8 +200,8 @@ class WindowClass(QMainWindow, form_class):
     # menubar functions
 
     def func_result_reset_clicked(self):
-        self.table_current_result.clear()
-        self.func_layout_clear(self.list_result)
+        self.table_current_result.setRowCount(0)
+        self.list_result.clear()
 
     def func_import_device(self):
         file_name = QFileDialog.getOpenFileName(self, 'Open File', './')
@@ -124,18 +209,17 @@ class WindowClass(QMainWindow, form_class):
             with open(file_name[0]) as json_file:
                 json_data = json.load(json_file)
                 if json_data["module"] == "ZigBee HA":
-                    module_index = self.combo_module_select.findText(
-                        json_data["module"])
+                    module_index = self.combo_module_select.findText(json_data["module"])
                     # self.combo_module_select.currentIndexChanged(module_index)
-                    self.text_name.setText("wafer")
+                    self.text_name.setText(json_data["name"])
                     # self.text_uuid.setText(json_data["uuid"])
                     self.text_address.setText(json_data["eui64"])
-                    self.text_entrypoint.setText(json_data["ep"])
+                    self.text_entrypoint.setText(str(json_data["ep"]))
                 else:
                     QMessageBox.about(self, "장치 정보 불러오기 실패", "장치 파일이 아닙니다.")
 
     def func_import_command(self):
-        file_name = QFileDialog.getOpenFileName(self, 'Open file', './')
+        file_name = QFileDialog.getOpenFileName(self, 'Open file', '',  'JSON (*.json)')
         if file_name[0]:
             input_command = common.read_command_from_json(
                 file_name[0], self.cbo_module.currentIndex())
@@ -147,6 +231,9 @@ class WindowClass(QMainWindow, form_class):
                 QMessageBox.about(self, "명령 정보 가져오기 실패", "명령 파일이 아닙니다.")
 
     # device generate
+    # def func_export_device(self):        
+    # file_name = QFileDialog.getSaveFileName(self, 'Save file', '', 'JSON (*.json)')
+
     def func_dev_gen_clicked(self):
 
         self.dict_device['module'] = self.combo_module_select.currentText()
@@ -165,6 +252,11 @@ class WindowClass(QMainWindow, form_class):
                     self, "message", self.device_file + " is saved")
             except Exception:
                 QMessageBox.about(self, "message", Exception)
+
+
+    def func_dev_load_clicked(self):
+        pass
+
 
     def func_layout_clear(self, layout):
         for i in reversed(range(layout.count())):
@@ -401,7 +493,7 @@ class WindowClass(QMainWindow, form_class):
             self.hlayout_entire_level_payload.addWidget(self.label_level)
             self.hlayout_entire_level_payload.addWidget(self.spin_step)
 
-        elif selected_command == "STOP" or selected_command == "STOP ONOFF":
+        elif selected_command == "STOP" or selected_command == "STOP ONOFF": 
             pass
 
     # command generate
@@ -915,6 +1007,8 @@ class Worker(QThread):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    myWindow = WindowClass()
-    myWindow.show()
+    # myWindow = WindowClass()
+    # myWindow.show()
+    wizard = WizardClass()
+    wizard.show()
     app.exec_()

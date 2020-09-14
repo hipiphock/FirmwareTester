@@ -30,6 +30,14 @@ class TaskRoutine:
     # 1. Starting connection with the device(the device joins the network).
     # 2. Sending/Receiving with the dongle and the device.
     # 3. Disbanding the device from Zigbee 
+
+    def connect_device(self, port):
+        cli_instance = ZbCliDevice('', '', port)
+        cli_instance.bdb.channel = [24]
+        cli_instance.bdb.role = 'zr'
+        cli_instance.bdb.start()
+        time.sleep(5.0)
+
     def start_routine(self):
         status = 1
         # Before connecting the device with the dongle,

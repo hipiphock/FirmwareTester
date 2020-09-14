@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>zigbee_bulb.jpg</file>
+    <file>zigbee_hub.jpg</file>
+  </qresource>
+</RCC>
