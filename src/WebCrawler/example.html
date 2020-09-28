@@ -1,0 +1,643 @@
+
+<!doctype html5>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="_csrf" content="d9bbc047-900a-4bb5-8b93-94ff4faffdbf"/>
+	<!-- default header name is X-CSRF-TOKEN -->
+	<meta name="_csrf_header" content="X-CSRF-TOKEN"/>
+	<title>Show Hub</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/assets/components/common/favicon-4993383b83174ec4d5a7b26bcc8df5b8.ico"/>
+	<link rel="apple-touch-icon" href="/assets/components/common/apple-touch-icon-b7275dbac7a4078e4f44859751581016.png"/>
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/components/common/apple-touch-icon-retina-35ea8b3c6aa433fa74ebc97d0b5a2a53.png"/>
+
+	
+		<link rel="stylesheet" href="/assets/base/bootstrap-framework-ca068de267e66f972264227b95ad8cb1.css"/>
+	
+
+	<link rel="stylesheet" href="/assets/base/common-77e2fb036db019b4c759f2bb145e94d3.css"/>
+
+	
+		<script src="/assets/libs/underscore/underscore-6e1f1c149dc88c708f9bfce4a061187f.js" type="text/javascript" ></script>
+	
+
+	
+
+	<script src="/assets/apps/main/main-app-5811442e0bc96e2d7374677668e7edc4.js" type="text/javascript" ></script>
+
+	
+		<script src="/assets/libs/bootstrap/bootstrap-e3bccdc29cf6e1d0f3e7bc54ccf086ef.js" type="text/javascript" ></script>
+	
+
+	<!--[if lt IE 9]>
+	<script src="/assets/libs/html5shiv/html5shiv-4163e58056c3c7ff50f91c9d141fefaa.js" type="text/javascript" ></script>
+	<![endif]-->
+	
+		<script type="text/javascript">
+			window.heap=window.heap||[],heap.load=function(t,e){window.heap.appid=t,window.heap.config=e;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=("https:"===document.location.protocol?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+t+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(t){return function(){heap.push([t].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+			heap.load("2894297474");
+		</script>
+	
+	
+		<meta name="layout" content="bootstrap-fixed">
+		<link rel="stylesheet" href="/assets/apps/hub/hub-show-8f1a3bc898981fd2911371424f899670.css"/>
+		
+		
+	
+</head>
+<body class="production-env">
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-M4C995"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script type="application/javascript">
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M4C995');
+</script>
+<!-- End Google Tag Manager -->
+
+
+
+	<header class="header-main minimized">
+
+	
+		<div class="login-tab">
+			<div class="login-tab-welcome">
+				<div class="st-arrow-container">
+					<div class="st-arrow-dropdown"></div>
+				</div>
+				
+				
+					
+					
+						Welcome back, <strong class="username"><a href="/user/show">youngjin.kim0706@gmail.com</a></strong>
+					
+				
+			</div>
+			<ul>
+				
+	
+
+
+
+				
+					
+
+					
+					
+
+					
+
+					
+					
+
+					<li><a href="/logout/index">Logout</a></li>
+				
+
+			</ul>
+		</div>
+	
+	
+	
+		<div>
+			<div class="gradient-top-bar"></div>
+			<div class="clearfix">
+				<div id="topNavigation" style="display:none;">
+					<div class="mobile-menu-brand"><img src='/assets/components/common/smartthings-logo.png' alt='logo' /></div>
+					
+						<div class="mobile-menu-icon"><div><div></div></div></div>
+					
+				</div>
+			</div>
+		</div>
+</header>
+
+	<div class="mobile-menu">
+	<ul class="ul-reset">
+		
+			<li><a href="/user/show">Logged in as: youngjin.kim0706@gmail.com</a></li>
+			<li><a href="/logout/index">Logout</a></li>
+		
+		
+		<li><a href="https://shop.smartthings.com">Shop</a></li>
+		<li><a href="http://smartthings.com">Learn More</a></li>
+		<li><a href="http://smartthings.com/build">Build</a></li>
+		<li><a href="http://support.smartthings.com">Support</a></li>
+		
+			<ul class="logged-in-menu ul-reset">
+				<li class="menu-title">Developer Tools:</li>
+				
+	
+
+
+
+				<li class=""><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li>
+				<li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li>
+				<li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li>
+				
+					<li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li>
+					<li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li>
+					
+						<li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li>
+					
+					<li class=""><a href="/ide/logs">Logs</a></li>
+				
+				
+				<li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li>
+			</ul>
+		
+	</ul>
+</div>
+
+	
+		
+	<div class="dev-nav-wrap">
+
+	<div class="navbar navbar-default main">
+		<div class="container-fluid">
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav main">
+					
+						<li class=""><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li>
+						<li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li>
+						<li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li>
+						
+							<li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li>
+							<li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li>
+							
+								<li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li>
+							
+							<li class=""><a href="/ide/logs">Live Logging</a></li>
+						
+						<li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li>
+					
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	</div>
+
+
+	
+
+
+<script id="success-template" type="text/x-handlebars-template">
+	<div class="inner-wrap">
+		<div class="alert alert-success alert-dismissible flash">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			{{message}}
+		</div>
+	</div>
+</script>
+
+<script type="application/javascript">
+	function _resize_window_delayed() {
+		setTimeout(function() {
+			window.dispatchEvent(new Event('resize'));
+		}, 50)
+	}
+</script>
+
+<div id="flash-message-container" class="row">
+
+
+
+
+</div>
+
+
+		<main class="hub-show-page content">
+			<div class="nav" role="navigation">
+				<ul class="nav nav-pills">
+					<li><a href="/location/show/c0747120-3d55-4038-af00-596d155a0d49">&laquo; 연구실 Location</a></li>
+				</ul>
+			</div>
+			<div id="show-hub">
+				<form action="/hub/list" method="post" class="pull-right top-form" >
+					<input type="hidden" name="_csrf" value="d9bbc047-900a-4bb5-8b93-94ff4faffdbf" id="_csrf" />
+					
+						<fieldset class="buttons">
+							<input type="hidden" name="id" value="51ec7044-52be-47ce-89d3-4d1ab0483521" id="id" />
+							<a href="/hub/edit/51ec7044-52be-47ce-89d3-4d1ab0483521" class="edit btn btn-default">Edit</a>
+							<input type="submit" name="_action_delete" value="Delete" class="delete btn btn-danger" onclick="return confirm(&#39;Are you sure?&#39;);" />
+						</fieldset>
+					
+				</form>
+
+				<h1>SmartThings Hub</h1>
+
+				<div class="table-wrap">
+					<table class="table table-bordered table-condensed">
+
+						
+						<tr>
+							<td>
+								<span id="name-label" class="property-label">Name</span>
+							</td>
+							<td>
+								<span class="property-value" aria-labelledby="name-label">SmartThings Hub</span>
+							</td>
+						</tr>
+						
+
+						
+						<tr>
+							<td>
+								<span id="zigbeeId-label" class="property-label">Hub ID</span>
+							</td>
+							<td>
+								<span class="property-value" aria-labelledby="zigbeeId-label">D052A8B922780001
+							</td>
+						</tr>
+						
+
+						
+
+						<tr>
+							<td>
+								<span id="status-label" class="property-label">Status</span>
+							</td>
+							<td>
+								<span class="property-value" aria-labelledby="status-label">ACTIVE</span>
+							</td>
+						</tr>
+
+						
+						
+						<tr>
+							<td>
+								<span id="firmwareVersion-label" class="property-label">Firmware Version</span>
+							</td>
+							<td class="property-value" aria-labelledby="zigbee-label">
+								000.031.00004
+								<ul>
+									
+									
+								</ul>
+							</td>
+						</tr>
+						
+						<tr>
+							<td>
+								<span id="hardwareVersion-label" class="property-label">Hardware Version</span>
+							</td>
+							<td class="property-value" aria-labelledby="hardwareVersion-label">
+								Hub v3 US
+								
+							</td>
+						</tr>
+						
+
+						
+						<tr>
+							<td>
+								<span id="location-label" class="property-label">Location</span>
+							</td>
+							<td>
+								<span class="property-value" aria-labelledby="location-label"><a href="/location/show/c0747120-3d55-4038-af00-596d155a0d49">연구실</a></span>
+							</td>
+						</tr>
+						
+
+						
+						<tr>
+							<td>
+								<span id="lastActivityAt-label" class="property-label">Last Activity At</span>
+							</td>
+							<td>
+								<span class="property-value" aria-labelledby="lastActivityAt-label">
+									2020-09-28 6:23 오전 UTC
+								</span>
+							</td>
+						</tr>
+						
+
+						
+
+						
+						<tr>
+							<td>
+								<span id="lastPingAt-label" class="property-label">Last Ping From Hub At</span>
+							</td>
+							<td>
+								<span class="property-value" aria-labelledby="lastPingAt-label">2020-09-28T06:23:47.780Z</span>
+							</td>
+						</tr>
+						
+
+						
+						<tr>
+							<td>
+								<span id="dateCreated-label" class="property-label">Date Created</span>
+							</td>
+							<td>
+								<span class="property-value" aria-labelledby="dateCreated-label">
+									2020-09-04 8:44 오전 UTC
+								</span>
+							</td>
+						</tr>
+						
+
+						
+						<tr>
+							<td>
+								<span id="lastUpdated-label" class="property-label">Last Updated</span>
+							</td>
+							<td>
+								<span class="property-value" aria-labelledby="lastUpdated-label">
+									2020-09-04 8:48 오전 UTC
+								</span>
+							</td>
+						</tr>
+						
+
+						<tr>
+							<td id="ip-label" class="property-label">IP Address</td>
+							<td class="property-value" aria-labelledby="ip-label">192.168.0.29</td>
+						</tr>
+
+						<tr>
+							<td id="mac-label" class="property-label">MAC Address</td>
+							<td class="property-value" aria-labelledby="mac-label">28:6D:97:B0:C7:BD</td>
+						</tr>
+
+						
+						<tr>
+							<td id="lastBooted-label" class="property-label">Last Booted</td>
+							<td>
+								<span class="property-value" aria-labelledby="lastBooted-label">
+									2020-09-09 5:43 오전 UTC
+								</span>
+							</td>
+						</tr>
+						
+
+						
+						<tr>
+							<td id="battery-label" class="property-label">Battery</td>
+							<td class="property-value" aria-labelledby="settings-label">
+								
+									On battery power: false
+								
+							</td>
+
+						</tr>
+						
+
+						
+						<tr>
+							<td id="settings-label" class="property-label">Settings</td>
+							<td class="property-value" aria-labelledby="settings-label">
+								
+									Presence sensor timeout: 2
+								
+							</td>
+						</tr>
+						
+
+						
+
+						
+
+
+						<tr>
+							<td>
+								<span id="zigbee-label" class="property-label">ZigBee</span>
+							</td>
+							<td class="property-value" aria-labelledby="zigbee-label">
+								<ul>
+									
+										
+										
+											<li>State: <strong>Functional</strong></li>
+										
+									
+										
+										
+											<li>Version: <strong>3.1.0</strong></li>
+										
+									
+										
+										
+											<li>EUI: <strong>286D9700020592FC</strong></li>
+										
+									
+										
+										
+										
+										
+									
+										
+										
+											<li>Channel: <strong>20</strong></li>
+										
+									
+										
+										
+											<li>Node ID: <strong>0000</strong></li>
+										
+									
+										
+										
+											<li>Pan ID: <strong>D78A</strong></li>
+										
+									
+										
+										
+										
+										
+									
+										
+										
+										
+										
+									
+										
+										
+											<li>OTA: <strong>disabled</strong></li>
+										
+									
+										
+										
+											<li>Unsecure Rejoin: <strong>false</strong></li>
+										
+									
+								</ul>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<span id="zwave-label" class="property-label">Z-Wave</span>
+							</td>
+							<td class="property-value" aria-labelledby="zwave-label">
+								<ul>
+									
+										
+										
+											<li>State: <strong>Functional</strong></li>
+										
+									
+										
+										
+											<li>Home ID: <strong>D11D6F2C</strong></li>
+										
+									
+										
+										
+											<li>Node ID: <strong>01</strong></li>
+										
+									
+										
+										
+											<li>Suc ID: <strong>01</strong></li>
+										
+									
+										
+										
+											<li>Protocol Version: <strong>6.04</strong></li>
+										
+									
+										
+											
+										
+										
+									
+										
+											
+										
+										
+									
+										
+										
+											<li>Region: <strong>US</strong></li>
+										
+									
+										
+											
+										
+										
+									
+										
+											
+										
+										
+									
+										
+											
+										
+										
+									
+										
+											
+										
+										
+									
+								</ul>
+							</td>
+						</tr>
+
+						<tr class="fieldcontain">
+							<td id="events-label" class="property-label">
+								Events
+							</td>
+							<td class="property-value" aria-labelledby="events-label">
+								<a href="/hub/51ec7044-52be-47ce-89d3-4d1ab0483521/events?source=true">List Events</a>
+							</td>
+						</tr>
+
+						
+
+						
+
+						 
+							
+						
+
+						
+
+						
+					</table>
+				</div>
+
+				<div class="table-wrap">
+					<h1>Devices (Found 1)</h1>
+					
+					<table class="table table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th>Display Name</th>
+								<th>Type</th>
+								<th>Zigbee Id</th>
+								<th>Device Network Id</th>
+								<th>Status</th>
+								<th>Execution Location</th>
+								<th>Last Activity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="even">
+								<td><a href="/device/show/8c0a8c35-e4a5-4d4b-9751-8349653667f0">Ultra Thin Wafer</a></td>
+								<td>ZigBee White Color Temperature Bulb</td>
+								<td>88571DFFFE0E5408</td>
+								<td>F4E1</td>
+								<td>
+									
+										ONLINE
+									
+								</td>
+								<td>Local</td>
+								
+								<td>방금</td>
+							</tr>
+						</tbody>
+					</table>					
+				</div>
+				
+					<nav aria-label="Device List Pages">
+						
+					</nav>
+				
+			</div>
+		</main>
+	
+<div class="inner-wrap clearfix"></div>
+<div class="footer main" role="contentinfo">
+	<div class="inner-wrap clearfix">
+		<div class="pull-left">
+			&copy; 2020 SmartThings, Inc. All rights reserved.
+		</div>
+		
+		
+			<ul class="pull-right footer-links">ßå
+				<li><a href="http://www.smartthings.com/benefits/" target="_blank">Benefits</a></li>
+				<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+				<li><a href="https://shop.smartthings.com" target="_blank">Shop</a></li>
+				<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+				<li><a href="http://blog.smartthings.com/" target="_blank">Blog</a></li>
+				<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+				<li><a href="https://developers.smartthings.com/" target="_blank">Developers</a></li>
+				<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+				<li><a href="http://support.smartthings.com" target="_blank">Support</a></li>
+				<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+				<li><a href="http://www.smartthings.com/terms/" target="_blank">Terms of Use</a></li>
+				<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+				<li><a href="http://www.smartthings.com/privacy/" target="_blank">Privacy Policy</a></li>
+			</ul>
+		
+	</div>
+</div>
+
+
+</body>
+</html>
