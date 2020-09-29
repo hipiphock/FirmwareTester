@@ -47,44 +47,47 @@ class WindowClass(QMainWindow, main_class):
             pass # put error messages here
 
     def func_level_interface(self):
-        try:
-            current_cmd = self.comboBox_level_commands.currentText()
-            self.clear_layout(self.vlayout_level_widget)
+        # try:
+        current_cmd = self.comboBox_level_commands.currentText()
+        self.clear_layout(self.vlayout_level_widget)
 
-            if commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_ONOFF_CMD:
-                hlayout_brightness = QHBoxLayout()
-                label_brightness = QLabel("밝기")
-                spinbox_brightness = QSpinBox()
-                spinbox_brightness.setMaximum(254) # 254 should be changed as constants.maxvalue
-                
-                hlayout_brightness.addWidget(label_brightness)
-                hlayout_brightness.addWidget(spinbox_brightness)
-                
-                # hlayout_random = QHBoxLayout
-                self.put_layout(self.vlayout_level_widget, hlayout_brightness)
-                
-            elif commands['LEVEL'][current_cmd] == LVL_CTRL_MOVE_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MOVE_ONOFF_CMD:
-                self.clear_layout(self.vlayout_level_widget)
+        if commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_ONOFF_CMD:
+            hlayout_brightness = QHBoxLayout()
+            label_brightness = QLabel("밝기")
+            spinbox_brightness = QSpinBox()
+            spinbox_brightness.setMaximum(254) # 254 should be changed as constants.maxvalue
+            hlayout_brightness.addWidget(label_brightness)
+            hlayout_brightness.addWidget(spinbox_brightness)
+            
+            hlayout_random = QHBoxLayout()
+            label_random = QLabel("임의값")
+            radio_normal = QRadioButton("정상 범위")
+            radio_abnormal = QRadioButton("비정상 범위")
+            hlayout_random.addWidget(label_random)
+            hlayout_random.addWidget(radio_normal)        
+            hlayout_random.addWidget(radio_abnormal)
 
-            elif commands['LEVEL'][current_cmd] == LVL_CTRL_STEP_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_STEP_ONOFF_CMD:
-                pass
-            elif commands['LEVEL'][current_cmd] == LVL_CTRL_STOP_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_STOP_ONOFF_CMD:
-                pass
+            self.put_layout(self.vlayout_level_widget, hlayout_brightness, hlayout_random)
+            
+        elif commands['LEVEL'][current_cmd] == LVL_CTRL_MOVE_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MOVE_ONOFF_CMD:
+            pass
+        elif commands['LEVEL'][current_cmd] == LVL_CTRL_STEP_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_STEP_ONOFF_CMD:
+            pass
+        elif commands['LEVEL'][current_cmd] == LVL_CTRL_STOP_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_STOP_ONOFF_CMD:
+            pass
 
-        except:
-            pass # put error messages here
+        # except:
+        #     pass # put error messages here
     
     def clear_layout(self, layout):
-        if type(layout) == QVBoxLayout:
-            layout.deleteLater()
-            # children = layout.children()
-            # for child in children:
-            #     print(child)
-            #     if type(child) == QHBoxLayout:
-            #         for widget in child.children():
-            #             print(widget)
-            #             child.removeWidget(widget)
-            #     child.deleteLater()
+        #if type(layout) == QVBoxLayout:
+        while layout.count():
+            child = layout.takeAt(0)
+            print(child)
+            if type(child) == QWidgetItem:
+                child.widget().deleteLater()
+            elif type(child) == QHBoxLayout or type(child) == QVBoxLayout:
+                self.clear_layout(child)
 
     def put_layout(self, parent, *childs):
         for child in childs:
