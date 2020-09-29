@@ -63,7 +63,6 @@ clusters['SCENE_CLUSTER'] = SCENE_CLUSTER
 clusters['ON_OFF_CLUSTER'] = ON_OFF_CLUSTER
 clusters['LVL_CTRL_CLUSTER'] = LVL_CTRL_CLUSTER
 clusters['OTA_CLUSTER'] = OTA_CLUSTER
-clusters['DOOR_LOCK_CLUSTER'] = DOOR_LOCK_CLUSTER
 clusters['COLOR_CTRL_CLUSTER'] = COLOR_CTRL_CLUSTER
 clusters['TEMPERATURE_CLUSTER'] = TEMPERATURE_CLUSTER
 clusters['PRESSURE_CLUSTER'] = PRESSURE_CLUSTER
@@ -258,3 +257,7 @@ BLE_CONNECTION              = 1
 COMMAND_TASK                = 0       # added by @hipiphock
 READ_ATTRIBUTE_TASK         = 1      # added by @hipiphock
 WRITE_ATTRIBUTE_TASK        = 2      # added by @hipiphock
+
+
+
+##### Value Range #####
