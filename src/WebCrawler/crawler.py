@@ -4,7 +4,7 @@ import json
 from selenium import webdriver
 from bs4 import BeautifulSoup
 
-example_page = driver_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'example.html'))
+example_page = os.path.abspath(os.path.join(os.path.dirname(__file__), 'example.html'))
 online = False
 
 class Crawler():
@@ -30,12 +30,11 @@ class Crawler():
             if self.driver is None:
                 print("no chrome driver")
                 return -1
-        
         try:
             if online:
                 soup = BeautifulSoup(self.driver.page_source, 'html.parser')
             else:
-                soup = BeautifulSoup(open(example_page), 'html.parser')
+                soup = BeautifulSoup(open(example_page, encoding = 'UTF-8'), 'html.parser')
             channel = 0
             zigbee_id = ""
             ul = soup.find_all('ul')
@@ -60,7 +59,6 @@ class Crawler():
             for index, td in enumerate(table[0].find_all('td')):
                 if index == id_index:
                     zigbee_id = td.getText()
-
             return channel, zigbee_id
 
         except:

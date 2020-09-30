@@ -22,6 +22,7 @@ class WindowClass(QMainWindow, main_class):
     
         self.pushButton_zigbee_webcrwal.clicked.connect(self.func_btn_zigbee_crwaler)
         self.comboBox_level_commands.currentIndexChanged.connect(self.func_level_interface)
+        self.comboBox_color_commands.currentIndexChanged.connect(self.func_color_interface)
         self.init_commands()
 
     def init_commands(self):
@@ -47,38 +48,72 @@ class WindowClass(QMainWindow, main_class):
             pass # put error messages here
 
     def func_level_interface(self):
-        # try:
-        current_cmd = self.comboBox_level_commands.currentText()
-        self.clear_layout(self.vlayout_level_widget)
+        try:
+            current_cmd = self.comboBox_level_commands.currentText()
+            self.clear_layout(self.vlayout_level_widget)
 
-        if commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_ONOFF_CMD:
-            hlayout_brightness = QHBoxLayout()
-            label_brightness = QLabel("밝기")
-            spinbox_brightness = QSpinBox()
-            spinbox_brightness.setMaximum(254) # 254 should be changed as constants.maxvalue
-            hlayout_brightness.addWidget(label_brightness)
-            hlayout_brightness.addWidget(spinbox_brightness)
-            
-            hlayout_random = QHBoxLayout()
-            label_random = QLabel("임의값")
-            radio_normal = QRadioButton("정상 범위")
-            radio_abnormal = QRadioButton("비정상 범위")
-            hlayout_random.addWidget(label_random)
-            hlayout_random.addWidget(radio_normal)        
-            hlayout_random.addWidget(radio_abnormal)
+            if commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_ONOFF_CMD:
+                hlayout_brightness = QHBoxLayout()
+                label_brightness = QLabel("밝기")
+                spinbox_brightness = QSpinBox()
+                spinbox_brightness.setMaximum(254) # 254 should be changed as constants.maxvalue
+                hlayout_brightness.addWidget(label_brightness)
+                hlayout_brightness.addWidget(spinbox_brightness)
+                
+                hlayout_random = QHBoxLayout()
+                label_random = QLabel("임의값")
+                radio_normal = QRadioButton("정상 범위")
+                radio_abnormal = QRadioButton("비정상 범위")
+                hlayout_random.addWidget(label_random)
+                hlayout_random.addWidget(radio_normal)        
+                hlayout_random.addWidget(radio_abnormal)
 
-            self.put_layout(self.vlayout_level_widget, hlayout_brightness, hlayout_random)
-            
-        elif commands['LEVEL'][current_cmd] == LVL_CTRL_MOVE_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MOVE_ONOFF_CMD:
-            pass
-        elif commands['LEVEL'][current_cmd] == LVL_CTRL_STEP_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_STEP_ONOFF_CMD:
-            pass
-        elif commands['LEVEL'][current_cmd] == LVL_CTRL_STOP_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_STOP_ONOFF_CMD:
-            pass
+                self.put_layout(self.vlayout_level_widget, hlayout_brightness, hlayout_random)
+                
+            elif commands['LEVEL'][current_cmd] == LVL_CTRL_MOVE_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MOVE_ONOFF_CMD:
+                hlayout_minmax = QHBoxLayout()
+                label_minmax = QLabel("최대/최소")
+                combobox_minmax = QComboBox()
+                combobox_minmax.addItem("최대")
+                combobox_minmax.addItem("최소")
+                hlayout_minmax.addWidget(label_minmax)
+                hlayout_minmax.addWidget(combobox_minmax)
 
-        # except:
-        #     pass # put error messages here
+                self.put_layout(self.vlayout_level_widget, hlayout_minmax)
+
+            elif commands['LEVEL'][current_cmd] == LVL_CTRL_STEP_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_STEP_ONOFF_CMD:
+                pass
+            elif commands['LEVEL'][current_cmd] == LVL_CTRL_STOP_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_STOP_ONOFF_CMD:
+                pass
+
+        except:
+            pass # put error messages here
     
+    def func_color_interface(self):
+        try:
+            current_cmd = self.comboBox_color_commands.currentText()
+            self.clear_layout(self.vlayout_color_widget)
+
+            if commands['COLOR'][current_cmd] == COLOR_CTRL_MV_TO_COLOR_TEMP_CMD:
+                hlayout_mired = QHBoxLayout()
+                label_mired = QLabel("온도")
+                spinbox_mired = QSpinBox()
+                hlayout_mired.addWidget(label_mired)
+                hlayout_mired.addWidget(spinbox_mired)
+
+                hlayout_random = QHBoxLayout()
+                label_random = QLabel("임의값")
+                radio_normal = QRadioButton("정상 범위")
+                radio_abnormal = QRadioButton("비정상 범위")
+                hlayout_random.addWidget(label_random)
+                hlayout_random.addWidget(radio_normal)        
+                hlayout_random.addWidget(radio_abnormal)
+
+                self.put_layout(self.vlayout_color_widget, hlayout_mired, hlayout_random)
+
+        except:
+            pass
+
     def clear_layout(self, layout):
         #if type(layout) == QVBoxLayout:
         while layout.count():

@@ -58,7 +58,7 @@
         <x>20</x>
         <y>20</y>
         <width>209</width>
-        <height>58</height>
+        <height>61</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -178,7 +178,7 @@
         <x>0</x>
         <y>30</y>
         <width>241</width>
-        <height>26</height>
+        <height>31</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -190,7 +190,17 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_level_commands"/>
+        <widget class="QComboBox" name="comboBox_level_commands">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QComboBox::AdjustToContents</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -199,8 +209,8 @@
        <rect>
         <x>260</x>
         <y>30</y>
-        <width>85</width>
-        <height>26</height>
+        <width>108</width>
+        <height>32</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -246,7 +256,7 @@
         <x>0</x>
         <y>30</y>
         <width>241</width>
-        <height>26</height>
+        <height>31</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -267,8 +277,8 @@
        <rect>
         <x>260</x>
         <y>30</y>
-        <width>85</width>
-        <height>26</height>
+        <width>108</width>
+        <height>32</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -284,6 +294,17 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>60</y>
+        <width>341</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="vlayout_color_widget"/>
+     </widget>
     </widget>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
@@ -291,7 +312,7 @@
        <x>20</x>
        <y>70</y>
        <width>351</width>
-       <height>33</height>
+       <height>34</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -340,7 +361,7 @@
      <x>0</x>
      <y>0</y>
      <width>1296</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
