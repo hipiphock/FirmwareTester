@@ -44,7 +44,11 @@ class WindowClass(QMainWindow, main_class):
         self.pushButton_zigbee_webcrwal.clicked.connect(self.func_btn_zigbee_crwaler)
         self.comboBox_level_commands.currentIndexChanged.connect(self.func_level_interface)
         self.comboBox_color_commands.currentIndexChanged.connect(self.func_color_interface)
+          
         self.pushButton_cmd_gen.clicked.connect(self.func_btn_command_generator)
+        self.pushButton_save_cmd.clicked.connect(self.func_btn_save_command)
+        self.pushButton_load_cmd.clicked.connect(self.func_btn_load_command)
+
         self.list_gen_cmd.itemDoubleClicked.connect(self.func_cmd_list_double_clicked)
         self.init_commands()
         self.cmd_generator = CmdGenerator()
@@ -62,6 +66,7 @@ class WindowClass(QMainWindow, main_class):
                 self.comboBox_color_commands.addItem(command)
 
             self.groupBox_cmd_gen.setEnabled(False) # disable all commands
+
         except:
             pass
     
@@ -70,18 +75,17 @@ class WindowClass(QMainWindow, main_class):
 
     def set_enable_ports(self):
         enabled_ports = get_enable_ports()
-        
+
         for port in enabled_ports:
             self.comboBox_port.addItem(port)
-
 
     def func_btn_command_generator(self):
         commands = []
         
         try:
-        # connection
+            # connection
             connection_enabled = self.checkBox_connection.isChecked()
-            commands.append(self.cmd_generator.cmd_connect(channel=self.lineEdit_zigbee_channel.text(), port = self.comboBox_port.currentText() ,enabled=connection_enabled))       
+            commands.append(self.cmd_generator.cmd_connect(channel=self.lineEdit_zigbee_channel.text(), port = self.comboBox_port.currentText(), enabled=connection_enabled))       
 
             # on/off
             for i in range(self.spinBox_count_onoff.value()):
@@ -89,13 +93,18 @@ class WindowClass(QMainWindow, main_class):
 
             # level
             for i in range(self.spinBox_count_level.value()):
-                for child in self.vlayout_level_widget.children():
-                    pass
-                    
+                cmds = self.cmd_generator.cmd_level_inteface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
+                commands.append(cmds)
+
             # color
             for i in range(self.spinBox_count_color.value()):
-                pass
+                cmds = self.cmd_generator.cmd_color_inteface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
+                commands.append(cmds)
 
+            # disconnect
+            disconnection_enabled = self.checkBox_disconnection.isChecked()
+            commands.append(self.cmd_generator.cmd_disconnect(enabled=disconnection_enabled))       
+            
             # show commands 
             for i in range(self.spinBox_iter_entire.value()):
                 for command in commands:
@@ -107,18 +116,46 @@ class WindowClass(QMainWindow, main_class):
         finally:
             self.func_level_interface()
 
+    def func_btn_save_command(self):
+        file_name = QFileDialog.getSaveFileName(self, 'Save file', '', 'JSON (*.json)')
+
+        commands = []
+        for i in range(self.list_gen_cmd.count()):
+            commands.append(self.list_gen_cmd.item(i).text())
+        json_format = {'commands': commands}
+
+        with open(file_name[0], 'w') as f:
+            try:
+                f.write(json.dumps(json_format, indent=4))
+                QMessageBox.about(
+                    self, "message", file_name[0] + " 파일이 생성되었습니다. ")
+
+            except Exception:
+                QMessageBox.about(self, "message", Exception)
+            
+    def func_btn_load_command(self):
+        file_name = QFileDialog.getOpenFileName(self, 'Open File', './')
+        if file_name[0]:
+            json_data = None
+            with open(file_name[0]) as json_file:
+                json_data = json.load(json_file)
+                print(json_data)
+            
+            commands = json_data['commands']
+            for command in commands:
+                self.list_gen_cmd.addItem(command)
+
     def func_cmd_list_double_clicked(self):
         self.list_gen_cmd.takeItem(self.list_gen_cmd.currentRow())
 
-
     def func_btn_zigbee_crwaler(self):
-        try:
-            channel, zigbee_id = self.crawler.crawl()
-            self.lineEdit_zigbee_channel.setText(channel)
-            self.lineEdit_zigbee_id.setText(zigbee_id) # this should be changed as combobox later
-            self.set_cmd_gen_enable()
-        except:
-            pass # put error messages here
+        # try:
+        channel, zigbee_id = self.crawler.crawl()
+        self.lineEdit_zigbee_channel.setText(channel)
+        self.lineEdit_zigbee_id.setText(zigbee_id) # this should be changed as combobox later
+        self.set_cmd_gen_enable()
+        # except:
+        #    pass # put error messages here
 
     def func_level_interface(self):
         try:
@@ -128,7 +165,7 @@ class WindowClass(QMainWindow, main_class):
             if commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_ONOFF_CMD:
                 hlayout_brightness = QHBoxLayout()
                 label_brightness = QLabel("밝기")
-                spinbox_brightness = QSpinBox()
+                spinbox_brightness = QSpinBox(objectName='spinbox_brightness')
                 spinbox_brightness.setMaximum(254) # 254 should be changed as constants.maxvalue
                 hlayout_brightness.addWidget(label_brightness)
                 hlayout_brightness.addWidget(spinbox_brightness)
@@ -162,16 +199,14 @@ class WindowClass(QMainWindow, main_class):
     def func_layout_random(self):
         hlayout_random = QHBoxLayout()
         label_random = QLabel("임의값")
-        radio_normal = QRadioButton("정상 범위")
-        radio_abnormal = QRadioButton("비정상 범위")
+        radio_normal = QRadioButton("정상 범위", objectName="radio_normal")
+        radio_abnormal = QRadioButton("비정상 범위", objectName="radio_abnormal")
         hlayout_random.addWidget(label_random)
         hlayout_random.addWidget(radio_normal)        
         hlayout_random.addWidget(radio_abnormal)
 
         return hlayout_random
-
-    
-
+  
     def func_color_interface(self):
         try:
             current_cmd = self.comboBox_color_commands.currentText()
@@ -180,7 +215,7 @@ class WindowClass(QMainWindow, main_class):
             if commands['COLOR'][current_cmd] == COLOR_CTRL_MV_TO_COLOR_TEMP_CMD:
                 hlayout_mired = QHBoxLayout()
                 label_mired = QLabel("온도(Mired)")
-                spinbox_mired = QSpinBox()
+                spinbox_mired = QSpinBox(objectName="spinbox_mired")
                 spinbox_mired.setMinimum(200)
                 spinbox_mired.setMaximum(370)
 
@@ -195,13 +230,13 @@ class WindowClass(QMainWindow, main_class):
             elif commands['COLOR'][current_cmd] == COLOR_CTRL_MV_TO_COLOR_CMD:
                 hlayout_color_x = QHBoxLayout()
                 label_color_x = QLabel("Color X (hex)")
-                lineEdit_color_x = QLineEdit()
+                lineEdit_color_x = QLineEdit(objectName="lineEdit_color_x")
                 hlayout_color_x.addWidget(label_color_x)
                 hlayout_color_x.addWidget(lineEdit_color_x)
 
                 hlayout_color_y = QHBoxLayout()
                 label_color_y = QLabel("Color Y (hex)")
-                lineEdit_color_y = QLineEdit()
+                lineEdit_color_y = QLineEdit(objectName="lineEdit_color_y")
                 hlayout_color_y.addWidget(label_color_y)
                 hlayout_color_y.addWidget(lineEdit_color_y)
 
@@ -216,7 +251,7 @@ class WindowClass(QMainWindow, main_class):
     def func_layout_transition_time(self):
         hlayout_transition = QHBoxLayout()
         label_transition = QLabel("전환시간(ms)")
-        spinbox_transition = QSpinBox()
+        spinbox_transition = QSpinBox(objectName="spinbox_transition")
         spinbox_transition.setMinimum(500)
         spinbox_transition.setMaximum(65534)
         hlayout_transition.addWidget(label_transition) 
@@ -224,7 +259,7 @@ class WindowClass(QMainWindow, main_class):
 
         hlayout_wait = QHBoxLayout()
         label_wait = QLabel("대기시간(ms)")
-        spinbox_wait = QSpinBox()
+        spinbox_wait = QSpinBox(objectName="spinbox_wait")
         spinbox_wait.setMinimum(501)
         spinbox_wait.setMaximum(65534)
         hlayout_wait.addWidget(label_wait) 

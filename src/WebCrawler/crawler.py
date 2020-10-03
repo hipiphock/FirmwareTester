@@ -10,6 +10,7 @@ online = False
 class Crawler():
     def __init__(self):
         current_platform = platform.platform().lower()
+        print(current_platform)
         # find driver path
         if "mac" in current_platform:
             driver_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'drivers', 'mac', 'chromedriver'))
@@ -18,7 +19,8 @@ class Crawler():
         elif "linux" in current_platform:
             pass
         
-        # self.driver = webdriver.Chrome(driver_path)
+        if online:
+            self.driver = webdriver.Chrome(driver_path)
 
     def login(self):    
         self.driver.implicitly_wait(3)
@@ -32,6 +34,7 @@ class Crawler():
                 return -1
         try:
             if online:
+                # self.login()
                 soup = BeautifulSoup(self.driver.page_source, 'html.parser')
             else:
                 soup = BeautifulSoup(open(example_page, encoding = 'UTF-8'), 'html.parser')

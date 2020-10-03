@@ -1,1 +1,6 @@
-{"module": "Zigbee HA", "channel": 20, "name": "wafer", "address": "88571DFFFE0E5408", "ep": 8, "port": "COM13"}
+{
+    "commands": [
+        "{\"cluster\": null, \"command\": \"CONNECT\", \"CHANNEL\": \"19\", \"PORT\": \"COM12\"}",
+        "{\"cluster\": null, \"command\": \"DISCONNECT\"}"
+    ]
+}
