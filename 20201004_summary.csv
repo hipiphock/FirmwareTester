@@ -1,0 +1,5 @@
+﻿실험일	 2020-10-04 20:40:05
+수행 명령어 수	 7
+클러스터: ON_OFF_CLUSTER	 CMD: TOGGLE	 횟수: 3	 성공: 3	 실패: 0
+클러스터: LVL_CTRL_CLUSTER	 CMD: MOVE_TO	 횟수: 2	 성공: 2	 실패: 0
+클러스터: COLOR_CTRL_CLUSTER	 CMD: MOVE_TO_MIRED	 횟수: 2	 성공: 2	 실패: 0

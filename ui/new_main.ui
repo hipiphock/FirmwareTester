@@ -649,7 +649,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -803,6 +803,11 @@
      </property>
      <column>
       <property name="text">
+       <string>시간</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
        <string>클러스터</string>
       </property>
      </column>
@@ -876,7 +881,7 @@
         <height>379</height>
        </rect>
       </property>
-      <widget class="QListWidget" name="list_result">
+      <widget class="QListWidget" name="list_summary">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -893,13 +898,13 @@
       <rect>
        <x>10</x>
        <y>410</y>
-       <width>651</width>
+       <width>1041</width>
        <height>61</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_18">
       <item>
-       <widget class="QPushButton" name="btn_result_reset">
+       <widget class="QPushButton" name="pushButton_reset">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -909,22 +914,19 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btn_result_print">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>출력</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_result_save">
+       <widget class="QPushButton" name="pushButton_result_save">
         <property name="enabled">
          <bool>true</bool>
         </property>
         <property name="text">
          <string>결과 저장</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_summary">
+        <property name="text">
+         <string>최종 결과</string>
         </property>
        </widget>
       </item>

@@ -14,6 +14,9 @@ class ZigBeeDriver():
         self.cli_instance = ZbCliDevice('', '', port)
         self.short = None
         self.entry_point = 8
+    
+    def __del__(self):
+        self.cli_instance.close_cli()
 
     def get_short_address(self):
         try:
@@ -47,11 +50,11 @@ class ZigBeeDriver():
         cluster = clusters[cmd['cluster']]
 
         if cluster == ON_OFF_CLUSTER:
-            cmd_id = commands['ONOFF'][cmd['command']]
+            cmd_id = commands[cmd['cluster']][cmd['command']]
         elif cluster == LVL_CTRL_CLUSTER:
-            cmd_id = commands['LEVEL'][cmd['command']]
+            cmd_id = commands[cmd['cluster']][cmd['command']]
         elif cluster == COLOR_CTRL_CLUSTER:
-            cmd_id = commands['COLOR'][cmd['command']]
+            cmd_id = commands[cmd['cluster']][cmd['command']]
 
 
         self.cli_instance.zcl.generic(
@@ -67,6 +70,6 @@ class ZigBeeDriver():
         except KeyError:
             pass
         
-    def read_attr_command(self):
-        pass
-
+    def read_attr_command(self, attribute):
+        result = self.cli_instance.zcl.readattr(self.target_id, attr=attribute, ep=self.entry_point)
+        return result

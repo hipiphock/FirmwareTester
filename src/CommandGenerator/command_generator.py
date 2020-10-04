@@ -1,6 +1,9 @@
+import datetime
+
 from Handler.Zigbee.zigbee_driver import ZigBeeDriver
 from Handler.Zigbee import constants
 from PyQt5.QtWidgets import *
+
 
 class CmdGenerator():
     def __init__(self):
@@ -15,6 +18,7 @@ class CmdGenerator():
     def cmd_connect(self, **params):
         cmd = {}
         cmd['cluster'] = None
+        # cmd['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
         if params['enabled']:
             cmd['command'] = 'CONNECT'
@@ -26,7 +30,8 @@ class CmdGenerator():
     def cmd_disconnect(self, **params):
         cmd = {}
         cmd['cluster'] = None
-
+        # cmd['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
         if params['enabled']:
             cmd['command'] = 'DISCONNECT'
         
@@ -35,7 +40,8 @@ class CmdGenerator():
     def cmd_onoff(self, **params):
         cmd = {}
         cmd['cluster'] = 'ON_OFF_CLUSTER'
-
+        # cmd['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
         if params['on']:
             cmd['command'] = 'ON'
         elif params['off']:
@@ -79,6 +85,7 @@ class CmdGenerator():
         cmd = {}
         cmd['cluster'] = 'LVL_CTRL_CLUSTER'
         cmd['command'] = params['command']
+        # cmd['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         if cmd['command'] == 'MOVE_TO' or cmd['command'] == 'MOVE_TO_ONOFF':
             level = (params['level'], constants.TYPES.UINT8)
@@ -123,9 +130,9 @@ class CmdGenerator():
                     for i in range(child.count()):
                         widget = child.itemAt(i).widget()
                         if widget.objectName() == "lineEdit_color_x":
-                            params['color_x'] = widget.value()      
+                            params['color_x'] = widget.text()      
                         elif widget.objectName() == "lineEdit_color_y":
-                            params['color_y'] = widget.value()        
+                            params['color_y'] = widget.text()        
                         elif widget.objectName() == "spinbox_transition":
                             params['transition'] = widget.value()   
                         elif widget.objectName() == "spinbox_wait":
@@ -147,7 +154,8 @@ class CmdGenerator():
         cmd = {}
         cmd['cluster'] = 'COLOR_CTRL_CLUSTER'
         cmd['command'] = params['command']
-
+        # cmd['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
         if cmd['command'] == 'MOVE_TO_MIRED':
             mired = (params['mired'], constants.TYPES.UINT16)
             transition = (params['transition'], constants.TYPES.UINT16)
@@ -155,8 +163,8 @@ class CmdGenerator():
             cmd['wait'] = params['wait']
 
         elif cmd['command'] == 'MOVE_TO_COLOR':
-            color_x = (params['x'], constants.TYPES.UINT16)
-            color_y = (params['y'], constants.TYPES.UINT16)
+            color_x = (int(params['color_x'], 16), constants.TYPES.UINT16)
+            color_y = (int(params['color_y'], 16), constants.TYPES.UINT16)
             transition = (params['transition'], constants.TYPES.UINT16)
 
             cmd['payloads'] = [color_x, color_y, transition]
