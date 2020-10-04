@@ -39,12 +39,17 @@ class ZigBeeDriver():
             print("connect failed: {}".format('Write timeout'))
         
         except CommandError: # already connected
-            self.cli_instance.bdb.start()
+            try:
+                self.cli_instance.bdb.start()
+            except CommandError:
+                pass
             return self.get_short_address()
     
     def disconnect(self):
         self.cli_instance.bdb.factory_reset()
-
+        self.short = None
+        
+        return self.get_short_address()
 
     def write_attr_command(self, cmd):
         cluster = clusters[cmd['cluster']]

@@ -12,6 +12,8 @@ from PyQt5.QtCore import *
 
 from WebCrawler import crawler
 from Handler.Zigbee.constants import *
+from Handler.Zigbee.zigbee_driver import ZigBeeDriver
+
 from CommandGenerator.command_generator import CmdGenerator
 
 ui_file = os.path.abspath(os.path.join(
@@ -54,6 +56,11 @@ class WindowClass(QMainWindow, main_class):
         self.pushButton_result_save.clicked.connect(self.func_btn_result_save)
         self.pushButton_summary.clicked.connect(self.func_btn_summary)
         self.pushButton_reset.clicked.connect(self.func_btn_reset)
+        self.pushButton_zigbee_dongle_connect.clicked.connect(self.func_btn_zigbee_dongle_connect)
+        self.pushButton_zigbee_dongle_disconnect.clicked.connect(self.func_btn_zigbee_dongle_disconnect)
+
+        self.pushButton_zigbee_dongle_connect.setEnabled(False)
+        self.pushButton_zigbee_dongle_disconnect.setEnabled(False)
 
         self.list_gen_cmd.itemDoubleClicked.connect(self.func_cmd_list_double_clicked)
         self.init_commands()
@@ -76,8 +83,8 @@ class WindowClass(QMainWindow, main_class):
         except:
             pass
     
-    def set_cmd_gen_enable(self):
-        self.groupBox_cmd_gen.setEnabled(True)
+    def set_cmd_gen_enable(self, isEnable=False):
+        self.groupBox_cmd_gen.setEnabled(isEnable)
 
     def set_enable_ports(self):
         enabled_ports = get_enable_ports()
@@ -85,44 +92,73 @@ class WindowClass(QMainWindow, main_class):
         for port in enabled_ports:
             self.comboBox_port.addItem(port)
 
+    def func_btn_zigbee_dongle_disconnect(self):
+        port = self.comboBox_port.currentText()
+        channel = int(self.lineEdit_zigbee_channel.text())
+        zigbee_id = int(self.lineEdit_zigbee_id.text(), 16)
+        driver = ZigBeeDriver(port, channel, zigbee_id)
+        
+        isConnected = True
+        while isConnected:
+            short_addr = driver.disconnect()
+            if short_addr < 0:
+                isConnected = False
+                print(short_addr)
+                break
+            time.sleep(1)
+        
+        self.set_cmd_gen_enable(False)
+        del driver
+        
+    def func_btn_zigbee_dongle_connect(self):
+        port = self.comboBox_port.currentText()
+        channel = int(self.lineEdit_zigbee_channel.text())
+        zigbee_id = int(self.lineEdit_zigbee_id.text(), 16)
+        driver = ZigBeeDriver(port, channel, zigbee_id)
+        
+        isConnected = False
+        while not isConnected:
+            short_addr = driver.connect()
+            if short_addr > 0:
+                isConnected = True
+                print(short_addr)
+                break
+            time.sleep(1)
+        
+        self.set_cmd_gen_enable(True)
+        self.pushButton_zigbee_dongle_disconnect.setEnabled(True)
+
+        del driver
+
     def func_btn_command_generator(self):
         commands = []
         
-        # try:
-        # connection
-        connection_enabled = self.checkBox_connection.isChecked()
-        if connection_enabled:
-            commands.append(self.cmd_generator.cmd_connect(channel=self.lineEdit_zigbee_channel.text(), port = self.comboBox_port.currentText(), enabled=connection_enabled))       
-
+        try:
         # on/off
-        for i in range(self.spinBox_count_onoff.value()):
-            commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
+            for i in range(self.spinBox_count_onoff.value()):
+                commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
 
-        # level
-        for i in range(self.spinBox_count_level.value()):
-            cmds = self.cmd_generator.cmd_level_inteface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
-            commands.append(cmds)
+            # level
+            for i in range(self.spinBox_count_level.value()):
+                cmds = self.cmd_generator.cmd_level_inteface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
+                commands.append(cmds)
 
-        # color
-        for i in range(self.spinBox_count_color.value()):
-            cmds = self.cmd_generator.cmd_color_inteface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
-            commands.append(cmds)
+            # color
+            for i in range(self.spinBox_count_color.value()):
+                cmds = self.cmd_generator.cmd_color_inteface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
+                commands.append(cmds)
+    
+            
+            # show commands 
+            for i in range(self.spinBox_iter_entire.value()):
+                for command in commands:
+                    self.list_gen_cmd.addItem(json.dumps(command))
 
-        # disconnect
-        disconnection_enabled = self.checkBox_disconnection.isChecked()
-        if disconnection_enabled:
-            commands.append(self.cmd_generator.cmd_disconnect(enabled=disconnection_enabled))       
+        except Exception:
+            print(str(Exception))
         
-        # show commands 
-        for i in range(self.spinBox_iter_entire.value()):
-            for command in commands:
-                self.list_gen_cmd.addItem(json.dumps(command))
-
-        # except Exception:
-        #     print(str(Exception))
-        
-        # finally:
-        #     self.func_level_interface()
+        finally:
+            self.func_level_interface()
 
     def func_btn_save_command(self):
         file_name = QFileDialog.getSaveFileName(self, 'Save file', '', 'JSON (*.json)')
@@ -165,7 +201,8 @@ class WindowClass(QMainWindow, main_class):
         channel, zigbee_id = self.crawler.crawl()
         self.lineEdit_zigbee_channel.setText(channel)
         self.lineEdit_zigbee_id.setText(zigbee_id) # this should be changed as combobox later
-        self.set_cmd_gen_enable()
+        # self.set_cmd_gen_enable()
+        self.pushButton_zigbee_dongle_connect.setEnabled(True)
         # except:
         #    pass # put error messages here
 
@@ -211,11 +248,11 @@ class WindowClass(QMainWindow, main_class):
     def func_layout_random(self):
         hlayout_random = QHBoxLayout()
         label_random = QLabel("임의값")
-        radio_normal = QRadioButton("정상 범위", objectName="radio_normal")
-        radio_abnormal = QRadioButton("비정상 범위", objectName="radio_abnormal")
+        checkbox_normal = QCheckBox("정상 범위", objectName="checkbox_normal")
+        checkbox_abnormal = QCheckBox("비정상 범위", objectName="checkbox_abnormal")
         hlayout_random.addWidget(label_random)
-        hlayout_random.addWidget(radio_normal)        
-        hlayout_random.addWidget(radio_abnormal)
+        hlayout_random.addWidget(checkbox_normal)        
+        hlayout_random.addWidget(checkbox_abnormal)
 
         return hlayout_random
   
@@ -286,7 +323,7 @@ class WindowClass(QMainWindow, main_class):
     def func_btn_start(self):
         connection_meta = {}
         connection_meta['port'] = self.comboBox_port.currentText()
-        connection_meta['channel'] = self.lineEdit_zigbee_channel.text()
+        connection_meta['channel'] = int(self.lineEdit_zigbee_channel.text())
         connection_meta['zigbee_id'] = int(self.lineEdit_zigbee_id.text(), 16)
 
         if self.list_gen_cmd.count() < 1:
@@ -481,6 +518,7 @@ class Worker(QThread):
                     result = validator.vaildate_attribute()
                     self.signal_command_complete.emit(result)
         
+
         print("현재 명령셋 종료")
         del self.driver
 
@@ -540,7 +578,7 @@ class Validator():
         cluster = clusters[self.cmd['cluster']]
         cmd = commands[self.cmd['cluster']][self.cmd['command']]
 
-        if  cluster == ON_OFF_CLUSTER:
+        if cluster == ON_OFF_CLUSTER:
             if cmd == ON_OFF_ON_CMD:
                 expected = True
 
@@ -563,8 +601,7 @@ class Validator():
                     expected = self.cmd['payloads'][0][0]
                 elif 'Y' in self.current.name:
                     expected = self.cmd['payloads'][1][0]
-                    
-    
+        
         if expected == self.current.value:
             return self.formatter(True, expected)
         else:

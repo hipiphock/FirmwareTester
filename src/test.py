@@ -7,6 +7,12 @@ import time
 zb = ZigBeeDriver('COM13', 19, int("88571DFFFE0E5408", 16))
 
 # command test
+zb.connect()
+print(zb.get_short_address())
+
+# zb.disconnect()
+
+# print(zb.get_short_address())
 
 # cmd_gen = CmdGenerator()
 # on = cmd_gen.cmd_onoff(on=True, off=False, toggle=False)

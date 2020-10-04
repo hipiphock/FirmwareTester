@@ -39,19 +39,6 @@
      <attribute name="title">
       <string>ZIgBee HA</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_zigbee_webcrwal">
-      <property name="geometry">
-       <rect>
-        <x>242</x>
-        <y>20</y>
-        <width>131</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>웹에서 가져오기</string>
-      </property>
-     </widget>
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
@@ -106,6 +93,39 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>242</x>
+        <y>20</y>
+        <width>141</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QPushButton" name="pushButton_zigbee_webcrwal">
+         <property name="text">
+          <string>웹에서 가져오기</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_zigbee_dongle_connect">
+         <property name="text">
+          <string>동글 연결</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_zigbee_dongle_disconnect">
+         <property name="text">
+          <string>동글 연결해제</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="BLE">
      <attribute name="title">
@@ -125,9 +145,9 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>180</y>
+      <y>210</y>
       <width>401</width>
-      <height>661</height>
+      <height>631</height>
      </rect>
     </property>
     <property name="font">
@@ -139,30 +159,11 @@
     <property name="title">
      <string>명령 생성</string>
     </property>
-    <widget class="Line" name="line">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>50</y>
-       <width>351</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>새굴림</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
     <widget class="Line" name="line_2">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>110</y>
+       <y>70</y>
        <width>351</width>
        <height>16</height>
       </rect>
@@ -181,7 +182,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>120</y>
+       <y>80</y>
        <width>371</width>
        <height>221</height>
       </rect>
@@ -323,7 +324,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>350</y>
+       <y>310</y>
        <width>371</width>
        <height>221</height>
       </rect>
@@ -462,7 +463,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>70</y>
+       <y>30</y>
        <width>371</width>
        <height>28</height>
       </rect>
@@ -537,7 +538,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>340</y>
+       <y>300</y>
        <width>351</width>
        <height>16</height>
       </rect>
@@ -556,7 +557,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>568</y>
+       <y>528</y>
        <width>351</width>
        <height>16</height>
       </rect>
@@ -575,7 +576,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>620</y>
+       <y>580</y>
        <width>341</width>
        <height>34</height>
       </rect>
@@ -606,7 +607,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>580</y>
+       <y>540</y>
        <width>242</width>
        <height>32</height>
       </rect>
@@ -644,50 +645,6 @@
         </property>
         <property name="maximum">
          <number>65534</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>30</y>
-       <width>361</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_12">
-      <item>
-       <widget class="QCheckBox" name="checkBox_connection">
-        <property name="font">
-         <font>
-          <family>새굴림</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>connect</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBox_disconnection">
-        <property name="font">
-         <font>
-          <family>새굴림</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>disconnect</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
         </property>
        </widget>
       </item>

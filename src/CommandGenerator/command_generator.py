@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from Handler.Zigbee.zigbee_driver import ZigBeeDriver
 from Handler.Zigbee import constants
@@ -8,6 +9,47 @@ from PyQt5.QtWidgets import *
 class CmdGenerator():
     def __init__(self):
         pass
+
+    def get_random_value(self, cluster, command, isNormal):
+        if command == 'MOVE_TO' or command =="MOVE_TO_ONOFF":
+            if isNormal:
+                return random.randint(1, 255)
+            else:
+                abnormal_range = []
+                under = random.randint(0 ,1)
+                over = random.randint(255, 999)
+
+                abnormal_range.append(under)
+                abnormal_range.append(over)
+
+                return random.choice(abnormal_range)
+
+        elif command == "MOVE_TO_MIRED":
+            if isNormal:
+                return random.randint(200,371)
+            else:
+                abnormal_range = []
+                under = random.randint(0, 200)
+                over = random.randint(371, 999)
+
+                abnormal_range.append(under)
+                abnormal_range.append(over)
+
+                return random.choice(abnormal_range)
+
+        elif command == "MOVE_TO_COLOR":
+            if isNormal:
+                return random.randint(int('0x31E9', 16), int('0x7F87', 16))
+            else:
+                abnormal_range = []
+                under = random.randint(int('0x0000', 16), int('0x31E9', 16))
+                over = random.randint(int('0x7F88', 16), int('0xFFFF', 16))
+                
+                abnormal_range.append(under)
+                abnormal_range.append(over)
+
+                return random.choice(abnormal_range)
+
 
     def random_range(self, cmcd_type, isNormal):
         if isNormal:
@@ -55,6 +97,7 @@ class CmdGenerator():
     def cmd_level_inteface(self, command, layout):
         params = {}
         params['command'] = command
+        poped_values = []
 
         if command == "MOVE_TO" or command == "MOVE_TO_ONOFF":
             for child in layout:
@@ -68,11 +111,20 @@ class CmdGenerator():
                         elif widget.objectName() == "spinbox_wait":
                             params['wait'] = widget.value()
 
-                        if isinstance(widget, QRadioButton):
-                            if widget.objectName() == "radio_normal" and widget.isChecked() :
-                                pass # get value from normal range
-                            if widget.objectName() == "radio_abnormal" and widget.isChecked() :
-                                pass # get value from abnormal range
+                        if isinstance(widget, QCheckBox):
+                            if widget.objectName() == "checkbox_normal" and widget.isChecked() :
+                                poped_values.append(self.get_random_value(cluster='LVL_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=True
+                                )) # get value from normal range
+                            if widget.objectName() == "checkbox_abnormal" and widget.isChecked() :
+                                poped_values.append(self.get_random_value(cluster='LVL_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=False
+                                )) # get value from abnormal range
+                            print(poped_values)
+                            params['level'] = random.choice(poped_values)
+                            
             if params['transition'] >= params['wait']:
                 params['wait'] = params['transition'] + 1
 
@@ -102,6 +154,7 @@ class CmdGenerator():
     def cmd_color_inteface(self, command, layout):
         params = {}
         params['command'] = command
+        poped_values = []
 
         if command == "MOVE_TO_MIRED":
             for child in layout:
@@ -115,12 +168,19 @@ class CmdGenerator():
                         elif widget.objectName() == "spinbox_wait":
                             params['wait'] = widget.value()
 
-                        if isinstance(widget, QRadioButton):
-                            if widget.objectName() == "radio_normal" and widget.isChecked() :
-                                pass # get value from normal range
-                            if widget.objectName() == "radio_abnormal" and widget.isChecked() :
-                                pass # get value from abnormal range
-                    
+                        if isinstance(widget, QCheckBox):
+                            if widget.objectName() == "checkbox_normal" and widget.isChecked() :
+                                poped_values.append(self.get_random_value(cluster='COLOR_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=True
+                                )) # get value from normal range
+                            if widget.objectName() == "checkbox_abnormal" and widget.isChecked() :
+                                poped_values.append(self.get_random_value(cluster='COLOR_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=False
+                                ))
+                            params['mired'] = random.choice(poped_values)
+
             if params['transition'] >= params['wait']:
                 params['wait'] = params['transition'] + 1
 
@@ -140,10 +200,26 @@ class CmdGenerator():
 
                         if isinstance(widget, QRadioButton):
                             if widget.objectName() == "radio_normal" and widget.isChecked() :
-                                pass # get value from normal range
+                                poped_values.append(self.get_random_value(cluster='COLOR_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=True
+                                ))
+                                poped_values.append(self.get_random_value(cluster='COLOR_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=True
+                                ))
                             if widget.objectName() == "radio_abnormal" and widget.isChecked() :
-                                pass # get value from abnormal range
-                    
+                                poped_values.append(self.get_random_value(cluster='COLOR_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=False
+                                ))
+                                poped_values.append(self.get_random_value(cluster='COLOR_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=False
+                                ))
+                            params['color_x'] = random.choice(poped_values)
+                            params['color_y'] = random.choice(poped_values)
+
             if params['transition'] >= params['wait']:
                 params['wait'] = params['transition'] + 1
 
