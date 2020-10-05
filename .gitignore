@@ -9,3 +9,4 @@ src/old_version/
 dist/
 build/
 main.spec
+old_version/
