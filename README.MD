@@ -2,13 +2,45 @@
 
 python3
 chrome web browser (verison 85.x)
+SmarthThings Hub 및 Ultra Thin Wafer (Zigbee 네트워크가 이미 구성되어 있어야 함)
 
+# 프로그램 실행 방법
 
 1. install python3 (https://www.python.org/downloads/)
-2. activate venv script 
+
+2. venv 환경을 만든다
+    1. 프로그램 디렉토리로 이동
+    2. python3 -m venv .venv 입력
+    
+3. activate venv script 
     1. 파워쉘을 연다.
     2. 프로그램 디렉토리로 이동한다. 
     3. 다음을 입력한다.
-        - .venv/bin/Activate.ps1
-3. 프로그램 실행
-    1. python src\main.py True
+        - .venv/Scripts/Activate.ps1
+
+4. 의존성 라이브러리 설치    
+    1. 3에서 열린 파워쉘 위에서 다음을 입력한다.
+        - pip insatll -r .\requirements.txt
+
+5. 프로그램 실행
+    1. 3을 입력하기 위해 연 파워쉘에서 다음을 입력한다.
+        - python src\main.py True
+
+# 프로그램 사용 방법
+##  동영상 및 PPT 참조
+
+1. 프로그램 실행 후, '크롬 실행' 버튼을 클릭한다.
+2. 크롬에 스마트띵스 홈페이지가 뜨면 로그인 후, Hub가 존재하는 장소 페이지로 이동 후, Hub를 클릭한다.
+3. Hub 페이지를 띄우고 프로그램으로 돌아와서 '웹에서 가져오기' 버튼을 클릭한다.
+4. 포트를 선택한다. 포트는 장치관리자의 포트(COM 및 LPT)에서 확인 가능하다. 
+5. 그 후 동글 연결 버튼을 누른다. (1번만 누르면 연결 될 때 까지 자동으로 재연결한다.)
+    - 연결 버튼을 누르기전에 스마트 폰의 Smartthings 앱에 들어간 후 주변 검색을 활성화 한다. 
+6. 연결이 되면 명령 생성 창이 활성화 된다.
+7. 원하는 명령어를 입력한다. 횟수가 0이면 입력되지 않는다.
+    - 입력된 명령은 명령 목록에서 확인 가능하며, 추가할 때마다 초기화 되지 않고 뒤에 append된다.
+8. 명령을 저장하려면 '명령 저장'버튼을 누른다.
+9. 명령을 불러오려면 '명령 불러오기' 버튼을 누른 후 파일을 찾는다.
+10. '검증 시작' 버튼을 눌러 실험을 진행한다.
+11. 실험이 종료 된 후, '최종 결과 버튼'을 눌러 전체 실험의 Summary를 얻는다.
+12. 저장을 위해 '결과 저장'버튼을 누른다. 이름을 입력하면 진행 상황은 '이름_raw.csv', 최종결과는 '이름_summary.cvs'로 자동 저장 된다. 
+
