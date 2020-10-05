@@ -42,7 +42,7 @@ class WindowClass(QMainWindow, main_class):
     def __init__(self, isOnline):
         super().__init__()
         self.setupUi(self)
-        self.crawler = crawler.Crawler(isOnline)
+        self.crawler = crawler.Crawler(isOnline=True)
     
         self.set_enable_ports()
         self.pushButton_zigbee_webcrwal.clicked.connect(self.func_btn_zigbee_crwaler)
@@ -636,7 +636,11 @@ class Validator():
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    myWindow = WindowClass(bool(sys.argv[1]))
+    try:
+        myWindow = WindowClass(bool(sys.argv[1]))
+    except:
+        myWindow = WindowClass()
+    
     myWindow.show()
     app.exec_()
 

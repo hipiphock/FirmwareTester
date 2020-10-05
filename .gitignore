@@ -6,3 +6,5 @@ launch.json
 logs/
 res/
 src/old_version/
+dist/
+build/
