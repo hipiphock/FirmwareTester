@@ -65,12 +65,14 @@ class Crawler():
             # for index, td in enumerate(table[0].find_all('td')):
             #     if index == id_index:
             #         zigbee_id = td.getText()
+
             bulb_lists = []
             tbody = soup.find_all('tbody')
-            for index, tr in enumerate(tbody[0].find_all('tr')):
+            for index, tr in enumerate(tbody[-1].find_all('tr')):
                 name = None
                 for index2, td in enumerate(tr.find_all('td')):
                     if index2 == 1:
+                        print(td.getText())
                         if td.getText() == "ZigBee White Color Temperature Bulb":
                             name = td.getText()
                     elif index2 == 2 and name:
