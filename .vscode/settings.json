@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "c:\\Users\\play1\\workspace\\FirmwareTester\\.venv\\Scripts\\python.exe",
+    "python.pythonPath": ".venv/bin/python",
     "git.ignoreLimitWarning": true
 }

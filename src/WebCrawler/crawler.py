@@ -5,12 +5,15 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 
 example_page = os.path.abspath(os.path.join(os.path.dirname(__file__), 'example.html'))
-online = False
 
 class Crawler():
-    def __init__(self):
+    def __init__(self, isOnline=True):
         current_platform = platform.platform().lower()
         print(current_platform)
+        if isOnline:
+            self.online = True
+        else:
+            self.online = False
         # find driver path
         if "mac" in current_platform:
             driver_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'drivers', 'mac', 'chromedriver'))
@@ -19,7 +22,7 @@ class Crawler():
         elif "linux" in current_platform:
             pass
         
-        if online:
+        if self.online:
             self.driver = webdriver.Chrome(driver_path)
 
     def login(self):    
@@ -28,12 +31,12 @@ class Crawler():
         self.driver.find_element_by_xpath('//*[@name="saLoginFrm"]/button').click()
     
     def crawl(self):
-        if online: 
+        if self.online: 
             if self.driver is None:
                 print("no chrome driver")
                 return -1
         try:
-            if online:
+            if self.online:
                 # self.login()
                 soup = BeautifulSoup(self.driver.page_source, 'html.parser')
             else:

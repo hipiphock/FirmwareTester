@@ -39,16 +39,18 @@ def get_enable_ports():
 
 
 class WindowClass(QMainWindow, main_class):
-    def __init__(self):
+    def __init__(self, isOnline):
         super().__init__()
         self.setupUi(self)
-        self.crawler = crawler.Crawler()
+        self.crawler = crawler.Crawler(isOnline)
     
         self.set_enable_ports()
         self.pushButton_zigbee_webcrwal.clicked.connect(self.func_btn_zigbee_crwaler)
         self.comboBox_level_commands.currentIndexChanged.connect(self.func_level_interface)
         self.comboBox_color_commands.currentIndexChanged.connect(self.func_color_interface)
-          
+
+
+        self.pushButton_launch_chrome.clicked.coonect(self.func_btn_launch_chrome)  
         self.pushButton_cmd_gen.clicked.connect(self.func_btn_command_generator)
         self.pushButton_save_cmd.clicked.connect(self.func_btn_save_command)
         self.pushButton_load_cmd.clicked.connect(self.func_btn_load_command)
@@ -58,10 +60,10 @@ class WindowClass(QMainWindow, main_class):
         self.pushButton_reset.clicked.connect(self.func_btn_reset)
         self.pushButton_zigbee_dongle_connect.clicked.connect(self.func_btn_zigbee_dongle_connect)
         self.pushButton_zigbee_dongle_disconnect.clicked.connect(self.func_btn_zigbee_dongle_disconnect)
-
+        
         self.pushButton_zigbee_dongle_connect.setEnabled(False)
         self.pushButton_zigbee_dongle_disconnect.setEnabled(False)
-
+        self.pushButton_zigbee_webcrwal.setEnabled(False)
         self.list_gen_cmd.itemDoubleClicked.connect(self.func_cmd_list_double_clicked)
         self.init_commands()
         self.cmd_generator = CmdGenerator()
@@ -91,6 +93,10 @@ class WindowClass(QMainWindow, main_class):
 
         for port in enabled_ports:
             self.comboBox_port.addItem(port)
+
+    def func_btn_launch_chrome(self):
+        self.crawler.login()
+        self.pushButton_zigbee_webcrwal.setEnabled(True)
 
     def func_btn_zigbee_dongle_disconnect(self):
         port = self.comboBox_port.currentText()
@@ -630,7 +636,7 @@ class Validator():
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    myWindow = WindowClass()
+    myWindow = WindowClass(bool(sys.argv[1]))
     myWindow.show()
     app.exec_()
 

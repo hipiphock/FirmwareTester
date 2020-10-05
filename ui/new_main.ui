@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1961</width>
-    <height>905</height>
+    <width>2560</width>
+    <height>1475</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
       <x>70</x>
       <y>10</y>
       <width>401</width>
-      <height>151</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="tabShape">
@@ -93,16 +93,23 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>242</x>
         <y>20</y>
-        <width>141</width>
-        <height>101</height>
+        <width>146</width>
+        <height>134</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QPushButton" name="pushButton_launch_chrome">
+         <property name="text">
+          <string>Chrome 실행</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QPushButton" name="pushButton_zigbee_webcrwal">
          <property name="text">
@@ -465,7 +472,7 @@
        <x>20</x>
        <y>30</y>
        <width>371</width>
-       <height>28</height>
+       <height>32</height>
       </rect>
      </property>
      <property name="font">
@@ -918,8 +925,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1961</width>
-     <height>26</height>
+     <width>2560</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>

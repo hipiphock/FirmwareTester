@@ -1,14 +1,17 @@
-from Handler.Zigbee.constants import DEFAULT_ZIGBEE_PROFILE_ID
-from Handler.Zigbee.zigbee_driver import ZigBeeDriver
-from CommandGenerator.command_generator import CmdGenerator
-from main import Worker
-import time
+# from Handler.Zigbee.constants import DEFAULT_ZIGBEE_PROFILE_ID
+# from Handler.Zigbee.zigbee_driver import ZigBeeDriver
+# from CommandGenerator.command_generator import CmdGenerator
+# from main import Worker
+# import time
+import sys
 
-zb = ZigBeeDriver('COM13', 19, int("88571DFFFE0E5408", 16))
+print (sys.argv)
+print (bool(sys.argv[1]))
+# zb = ZigBeeDriver('COM13', 19, int("88571DFFFE0E5408", 16))
 
-# command test
-zb.connect()
-print(zb.get_short_address())
+# # command test
+# zb.connect()
+# print(zb.get_short_address())
 
 # zb.disconnect()
 
