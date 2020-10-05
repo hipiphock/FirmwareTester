@@ -39,10 +39,10 @@ def get_enable_ports():
 
 
 class WindowClass(QMainWindow, main_class):
-    def __init__(self, isOnline):
+    def __init__(self, isOnline)=True:
         super().__init__()
         self.setupUi(self)
-        self.crawler = crawler.Crawler(isOnline=True)
+        self.crawler = crawler.Crawler(isOnline)
     
         self.set_enable_ports()
         self.pushButton_zigbee_webcrwal.clicked.connect(self.func_btn_zigbee_crwaler)
