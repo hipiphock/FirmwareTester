@@ -16,16 +16,16 @@ class Crawler():
             self.online = False
         # find driver path
         if "mac" in current_platform:
-            driver_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'drivers', 'mac', 'chromedriver'))
+            self.driver_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'drivers', 'mac', 'chromedriver'))
         elif "windows" in current_platform:
-            driver_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'drivers', 'windows', 'chromedriver'))
+            self.driver_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'drivers', 'windows', 'chromedriver'))
         elif "linux" in current_platform:
             pass
         
-        if self.online:
-            self.driver = webdriver.Chrome(driver_path)
 
-    def login(self):    
+    def login(self):
+        if self.online:
+            self.driver = webdriver.Chrome(self.driver_path)    
         self.driver.implicitly_wait(3)
         self.driver.get('https://account.smartthings.com/login?redirect=https%3A%2F%2Fgraph.api.smartthings.com%2F')
         self.driver.find_element_by_xpath('//*[@name="saLoginFrm"]/button').click()
