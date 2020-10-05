@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 example_page = os.path.abspath(os.path.join(os.path.dirname(__file__), 'example.html'))
 
 class Crawler():
-    def __init__(self, isOnline=True):
+    def __init__(self, isOnline):
         current_platform = platform.platform().lower()
         print(current_platform)
         if isOnline:
@@ -26,10 +26,10 @@ class Crawler():
     def login(self):
         if self.online:
             self.driver = webdriver.Chrome(self.driver_path)    
-        self.driver.implicitly_wait(3)
-        self.driver.get('https://account.smartthings.com/login?redirect=https%3A%2F%2Fgraph.api.smartthings.com%2F')
-        self.driver.find_element_by_xpath('//*[@name="saLoginFrm"]/button').click()
-    
+            self.driver.implicitly_wait(3)
+            self.driver.get('https://account.smartthings.com/login?redirect=https%3A%2F%2Fgraph.api.smartthings.com%2F')
+            self.driver.find_element_by_xpath('//*[@name="saLoginFrm"]/button').click()
+        
     def crawl(self):
         if self.online: 
             if self.driver is None:

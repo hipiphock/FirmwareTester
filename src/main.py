@@ -39,7 +39,7 @@ def get_enable_ports():
 
 
 class WindowClass(QMainWindow, main_class):
-    def __init__(self, isOnline=True):
+    def __init__(self, isOnline=False):
         super().__init__()
         self.setupUi(self)
         self.crawler = crawler.Crawler(isOnline)
@@ -139,32 +139,32 @@ class WindowClass(QMainWindow, main_class):
     def func_btn_command_generator(self):
         commands = []
         
-        try:
+        # try:
         # on/off
-            for i in range(self.spinBox_count_onoff.value()):
-                commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
+        for i in range(self.spinBox_count_onoff.value()):
+            commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
 
-            # level
-            for i in range(self.spinBox_count_level.value()):
-                cmds = self.cmd_generator.cmd_level_inteface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
-                commands.append(cmds)
+        # level
+        for i in range(self.spinBox_count_level.value()):
+            cmds = self.cmd_generator.cmd_level_inteface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
+            commands.append(cmds)
 
-            # color
-            for i in range(self.spinBox_count_color.value()):
-                cmds = self.cmd_generator.cmd_color_inteface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
-                commands.append(cmds)
-    
-            
-            # show commands 
-            for i in range(self.spinBox_iter_entire.value()):
-                for command in commands:
-                    self.list_gen_cmd.addItem(json.dumps(command))
+        # color
+        for i in range(self.spinBox_count_color.value()):
+            cmds = self.cmd_generator.cmd_color_inteface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
+            commands.append(cmds)
 
-        except Exception:
-            print(str(Exception))
         
-        finally:
-            self.func_level_interface()
+        # show commands 
+        for i in range(self.spinBox_iter_entire.value()):
+            for command in commands:
+                self.list_gen_cmd.addItem(json.dumps(command))
+
+        # except Exception:
+        #     print(str(Exception))
+        
+        # finally:
+        #     self.func_level_interface()
 
     def func_btn_save_command(self):
         file_name = QFileDialog.getSaveFileName(self, 'Save file', '', 'JSON (*.json)')
@@ -497,33 +497,35 @@ class Worker(QThread):
             command['timestamp'] = datetime.datetime.now().strftime('%m-%d %H:%M:%S.%f')    # add time stamp
 
             if not "CONNECT" in command['command']:
-                # get current value of attributes
-                attrs = self.create_attribute(command)    
-                for attr in attrs:
-                    prevs.append(self.driver.read_attr_command(attr))
-                
-                # write command
-                self.driver.write_attr_command(command)
+                try:
+                    # get current value of attributes
+                    attrs = self.create_attribute(command)    
+                    for attr in attrs:
+                        prevs.append(self.driver.read_attr_command(attr))
+                    
+                    # write command
+                    self.driver.write_attr_command(command)
 
-                if command['cluster'] != 'ON_OFF_CLUSTER':    
-                    # then, wait until remaining_time == 0
-                    while True:
-                        attribute = self.create_attribute(command, isRemain=True)
-                        remain_time = self.driver.read_attr_command(attribute)
-                        time.sleep(0.1)
-                        if remain_time.value == 0:
-                            break
+                    if command['cluster'] != 'ON_OFF_CLUSTER':    
+                        # then, wait until remaining_time == 0
+                        while True:
+                            attribute = self.create_attribute(command, isRemain=True)
+                            remain_time = self.driver.read_attr_command(attribute)
+                            time.sleep(0.1)
+                            if remain_time.value == 0:
+                                break
 
-                attrs = self.create_attribute(command)
-                for attr in attrs:
-                    currents.append(self.driver.read_attr_command(attr))
-                
-                # result validation and then, update result into the table
-                for prev, current in list(zip(prevs, currents)):
-                    validator = Validator(command, prev, current)
-                    result = validator.vaildate_attribute()
-                    self.signal_command_complete.emit(result)
-        
+                    attrs = self.create_attribute(command)
+                    for attr in attrs:
+                        currents.append(self.driver.read_attr_command(attr))
+                    
+                    # result validation and then, update result into the table
+                    for prev, current in list(zip(prevs, currents)):
+                        validator = Validator(command, prev, current)
+                        result = validator.vaildate_attribute()
+                        self.signal_command_complete.emit(result)
+                except:
+                    print("read attr is none")    
 
         print("현재 명령셋 종료")
         del self.driver

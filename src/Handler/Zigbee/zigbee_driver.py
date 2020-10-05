@@ -76,5 +76,9 @@ class ZigBeeDriver():
             pass
         
     def read_attr_command(self, attribute):
-        result = self.cli_instance.zcl.readattr(self.target_id, attr=attribute, ep=self.entry_point)
+        try:
+            result = self.cli_instance.zcl.readattr(self.target_id, attr=attribute, ep=self.entry_point)
+        except CommandError:
+            print("request Timed out")
+            
         return result

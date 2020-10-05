@@ -122,8 +122,9 @@ class CmdGenerator():
                                                     command=command, 
                                                     isNormal=False
                                 )) # get value from abnormal range
-                            print(poped_values)
-                            params['level'] = random.choice(poped_values)
+                            if len(poped_values) > 0 :
+                                print(poped_values)
+                                params['level'] = random.choice(poped_values)
                             
             if params['transition'] >= params['wait']:
                 params['wait'] = params['transition'] + 1
@@ -179,7 +180,8 @@ class CmdGenerator():
                                                     command=command, 
                                                     isNormal=False
                                 ))
-                            params['mired'] = random.choice(poped_values)
+                            if len(poped_values) > 0:
+                                params['mired'] = random.choice(poped_values)
 
             if params['transition'] >= params['wait']:
                 params['wait'] = params['transition'] + 1
@@ -217,8 +219,9 @@ class CmdGenerator():
                                                     command=command, 
                                                     isNormal=False
                                 ))
-                            params['color_x'] = random.choice(poped_values)
-                            params['color_y'] = random.choice(poped_values)
+                            if len(poped_values) > 0:
+                                params['color_x'] = random.choice(poped_values)
+                                params['color_y'] = random.choice(poped_values)
 
             if params['transition'] >= params['wait']:
                 params['wait'] = params['transition'] + 1
