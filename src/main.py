@@ -101,7 +101,7 @@ class WindowClass(QMainWindow, main_class):
     def func_btn_zigbee_dongle_disconnect(self):
         port = self.comboBox_port.currentText()
         channel = int(self.lineEdit_zigbee_channel.text())
-        zigbee_id = int(self.lineEdit_zigbee_id.text(), 16)
+        zigbee_id = int(self.comboBox_zigbee_ids.currentText().split(':')[1], 16)
         driver = ZigBeeDriver(port, channel, zigbee_id)
         
         isConnected = True
@@ -119,7 +119,7 @@ class WindowClass(QMainWindow, main_class):
     def func_btn_zigbee_dongle_connect(self):
         port = self.comboBox_port.currentText()
         channel = int(self.lineEdit_zigbee_channel.text())
-        zigbee_id = int(self.lineEdit_zigbee_id.text(), 16)
+        zigbee_id = int(self.comboBox_zigbee_ids.currentText().split(':')[1], 16)
         driver = ZigBeeDriver(port, channel, zigbee_id)
         
         isConnected = False
@@ -204,9 +204,10 @@ class WindowClass(QMainWindow, main_class):
 
     def func_btn_zigbee_crwaler(self):
         # try:
-        channel, zigbee_id = self.crawler.crawl()
+        channel, zigbee_ids = self.crawler.crawl()
         self.lineEdit_zigbee_channel.setText(channel)
-        self.lineEdit_zigbee_id.setText(zigbee_id) # this should be changed as combobox later
+        for zigbee_id in zigbee_ids:
+            self.comboBox_zigbee_ids.addItem(zigbee_id) # this should be changed as combobox later
         # self.set_cmd_gen_enable()
         self.pushButton_zigbee_dongle_connect.setEnabled(True)
         # except:
@@ -330,7 +331,7 @@ class WindowClass(QMainWindow, main_class):
         connection_meta = {}
         connection_meta['port'] = self.comboBox_port.currentText()
         connection_meta['channel'] = int(self.lineEdit_zigbee_channel.text())
-        connection_meta['zigbee_id'] = int(self.lineEdit_zigbee_id.text(), 16)
+        connection_meta['zigbee_id'] = int(self.comboBox_zigbee_ids.currentText().split(':')[1], 16)
 
         if self.list_gen_cmd.count() < 1:
             QMessageBox.about(self, "오류" ,"수행할 명령이 존재하지 않습니다. \n 명령을 입력해주세요")    

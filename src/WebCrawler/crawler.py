@@ -29,7 +29,7 @@ class Crawler():
             self.driver.implicitly_wait(3)
             self.driver.get('https://account.smartthings.com/login?redirect=https%3A%2F%2Fgraph.api.smartthings.com%2F')
             self.driver.find_element_by_xpath('//*[@name="saLoginFrm"]/button').click()
-        
+
     def crawl(self):
         if self.online: 
             if self.driver is None:
@@ -57,15 +57,26 @@ class Crawler():
             thead = soup.find_all('thead')
             id_index = 0
 
-            for index, th in enumerate(thead[0].find_all('th')):
-                if th.getText().lower() == "zigbee id":
-                    id_index = index
+            # for index, th in enumerate(thead[0].find_all('th')):
+            #     if th.getText().lower() == "zigbee id":
+            #         id_index = index
             
-            table = soup.find_all('tr', {"class": "even"})
-            for index, td in enumerate(table[0].find_all('td')):
-                if index == id_index:
-                    zigbee_id = td.getText()
-            return channel, zigbee_id
+            # table = soup.find_all('tr', {"class": "even"})
+            # for index, td in enumerate(table[0].find_all('td')):
+            #     if index == id_index:
+            #         zigbee_id = td.getText()
+            bulb_lists = []
+            tbody = soup.find_all('tbody')
+            for index, tr in enumerate(tbody[0].find_all('tr')):
+                name = None
+                for index2, td in enumerate(tr.find_all('td')):
+                    if index2 == 1:
+                        if td.getText() == "ZigBee White Color Temperature Bulb":
+                            name = td.getText()
+                    elif index2 == 2 and name:
+                        bulb_lists.append("{}:{}".format(name, td.getText()))
+            print(bulb_lists)
+            return channel, bulb_lists
 
         except:
             pass
