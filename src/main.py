@@ -39,7 +39,7 @@ def get_enable_ports():
 
 
 class WindowClass(QMainWindow, main_class):
-    def __init__(self, isOnline)=True:
+    def __init__(self, isOnline=True):
         super().__init__()
         self.setupUi(self)
         self.crawler = crawler.Crawler(isOnline)
