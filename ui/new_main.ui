@@ -73,7 +73,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_zigbee_id"/>
+          <widget class="QComboBox" name="comboBox_zigbee_ids"/>
          </item>
         </layout>
        </item>
@@ -99,7 +99,7 @@
         <x>242</x>
         <y>20</y>
         <width>146</width>
-        <height>134</height>
+        <height>135</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -926,7 +926,7 @@
      <x>0</x>
      <y>0</y>
      <width>2560</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

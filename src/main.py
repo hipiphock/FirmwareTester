@@ -39,7 +39,7 @@ def get_enable_ports():
 
 
 class WindowClass(QMainWindow, main_class):
-    def __init__(self, isOnline):
+    def __init__(self, isOnline=False):
         super().__init__()
         self.setupUi(self)
         self.crawler = crawler.Crawler(isOnline)
@@ -50,7 +50,7 @@ class WindowClass(QMainWindow, main_class):
         self.comboBox_color_commands.currentIndexChanged.connect(self.func_color_interface)
 
 
-        self.pushButton_launch_chrome.clicked.coonect(self.func_btn_launch_chrome)  
+        self.pushButton_launch_chrome.clicked.connect(self.func_btn_launch_chrome)  
         self.pushButton_cmd_gen.clicked.connect(self.func_btn_command_generator)
         self.pushButton_save_cmd.clicked.connect(self.func_btn_save_command)
         self.pushButton_load_cmd.clicked.connect(self.func_btn_load_command)
@@ -101,7 +101,7 @@ class WindowClass(QMainWindow, main_class):
     def func_btn_zigbee_dongle_disconnect(self):
         port = self.comboBox_port.currentText()
         channel = int(self.lineEdit_zigbee_channel.text())
-        zigbee_id = int(self.lineEdit_zigbee_id.text(), 16)
+        zigbee_id = int(self.comboBox_zigbee_ids.currentText().split(':')[1], 16)
         driver = ZigBeeDriver(port, channel, zigbee_id)
         
         isConnected = True
@@ -119,7 +119,7 @@ class WindowClass(QMainWindow, main_class):
     def func_btn_zigbee_dongle_connect(self):
         port = self.comboBox_port.currentText()
         channel = int(self.lineEdit_zigbee_channel.text())
-        zigbee_id = int(self.lineEdit_zigbee_id.text(), 16)
+        zigbee_id = int(self.comboBox_zigbee_ids.currentText().split(':')[1], 16)
         driver = ZigBeeDriver(port, channel, zigbee_id)
         
         isConnected = False
@@ -139,32 +139,32 @@ class WindowClass(QMainWindow, main_class):
     def func_btn_command_generator(self):
         commands = []
         
-        try:
+        # try:
         # on/off
-            for i in range(self.spinBox_count_onoff.value()):
-                commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
+        for i in range(self.spinBox_count_onoff.value()):
+            commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
 
-            # level
-            for i in range(self.spinBox_count_level.value()):
-                cmds = self.cmd_generator.cmd_level_inteface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
-                commands.append(cmds)
+        # level
+        for i in range(self.spinBox_count_level.value()):
+            cmds = self.cmd_generator.cmd_level_inteface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
+            commands.append(cmds)
 
-            # color
-            for i in range(self.spinBox_count_color.value()):
-                cmds = self.cmd_generator.cmd_color_inteface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
-                commands.append(cmds)
-    
-            
-            # show commands 
-            for i in range(self.spinBox_iter_entire.value()):
-                for command in commands:
-                    self.list_gen_cmd.addItem(json.dumps(command))
+        # color
+        for i in range(self.spinBox_count_color.value()):
+            cmds = self.cmd_generator.cmd_color_inteface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
+            commands.append(cmds)
 
-        except Exception:
-            print(str(Exception))
         
-        finally:
-            self.func_level_interface()
+        # show commands 
+        for i in range(self.spinBox_iter_entire.value()):
+            for command in commands:
+                self.list_gen_cmd.addItem(json.dumps(command))
+
+        # except Exception:
+        #     print(str(Exception))
+        
+        # finally:
+        #     self.func_level_interface()
 
     def func_btn_save_command(self):
         file_name = QFileDialog.getSaveFileName(self, 'Save file', '', 'JSON (*.json)')
@@ -204,9 +204,10 @@ class WindowClass(QMainWindow, main_class):
 
     def func_btn_zigbee_crwaler(self):
         # try:
-        channel, zigbee_id = self.crawler.crawl()
+        channel, zigbee_ids = self.crawler.crawl()
         self.lineEdit_zigbee_channel.setText(channel)
-        self.lineEdit_zigbee_id.setText(zigbee_id) # this should be changed as combobox later
+        for zigbee_id in zigbee_ids:
+            self.comboBox_zigbee_ids.addItem(zigbee_id) # this should be changed as combobox later
         # self.set_cmd_gen_enable()
         self.pushButton_zigbee_dongle_connect.setEnabled(True)
         # except:
@@ -330,7 +331,7 @@ class WindowClass(QMainWindow, main_class):
         connection_meta = {}
         connection_meta['port'] = self.comboBox_port.currentText()
         connection_meta['channel'] = int(self.lineEdit_zigbee_channel.text())
-        connection_meta['zigbee_id'] = int(self.lineEdit_zigbee_id.text(), 16)
+        connection_meta['zigbee_id'] = int(self.comboBox_zigbee_ids.currentText().split(':')[1], 16)
 
         if self.list_gen_cmd.count() < 1:
             QMessageBox.about(self, "오류" ,"수행할 명령이 존재하지 않습니다. \n 명령을 입력해주세요")    
@@ -497,33 +498,35 @@ class Worker(QThread):
             command['timestamp'] = datetime.datetime.now().strftime('%m-%d %H:%M:%S.%f')    # add time stamp
 
             if not "CONNECT" in command['command']:
-                # get current value of attributes
-                attrs = self.create_attribute(command)    
-                for attr in attrs:
-                    prevs.append(self.driver.read_attr_command(attr))
-                
-                # write command
-                self.driver.write_attr_command(command)
+                try:
+                    # get current value of attributes
+                    attrs = self.create_attribute(command)    
+                    for attr in attrs:
+                        prevs.append(self.driver.read_attr_command(attr))
+                    
+                    # write command
+                    self.driver.write_attr_command(command)
 
-                if command['cluster'] != 'ON_OFF_CLUSTER':    
-                    # then, wait until remaining_time == 0
-                    while True:
-                        attribute = self.create_attribute(command, isRemain=True)
-                        remain_time = self.driver.read_attr_command(attribute)
-                        time.sleep(0.1)
-                        if remain_time.value == 0:
-                            break
+                    if command['cluster'] != 'ON_OFF_CLUSTER':    
+                        # then, wait until remaining_time == 0
+                        while True:
+                            attribute = self.create_attribute(command, isRemain=True)
+                            remain_time = self.driver.read_attr_command(attribute)
+                            time.sleep(0.1)
+                            if remain_time.value == 0:
+                                break
 
-                attrs = self.create_attribute(command)
-                for attr in attrs:
-                    currents.append(self.driver.read_attr_command(attr))
-                
-                # result validation and then, update result into the table
-                for prev, current in list(zip(prevs, currents)):
-                    validator = Validator(command, prev, current)
-                    result = validator.vaildate_attribute()
-                    self.signal_command_complete.emit(result)
-        
+                    attrs = self.create_attribute(command)
+                    for attr in attrs:
+                        currents.append(self.driver.read_attr_command(attr))
+                    
+                    # result validation and then, update result into the table
+                    for prev, current in list(zip(prevs, currents)):
+                        validator = Validator(command, prev, current)
+                        result = validator.vaildate_attribute()
+                        self.signal_command_complete.emit(result)
+                except:
+                    print("read attr is none")    
 
         print("현재 명령셋 종료")
         del self.driver
@@ -636,7 +639,11 @@ class Validator():
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    myWindow = WindowClass(bool(sys.argv[1]))
+    try:
+        myWindow = WindowClass(bool(sys.argv[1]))
+    except:
+        myWindow = WindowClass()
+    
     myWindow.show()
     app.exec_()
 
