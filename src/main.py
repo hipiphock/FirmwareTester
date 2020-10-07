@@ -49,7 +49,6 @@ class WindowClass(QMainWindow, main_class):
         self.comboBox_level_commands.currentIndexChanged.connect(self.func_level_interface)
         self.comboBox_color_commands.currentIndexChanged.connect(self.func_color_interface)
 
-
         self.pushButton_launch_chrome.clicked.connect(self.func_btn_launch_chrome)  
         self.pushButton_cmd_gen.clicked.connect(self.func_btn_command_generator)
         self.pushButton_save_cmd.clicked.connect(self.func_btn_save_command)

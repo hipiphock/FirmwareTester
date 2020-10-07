@@ -94,7 +94,7 @@ class CmdGenerator():
         return cmd
 
 
-    def cmd_level_inteface(self, command, layout):
+    def cmd_level_interface(self, command, layout):
         params = {}
         params['command'] = command
         poped_values = []
@@ -152,7 +152,7 @@ class CmdGenerator():
         
         return cmd
 
-    def cmd_color_inteface(self, command, layout):
+    def cmd_color_interface(self, command, layout):
         params = {}
         params['command'] = command
         poped_values = []
