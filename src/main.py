@@ -145,12 +145,12 @@ class WindowClass(QMainWindow, main_class):
 
         # level
         for i in range(self.spinBox_count_level.value()):
-            cmds = self.cmd_generator.cmd_level_inteface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
+            cmds = self.cmd_generator.cmd_level_interface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
             commands.append(cmds)
 
         # color
         for i in range(self.spinBox_count_color.value()):
-            cmds = self.cmd_generator.cmd_color_inteface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
+            cmds = self.cmd_generator.cmd_color_interface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
             commands.append(cmds)
 
         
