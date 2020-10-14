@@ -3,6 +3,7 @@ import sys
 import json
 import csv
 import datetime
+import json     # for reading cluster configuration files
 
 import serial
 from PyQt5 import uic
@@ -21,9 +22,20 @@ ui_file = os.path.abspath(os.path.join(
 
 main_class = uic.loadUiType(ui_file)[0]
 
-# TODO: create main table for
-on_off_cluster = None
-cluster_dict = {"on_off_cluster":on_off_cluster}
+# TODO: create main table for clusters
+def read_cluster_files(filename):
+    input_json = open(filename)
+    result = json.load(input_json)
+    return result
+
+on_off_cluster = read_cluster_files("on_off_cluster.json")
+level_control_cluster = read_cluster_files("level_control_cluster.json")
+color_control_cluster = read_cluster_files("color_control_cluster.json")
+cluster_table = {
+    "on_off_cluster":on_off_cluster,
+    "level_control_cluster":level_control_cluster,
+    "color_control_cluster":color_control_cluster
+}
 
 def get_enable_ports():
     if sys.platform.startswith('win'):   

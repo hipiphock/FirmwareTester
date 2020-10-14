@@ -42,11 +42,18 @@ class Cluster:
                 return
         # TODO: implement not found error
 
+    def readClusterFile(self, filename):
+        pass
+
+    def writeClusterFile(self, filename):
+        pass
+
 
 class Attribute:
     def __init__(self, id, name, min=None, max=None):
         self.id = id
         self.name = name
+        # Add cluster id?
         self.min = min
         self.max = max
 
