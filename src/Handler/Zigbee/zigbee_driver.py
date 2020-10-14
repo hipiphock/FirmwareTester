@@ -1,10 +1,14 @@
 import time
+import logging
 
 from serial.serialutil import SerialTimeoutException
 from zb_cli_wrapper.zb_cli_dev import ZbCliDevice
 from zb_cli_wrapper.src.utils.communicator import CommandError
 from zb_cli_wrapper.src.utils.zigbee_classes.clusters.attribute import Attribute
 from Handler.Zigbee.constants import DEFAULT_ZIGBEE_PROFILE_ID, clusters, commands, attributes, ON_OFF_CLUSTER, LVL_CTRL_CLUSTER, COLOR_CTRL_CLUSTER
+
+driverlogger = logging.getLogger("ZigbeeDriver")
+driverlogger.setLevel(logging.INFO)
 
 class ZigBeeDriver():
     def __init__(self, port, channel, target_id):
@@ -52,6 +56,7 @@ class ZigBeeDriver():
         return self.get_short_address()
 
     def write_attr_command(self, cmd):
+        # TODO: fix cmd?
         cluster = clusters[cmd['cluster']]
 
         if cluster == ON_OFF_CLUSTER:

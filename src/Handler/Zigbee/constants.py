@@ -39,19 +39,19 @@
 from enum import Enum
 
 class TYPES:
-    BOOL = 0x10
-    UINT8 = 0x20
-    UINT16 = 0x21
-    UINT32 = 0x23
-    UINT64 = 0x27
-    SINT8 = 0x28
-    SINT16 = 0x29
-    SINT64 = 0x2f
-    ENUM8 = 0x30
-    MAP8 = 0x18
-    MAP16 = 0x19
-    EUI64 = 0xF0
-    STRING = 0x42
+    BOOL    = 0x10
+    UINT8   = 0x20
+    UINT16  = 0x21
+    UINT32  = 0x23
+    UINT64  = 0x27
+    SINT8   = 0x28
+    SINT16  = 0x29
+    SINT64  = 0x2f
+    ENUM8   = 0x30
+    MAP8    = 0x18
+    MAP16   = 0x19
+    EUI64   = 0xF0
+    STRING  = 0x42
 
 
 
@@ -256,7 +256,7 @@ DOOR_LOCK_CLOSE = 0
 ZIGBEE_CONNECTION           = 0
 BLE_CONNECTION              = 1
 
-COMMAND_TASK                = 0       # added by @hipiphock
+COMMAND_TASK                = 0      # added by @hipiphock
 READ_ATTRIBUTE_TASK         = 1      # added by @hipiphock
 WRITE_ATTRIBUTE_TASK        = 2      # added by @hipiphock
 

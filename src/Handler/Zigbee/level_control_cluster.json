@@ -1,0 +1,74 @@
+{
+    "cluster_id"    :   "0x0008",
+    "cluster_name"  :   "LVL_CTRL_CLUSTER",
+    "attributes"    :   [
+        {   "attr_id":"0x0000",
+            "attr_name":"CurrentLevel",
+            "attr_type":"uint8"
+        },
+        {
+            "attr_id":"0x0001",
+            "attr_name":"RemainingTime",
+            "attr_type":"uint16"
+        },
+        {
+            "attr_id":"0x0010",
+            "attr_name":"OnOffTransitionTime",
+            "attr_type":"uint16"
+        },
+        {
+            "attr_id":"0x0011",
+            "attr_name":"OnLevel",
+            "attr_type":"uint8"
+        },
+        {
+            "attr_id":"0x0012",
+            "attr_name":"OnTransitionTime",
+            "attr_type":"uint16"
+        },
+        {
+            "attr_id":"0x0013",
+            "attr_name":"OffTransitionTime",
+            "attr_type":"uint16"
+        },
+        {
+            "attr_id":"0x0014",
+            "attr_name":"DefaultMoveRate",
+            "attr_type":"uint16"
+        }
+    ],
+    "commands"      :   [
+        {
+            "cmd_id":"0x00",
+            "cmd_desc":"Move to Level"
+        },
+        {
+            "cmd_id":"0x01",
+            "cmd_desc":"Move"
+        },
+        {
+            "cmd_id":"0x02",
+            "cmd_desc":"Step"
+        },
+        {
+            "cmd_id":"0x03",
+            "cmd_desc":"Stop"
+        },
+        {
+            "cmd_id":"0x04",
+            "cmd_desc":"Move to Level(with On/Off)"
+        },
+        {
+            "cmd_id":"0x05",
+            "cmd_desc":"Move(with On/Off)"
+        },
+        {
+            "cmd_id":"0x06",
+            "cmd_desc":"Step(with On/Off)"
+        },
+        {
+            "cmd_id":"0x07",
+            "cmd_desc":"Stop"
+        }
+    ]
+}

@@ -1,0 +1,51 @@
+{
+    "cluster_id"    :   "0x0006",
+    "cluster_name"  :   "ON_OFF_CLUSTER",
+    "attributes":[
+        {   "attr_id":"0x0000",
+            "attr_name":"OnOff",
+            "attr_type":"bool"
+        },
+        {
+            "attr_id":"0x4000",
+            "attr_name":"OnOff",
+            "attr_type":"bool"
+        },
+        {
+            "attr_id":"0x4001",
+            "attr_name":"OnOff",
+            "attr_type":"uint16"
+        },
+        {
+            "attr_id":"0x4002",
+            "attr_name":"OnOff",
+            "attr_type":"uint16"
+        }
+    ],
+    "commands":[
+        {
+            "cmd_id":"0x00",
+            "cmd_desc":"off"
+        },
+        {
+            "cmd_id":"0x01",
+            "cmd_desc":"on"
+        },
+        {
+            "cmd_id":"0x02",
+            "cmd_desc":"toggle"
+        },
+        {
+            "cmd_id":"0x40",
+            "cmd_desc":"off with effect"
+        },
+        {
+            "cmd_id":"0x41",
+            "cmd_desc":"on with recall global scene"
+        },
+        {
+            "cmd_id":"0x42",
+            "cmd_desc":"on with timed off"
+        }
+    ]
+}

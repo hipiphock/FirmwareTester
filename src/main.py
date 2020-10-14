@@ -21,6 +21,10 @@ ui_file = os.path.abspath(os.path.join(
 
 main_class = uic.loadUiType(ui_file)[0]
 
+# TODO: create main table for
+on_off_cluster = None
+cluster_dict = {"on_off_cluster":on_off_cluster}
+
 def get_enable_ports():
     if sys.platform.startswith('win'):   
         ports = ['COM%s' % (i + 1) for i in range(256)]   

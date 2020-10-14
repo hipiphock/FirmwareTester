@@ -7,6 +7,7 @@ Cluster의 member로
  - Attribute
  - Command
 
+Dictionary로 만드는게 나을까? 이름, id 형식으로
 """
 from constants import *
 
@@ -29,6 +30,7 @@ class Cluster:
             if attr.id == attr_id:
                 self.attr_list.remove(attr)
                 return
+        # TODO: implement not found error
 
     def addCommand(self, cmd):
         self.cmd_list.append(cmd)
@@ -37,6 +39,8 @@ class Cluster:
         for cmd in self.cmd_list:
             if cmd.id == cmd_id:
                 self.cmd_list.remove(cmd)
+                return
+        # TODO: implement not found error
 
 
 class Attribute:
@@ -51,6 +55,8 @@ class Command:
         self.id = id
         self.name = name
         self.payload = None
+    
+    # TODO: need to do something with payload
 
 def test():
     on_off_cluster = Cluster(ON_OFF_CLUSTER, "ON_OFF_CLUSTER")
