@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": ".venv/bin/python",
+    "python.pythonPath": "C:\\Users\\hipip\\anaconda3\\envs\\gradproj\\python.exe",
     "git.ignoreLimitWarning": true
 }
