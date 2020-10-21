@@ -5,7 +5,6 @@ id      = value
 import os
 import sys
 import json 
-from constants import *
 
 class Cluster:
     """
