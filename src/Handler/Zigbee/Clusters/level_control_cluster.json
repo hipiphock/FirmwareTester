@@ -26,42 +26,66 @@
         {
             "id":"0x00",
             "name":"MOVE_TO",
-            "desc":"Move to Level"
+            "desc":"Move to Level",
+            "effected_attrs":[
+                "LVL_CTRL_CURR_LVL_ATTR"
+            ]
         },
         {
             "id":"0x01",
             "name":"MOVE",
-            "desc":"Move"
+            "desc":"Move",
+            "effected_attrs":[
+                "LVL_CTRL_CURR_LVL_ATTR"
+            ]
         },
         {
             "id":"0x02",
             "name":"STEP",
-            "desc":"Step"
+            "desc":"Step",
+            "effected_attrs":[
+                "LVL_CTRL_CURR_LVL_ATTR"
+            ]
         },
         {
             "id":"0x03",
             "name":"STOP",
-            "desc":"Stop"
+            "desc":"Stop",
+            "effected_attrs":[
+                "LVL_CTRL_REMAIN_TIME_ATTR"
+            ]
         },
         {
             "id":"0x04",
             "name":"MOVE_TO_ONOFF",
-            "desc":"Move to Level(with On/Off)"
+            "desc":"Move to Level(with On/Off)",
+            "effected_attrs":[
+                "LVL_CTRL_CURR_LVL_ATTR"
+            ]
         },
         {
             "id":"0x05",
             "name":"MOVE_ONOFF",
-            "desc":"Move(with On/Off)"
+            "desc":"Move(with On/Off)",
+            "effected_attrs":[
+                "LVL_CTRL_CURR_LVL_ATTR"
+            ]
         },
         {
             "id":"0x06",
             "name":"STEP_ONOFF",
-            "cmd_desc":"Step(with On/Off)"
+            "cmd_desc":"Step(with On/Off)",
+            "effected_attrs":[
+                "LVL_CTRL_CURR_LVL_ATTR"
+            ]
         },
         {
             "id":"0x07",
             "name":"STOP_ONOFF",
-            "cmd_desc":"Stop"
+            "cmd_desc":"Stop",
+            "effected_attrs":[
+                "LVL_CTRL_REMAIN_TIME_ATTR"
+            ]
         }
     ]
 }

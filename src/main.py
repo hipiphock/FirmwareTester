@@ -138,17 +138,30 @@ class WindowClass(QMainWindow, main_class):
         del driver
 
     def func_btn_command_generator(self):
+        # FIXING
+        # commands will be a list of TaskCmd objects
         commands = []
         
         # try:
         # on/off
         for i in range(self.spinBox_count_onoff.value()):
-            commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
+            # commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
+            # TODO: append from cluster_table
+            cluster_key = "ON_OFF_CLUSTER"
+            attr_list = CLUSTER_TABLE['ON_OFF_CLUSTER']['ON']['effected_attrs']
+            if(self.radioButton_on.isChecked()):
+                on_off_cmd = TaskCmd(cluster_key, CLUSTER_TABLE['ON_OFF_CLUSTER']['ON']['id']), attr_list
+            elif(self.radioButton_off.isChecked()):
+                on_off_cmd = TaskCmd(cluster_key, CLUSTER_TABLE['ON_OFF_CLUSTER']['OFF']['id'], attr_list)
+            elif(self.radioButton_toggle.isChecked()):
+                on_off_cmd = TaskCmd(cluster_key, CLUSTER_TABLE['ON_OFF_CLUSTER']['TOGGLE']['id'], attr_list)
+            commands.append(on_off_cmd)
 
         # level
         for i in range(self.spinBox_count_level.value()):
             cmds = self.cmd_generator.cmd_level_interface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
-            commands.append(cmds)
+            # commands.append(cmds)
+            # TODO: append from cluster_table
 
         # color
         for i in range(self.spinBox_count_color.value()):
@@ -339,7 +352,7 @@ class WindowClass(QMainWindow, main_class):
 
         else:
             cmds = []
-        
+            # TODO: 
             for i in range(self.list_gen_cmd.count()):
                 cmds.append(json.loads(self.list_gen_cmd.item(i).text()))
             self.worker = Worker(connection_meta, cmds, parent=self)

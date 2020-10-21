@@ -54,16 +54,6 @@ class Cluster:
     def writeClusterFile(self, filename):
         pass
 
-# returns cluster files' name
-def get_all_clusters():
-    cluster_path = os.path.join(os.path.dirname(__file__), 'Clusters')
-    cluster_file_list = [f for f in os.listdir(cluster_path) if os.path.isfile(os.path.join(cluster_path, f))]
-    cluster_table = {}
-    for cluster_file in cluster_file_list:
-        # read each cluster file, and save it to cluster table
-        cluster = Cluster.readClusterFile(os.path.join(cluster_path, cluster_file))
-        cluster_table[cluster.name] = cluster
-    return cluster_table
 
 class Attr:
     def __init__(self, id, name, attr_type, min=None, max=None):
@@ -73,13 +63,14 @@ class Attr:
         self.min = min
         self.max = max
 
+
 class Cmd:
     def __init__(self, id, name, payload=None):
         self.id = id
         self.name = name
         self.payload = None
-    
     # TODO: need to do something with payload
+
 
 class TaskCmd:
     # class that is going to be used in main routine
@@ -94,8 +85,21 @@ class TaskCmd:
             # TODO: how do I find cluster?
             pass
 
+
+# returns cluster files' name
+def get_all_clusters():
+    cluster_path = os.path.join(os.path.dirname(__file__), 'Clusters')
+    cluster_file_list = [f for f in os.listdir(cluster_path) if os.path.isfile(os.path.join(cluster_path, f))]
+    cluster_table = {}
+    for cluster_file in cluster_file_list:
+        # read each cluster file, and save it to cluster table
+        cluster = Cluster.readClusterFile(os.path.join(cluster_path, cluster_file))
+        cluster_table[cluster.name] = cluster
+    return cluster_table
+
 # FIXING
 CLUSTER_TABLE = get_all_clusters()
+
 
 def test():
     pass
