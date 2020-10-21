@@ -1,0 +1,102 @@
+{
+    "id"    :   "0x0300",
+    "name"  :   "COLOR_CTRL_CLUSTER",
+    "attributes"    :   [
+        {   "id":"0x0000",
+            "name":"COLOR_CTRL_CURR_HUE_ATTR",
+            "type":"uint8"
+        },
+        {
+            "id":"0x0001",
+            "name":"COLOR_CTRL_CURR_SAT_ATTR",
+            "type":"uint8"
+        },
+        {
+            "id":"0x0002",
+            "name":"COLOR_CTRL_REMAIN_TIME_ATTR",
+            "type":"uint16"
+        },
+        {
+            "id":"0x0003",
+            "name":"COLOR_CTRL_CURR_X_ATTR",
+            "type":"uint16"
+        },
+        {
+            "id":"0x0004",
+            "name":"COLOR_CTRL_CURR_Y_ATTR",
+            "type":"uint8"
+        },
+        {
+            "id":"0x0007",
+            "name":"COLOR_CTRL_COLOR_TEMP_MIRED_ATTR",
+            "type":"uint16"
+        },
+        {
+            "id":"0x0008",
+            "name":"COLOR_CTRL_COLOR_MODE_ATTR",
+            "type":"uint16"
+        },
+        {
+            "id":"0x4001",
+            "name":"COLOR_CTRL_ENHANCED_COLOR_MODE_ATTR",
+            "type":"uint16"
+        },
+        {
+            "id":"0x400a",
+            "name":"COLOR_CTRL_COLOR_CAPABILITY_ATTR",
+            "type":"uint16"
+        },
+        {
+            "id":"0x400b",
+            "name":"COLOR_CTRL_COLOR_TEMP_MIN_MIRED_ATTR",
+            "type":"uint16"
+        },
+        {
+            "id":"0x400c",
+            "name":"COLOR_CTRL_COLOR_TEMP_MAX_MIRED_ATTR",
+            "type":"uint16"
+        }
+    ],
+    "commands"      :   [
+        {
+            "id":"0x00",
+            "name":"MOVE_TO_HUE",
+            "desc":"Move to Hue"
+        },
+        {
+            "id":"0x01",
+            "name":"MOVE_TO_SAT",
+            "desc":"Move to Saturation"
+        },
+        {
+            "id":"0x02",
+            "name":"MOVE_TO_HUE_AND_SAT",
+            "desc":"Move to Hue and Saturation"
+        },
+        {
+            "id":"0x03",
+            "name":"MOVE_TO_COLOR",
+            "desc":"Move to color"
+        },
+        {
+            "id":"0x04",
+            "name":"MOVE_COLOR",
+            "desc":"Move to Level(with On/Off)"
+        },
+        {
+            "id":"0x05",
+            "name":"STEP_COLOR",
+            "desc":"Move(with On/Off)"
+        },
+        {
+            "id":"0x06",
+            "name":"MOVE_MIRED",
+            "cmd_desc":"Step(with On/Off)"
+        },
+        {
+            "id":"0x07",
+            "name":"STEP_MIRED",
+            "cmd_desc":"Stop"
+        }
+    ]
+}

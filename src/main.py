@@ -14,6 +14,7 @@ from PyQt5.QtCore import *
 from WebCrawler import crawler
 from Handler.Zigbee.constants import *
 from Handler.Zigbee.zigbee_driver import ZigBeeDriver
+from Handler.Zigbee.structures import get_all_clusters, TaskCmd, CLUSTER_TABLE
 
 from CommandGenerator.command_generator import CmdGenerator
 
@@ -21,21 +22,6 @@ ui_file = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', 'ui', 'new_main.ui'))
 
 main_class = uic.loadUiType(ui_file)[0]
-
-# TODO: create main table for clusters
-# def read_cluster_files(filename):
-#     input_json = open(filename)
-#     result = json.load(input_json)
-#     return result
-
-# on_off_cluster          = read_cluster_files("on_off_cluster.json")
-# level_control_cluster   = read_cluster_files("level_control_cluster.json")
-# color_control_cluster   = read_cluster_files("color_control_cluster.json")
-# cluster_table = {
-#     "on_off_cluster"        :   on_off_cluster,
-#     "level_control_cluster" :   level_control_cluster,
-#     "color_control_cluster" :   color_control_cluster
-# }
 
 def get_enable_ports():
     if sys.platform.startswith('win'):   
@@ -548,6 +534,7 @@ class Worker(QThread):
 
 
     def create_attribute(self, command, isRemain=False):
+        # just get attribute from pre-defined command - attribute
         cluster = clusters[command['cluster']]
         cmd = commands[command['cluster']][command['command']]
 
@@ -562,35 +549,42 @@ class Worker(QThread):
             return attribute
 
         else: # read value
-            attrs = []
-            if cluster == ON_OFF_CLUSTER: # onoff cluster only need on_off_attr
-                attribute_id, attribute_type = attributes['ON_OFF_ONOFF_ATTR']
-                attr_name = "ON/OFF"
-                attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-            elif cluster == LVL_CTRL_CLUSTER: # update here
-                attribute_id, attribute_type = attributes['LVL_CTRL_CURR_LVL_ATTR']
-                attr_name = "밝기"
-                attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-            elif cluster == COLOR_CTRL_CLUSTER:
-                if cmd == COLOR_CTRL_MV_TO_COLOR_TEMP_CMD:
-                    attribute_id, attribute_type = attributes['COLOR_CTRL_COLOR_TEMP_MIRED_ATTR']
-                    attr_name = "온도" 
-                    attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-                elif cmd == COLOR_CTRL_MV_TO_COLOR_CMD:
-                    attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_X_ATTR']
-                    attr_name = "Color X"
-                    attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            # attrs = []
+            # if cluster == ON_OFF_CLUSTER: # onoff cluster only need on_off_attr
+            #     attribute_id, attribute_type = attributes['ON_OFF_ONOFF_ATTR']
+            #     attr_name = "ON/OFF"
+            #     attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            # elif cluster == LVL_CTRL_CLUSTER: # update here
+            #     attribute_id, attribute_type = attributes['LVL_CTRL_CURR_LVL_ATTR']
+            #     attr_name = "밝기"
+            #     attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            # elif cluster == COLOR_CTRL_CLUSTER:
+            #     if cmd == COLOR_CTRL_MV_TO_COLOR_TEMP_CMD:
+            #         attribute_id, attribute_type = attributes['COLOR_CTRL_COLOR_TEMP_MIRED_ATTR']
+            #         attr_name = "온도" 
+            #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            #     elif cmd == COLOR_CTRL_MV_TO_COLOR_CMD:
+            #         attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_X_ATTR']
+            #         attr_name = "Color X"
+            #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
                     
-                    attr_name = "Color Y"
-                    attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_Y_ATTR']
-                    attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-            
-            return attrs
+            #         attr_name = "Color Y"
+            #         attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_Y_ATTR']
+            #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+
+            # FIXING by @hipiphock
+            # TODO: 바로 command의 member에 있는 attr list를 통해 바로 attribute를 가져온다.
+            attrs = []
+            attr_list = []
+            for attr in attr_list:
+                attr_id, attr_type = CLUSTER_TABLE[cluster][attr]
+                attrs.append(Attribute(cluster=cluster, id=attr_id, type=attr_type))
 
     def stop(self):
         del self
 
 
+# TODO: fix Validator with 
 from Handler.Zigbee.constants import commands, attributes, clusters
 class Validator():
     def __init__(self, cmd, previous, current):

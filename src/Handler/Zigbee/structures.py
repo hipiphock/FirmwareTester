@@ -1,13 +1,6 @@
 """
-There are three classes here: Cluster, Attribute, Command.
-
-Class들을 만들어서 해당 class를 추가하고 마는 식으로 구현
-
-Cluster의 member로
- - Attribute
- - Command
-
-Dictionary로 만드는게 나을까? 이름, id 형식으로
+name    = key
+id      = value
 """
 import os
 import sys
@@ -18,31 +11,45 @@ class Cluster:
     """
     Each cluster should have cluster name, and cluster number.
     """
-    def __init__(self, name, value):
+    def __init__(self, id, name, attr_table=None, cmd_table=None):
         super().__init__()
-        self.name = name
         self.id = id
-        self.attr_table = {}
-        self.cmd_table = {}
+        self.name = name
+        self.attr_table = attr_table
+        self.cmd_table = cmd_table
 
     def addAttr(self, attr_key, attr):
+        if self.attr_table == None:
+            self.attr_table = {}
         self.attr_table[attr_key] = attr
 
     def removeAttr(self, attr_key):
         del self.attr_table[attr_key]
 
     def addCmd(self, cmd_key, cmd):
+        if self.cmd_table == None:
+            self.cmd_table = {}
         self.cmd_table[cmd_key] = cmd
 
     def removeCmd(self, cmd_key):
         del self.cmd_table[cmd_key]
 
-    def readClusterFile(self, filename):
-        # TODO: read cluster files
+    @classmethod
+    def readClusterFile(cls, filename):
         with open(filename, "r") as cluster_file:
             cluster = json.load(cluster_file)
-            print(cluster)
-        
+            # need to handle attr_table and cmd_table
+            attr_table = {}
+            for attr in cluster['attributes']:
+                attr_type = attr['type']    # TODO: convert element to attribute type
+                attr_obj = Attr(attr['id'], attr['name'], attr_type)
+                attr_table[attr['name']] = attr_obj
+            cmd_table = {}
+            for cmd in cluster['commands']:
+                print(cmd)
+                cmd_obj = Cmd(cmd['id'], cmd['name'])
+                cmd_table[cmd['name']] = cmd_obj
+            return cls(cluster['id'], cluster['name'], attr_table, cmd_table)
 
     def writeClusterFile(self, filename):
         pass
@@ -50,14 +57,19 @@ class Cluster:
 # returns cluster files' name
 def get_all_clusters():
     cluster_path = os.path.join(os.path.dirname(__file__), 'Clusters')
-    cluster_list = [f for f in os.listdir(cluster_path) if os.path.isfile(os.path.join(cluster_path, f))]
-    return cluster_list
+    cluster_file_list = [f for f in os.listdir(cluster_path) if os.path.isfile(os.path.join(cluster_path, f))]
+    cluster_table = {}
+    for cluster_file in cluster_file_list:
+        # read each cluster file, and save it to cluster table
+        cluster = Cluster.readClusterFile(os.path.join(cluster_path, cluster_file))
+        cluster_table[cluster.name] = cluster
+    return cluster_table
 
 class Attr:
-    def __init__(self, id, name, min=None, max=None):
+    def __init__(self, id, name, attr_type, min=None, max=None):
         self.id = id
         self.name = name
-        # Add cluster id?
+        self.type = attr_type
         self.min = min
         self.max = max
 
@@ -69,17 +81,24 @@ class Cmd:
     
     # TODO: need to do something with payload
 
+class TaskCmd:
+    # class that is going to be used in main routine
+    def __init__(self, cluster_key, command_key, attrs):
+        self.cluster_key = cluster_key
+        self.command_key = command_key
+        self.attrs = attrs
+    
+    # get attribute lists
+    def getAttrList(self):
+        for attr in self.attrs:
+            # TODO: how do I find cluster?
+            pass
+
+# FIXING
+CLUSTER_TABLE = get_all_clusters()
+
 def test():
-    cluster_list = get_all_clusters()
-    for cluster in cluster_list:
-        print(cluster)
-    on_off_cluster = Cluster(ON_OFF_CLUSTER, "ON_OFF_CLUSTER")
-    on_off_attr = Attr(ON_OFF_ONOFF_ATTR, "ON_OFF_ONOFF_ATTR")
-    toggle_cmd = Cmd(ON_OFF_TOGGLE_CMD, "ON_OFF_TOGGLE_CMD")
-    on_off_cluster.addAttr('ON_OFF_ATTR', on_off_attr)
-    on_off_cluster.removeAttr('ON_OFF_ATTR')
-    on_off_cluster.addCmd('ON_OFF_TOGGLE_CMD', toggle_cmd)
-    on_off_cluster.removeCmd("ON_OFF_TOGGLE_CMD")
+    pass
 
 if __name__ == "__main__":
     test()

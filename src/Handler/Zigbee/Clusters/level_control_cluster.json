@@ -1,73 +1,66 @@
 {
-    "cluster_id"    :   "0x0008",
-    "cluster_name"  :   "LVL_CTRL_CLUSTER",
+    "id"    :   "0x0008",
+    "name"  :   "LVL_CTRL_CLUSTER",
     "attributes"    :   [
-        {   "attr_id":"0x0000",
-            "attr_name":"CurrentLevel",
-            "attr_type":"uint8"
+        {   "id":"0x0000",
+            "name":"LVL_CTRL_CURR_LVL_ATTR",
+            "type":"uint8"
         },
         {
-            "attr_id":"0x0001",
-            "attr_name":"RemainingTime",
-            "attr_type":"uint16"
+            "id":"0x0001",
+            "name":"LVL_CTRL_REMAIN_TIME_ATTR",
+            "type":"uint16"
         },
         {
-            "attr_id":"0x0010",
-            "attr_name":"OnOffTransitionTime",
-            "attr_type":"uint16"
+            "id":"0x0010",
+            "name":"LVL_CTRL_ONOFF_TRANS_TIME_ATTR",
+            "type":"uint16"
         },
         {
-            "attr_id":"0x0011",
-            "attr_name":"OnLevel",
-            "attr_type":"uint8"
-        },
-        {
-            "attr_id":"0x0012",
-            "attr_name":"OnTransitionTime",
-            "attr_type":"uint16"
-        },
-        {
-            "attr_id":"0x0013",
-            "attr_name":"OffTransitionTime",
-            "attr_type":"uint16"
-        },
-        {
-            "attr_id":"0x0014",
-            "attr_name":"DefaultMoveRate",
-            "attr_type":"uint16"
+            "id":"0x0011",
+            "name":"LVL_CTRL_ON_LEVEL_ATTR",
+            "type":"uint8"
         }
     ],
     "commands"      :   [
         {
-            "cmd_id":"0x00",
-            "cmd_desc":"Move to Level"
+            "id":"0x00",
+            "name":"MOVE_TO",
+            "desc":"Move to Level"
         },
         {
-            "cmd_id":"0x01",
-            "cmd_desc":"Move"
+            "id":"0x01",
+            "name":"MOVE",
+            "desc":"Move"
         },
         {
-            "cmd_id":"0x02",
-            "cmd_desc":"Step"
+            "id":"0x02",
+            "name":"STEP",
+            "desc":"Step"
         },
         {
-            "cmd_id":"0x03",
-            "cmd_desc":"Stop"
+            "id":"0x03",
+            "name":"STOP",
+            "desc":"Stop"
         },
         {
-            "cmd_id":"0x04",
-            "cmd_desc":"Move to Level(with On/Off)"
+            "id":"0x04",
+            "name":"MOVE_TO_ONOFF",
+            "desc":"Move to Level(with On/Off)"
         },
         {
-            "cmd_id":"0x05",
-            "cmd_desc":"Move(with On/Off)"
+            "id":"0x05",
+            "name":"MOVE_ONOFF",
+            "desc":"Move(with On/Off)"
         },
         {
-            "cmd_id":"0x06",
+            "id":"0x06",
+            "name":"STEP_ONOFF",
             "cmd_desc":"Step(with On/Off)"
         },
         {
-            "cmd_id":"0x07",
+            "id":"0x07",
+            "name":"STOP_ONOFF",
             "cmd_desc":"Stop"
         }
     ]
