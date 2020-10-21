@@ -153,15 +153,6 @@ class WindowClass(QMainWindow, main_class):
             cmds = self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked())
             commands.append(cmds)
             # TODO: append from cluster_table
-            # cluster_key = "ON_OFF_CLUSTER"
-            # attr_list = CLUSTER_TABLE['ON_OFF_CLUSTER']['ON']['effected_attrs']
-            # if(self.radioButton_on.isChecked()):
-            #     on_off_cmd = TaskCmd(cluster_key, CLUSTER_TABLE['ON_OFF_CLUSTER']['ON']['id']), attr_list
-            # elif(self.radioButton_off.isChecked()):
-            #     on_off_cmd = TaskCmd(cluster_key, CLUSTER_TABLE['ON_OFF_CLUSTER']['OFF']['id'], attr_list)
-            # elif(self.radioButton_toggle.isChecked()):
-            #     on_off_cmd = TaskCmd(cluster_key, CLUSTER_TABLE['ON_OFF_CLUSTER']['TOGGLE']['id'], attr_list)
-            # commands.append(on_off_cmd)
 
         # level
         for i in range(self.spinBox_count_level.value()):
@@ -660,46 +651,51 @@ class Validator():
                 )
         finally:
             return result
-        
+
+# written by @ninima0323
 class EditCmdWindow(QMainWindow):
     def __init__(self, parent, type):
         super(EditCmdWindow, self).__init__(parent)
         edit_ui = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..', 'ui', 'edit_cmd_window.ui'))
         uic.loadUi(edit_ui, self)
-        self.comboBox_cluster.addItem("ON OFF CLUSTER")
-        self.comboBox_cluster.addItem("LEVEL CLUSTER")
-        self.comboBox_cluster.addItem("COLOR OFF CLUSTER")
+        for cluster_item in CLUSTER_TABLE.keys():
+            self.comboBox_cluster.addItem(cluster_item)
         self.comboBox_cluster.currentIndexChanged.connect(self.func_cluster_changed)
-        if type == 0:#zigbee
+
+        if type == 0: #zigbee
             self.groupBox_1.setTitle("command 수정")
             self.groupBox_2.setTitle("attribute 수정")
             self.pushButton_save.clicked.connect(self.func_btn_save_zigbee)
 
             self.tableWidget_g1.setSelectionMode(QAbstractItemView.SingleSelection)
-            self.tableWidget_g1.setColumnCount(2)
+            self.tableWidget_g1.setColumnCount(4)
             self.tableWidget_g1.setRowCount(0)  # 파일에 있는 특정 cluster의 command 만큼
-            self.tableWidget_g1.setHorizontalHeaderLabels(["command id", "command description"])
+            self.tableWidget_g1.setHorizontalHeaderLabels(["command id", "command name", "command desc", "affected_attrs"])
 
             self.tableWidget_g2.setSelectionMode(QAbstractItemView.SingleSelection)
             self.tableWidget_g2.setColumnCount(3)
             self.tableWidget_g2.setRowCount(0) # 파일에 있는 특정 cluster의 attribute 만큼
             self.tableWidget_g2.setHorizontalHeaderLabels(["attribute id", "attribute name", "attribute type"])
 
-        else:#ble
-            #테이블 형식 모르겠어서 설정 안함
+        else: #ble
+            # TODO: make automated routine for fetching service files
             self.groupBox_1.setTitle("service 수정")
-            self.groupBox_2.setTitle("attribute 수정")
+            self.groupBox_2.setTitle("characteristic 수정")
             self.pushButton_save.clicked.connect(self.func_btn_save_ble)
-        self.pushButton_delete_g1.clicked.connect(self.func_delete_row_g1)
-        self.pushButton_add_g1.clicked.connect(self.func_add_g1)
-        self.pushButton_delete_g2.clicked.connect(self.func_delete_row_g2)
-        self.pushButton_add_g2.clicked.connect(self.func_add_g2)
+
+        self.pushButton_delete_g1.clicked.connect(self.func_delete_row_command)
+        self.pushButton_add_g1.clicked.connect(self.func_add_command)
+        self.pushButton_delete_g2.clicked.connect(self.func_delete_row_attribute)
+        self.pushButton_add_g2.clicked.connect(self.func_add_attribute)
         self.pushButton_cancel.clicked.connect(self.func_btn_cancel)
         self.show()
 
-    def func_cluster_changed(self, type):
-        cluster = self.comboBox_cluster.currentIndex()
+    def func_cluster_changed(self):
+        # TODO: read CLUSTER_TABLE for each cluster key
+        cluster_key = self.comboBox_cluster.currentText()
+        cluster = CLUSTER_TABLE[cluster_key]
+        # self.tableWidget_g1.setItem(new_row_cnt - 1, 0, QTableWidgetItem(cluster['commands']))
         # 각 클러스터에 맞는 명령 가져와 테이블에 추가하기
         #tableWidget_g1 이 위쪽 테이블 g2가 아래쪽 테이블 
         #zigbee라면 1이 커맨드, 2가 attribute
@@ -709,18 +705,16 @@ class EditCmdWindow(QMainWindow):
         # self.tableWidget_g2.setItem(new_row_cnt-1,1,QTableWidgetItem(attr_name))
         # self.tableWidget_g2.setItem(new_row_cnt-1,2,QTableWidgetItem(attr_type))
         
-        # if type == 0:#zigbee
-        #     if cluster == 0: #on off
-        #     elif cluster == 1: #level
-        #     else: #color
-        # else: #ble
 
-    def func_add_g1(self, type):
+    def func_add_command(self, type):
+        # TODO: command needs four element when adding
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 1)
             input_dialog.exec_()
             cmd_id = input_dialog.cmd_id
+            # cmd_name = input_dialog.cmd_name
             cmd_desc = input_dialog.cmd_desc
+            # cmd_affected_attrs = input_dialog.cmd_affected_attrs
             if cmd_id != "" and cmd_desc != "":
                 new_row_cnt = self.tableWidget_g1.rowCount() + 1
                 self.tableWidget_g1.setRowCount(new_row_cnt)
@@ -730,7 +724,7 @@ class EditCmdWindow(QMainWindow):
         else: #ble
             input_dialog = InputBLEDialog(self,1)
 
-    def func_add_g2(self, type):
+    def func_add_attribute(self, type):
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 2)
             input_dialog.exec_()
@@ -746,11 +740,12 @@ class EditCmdWindow(QMainWindow):
         else: #ble
             input_dialog = InputBLEDialog(self,2)
     
-    def func_delete_row_g1(self):
+    def func_delete_row_command(self):
         row = self.tableWidget_g1.currentRow()
         self.tableWidget_g1.removeRow(row)
+        # TODO: write command to 
     
-    def func_delete_row_g2(self):
+    def func_delete_row_attribute(self):
         row = self.tableWidget_g2.currentRow()
         self.tableWidget_g2.removeRow(row)
 
