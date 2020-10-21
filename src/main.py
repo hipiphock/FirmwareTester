@@ -145,7 +145,8 @@ class WindowClass(QMainWindow, main_class):
         # try:
         # on/off
         for i in range(self.spinBox_count_onoff.value()):
-            commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
+            cmds = self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked())
+            commands.append(cmds)
             # TODO: append from cluster_table
             # cluster_key = "ON_OFF_CLUSTER"
             # attr_list = CLUSTER_TABLE['ON_OFF_CLUSTER']['ON']['effected_attrs']
@@ -160,7 +161,7 @@ class WindowClass(QMainWindow, main_class):
         # level
         for i in range(self.spinBox_count_level.value()):
             cmds = self.cmd_generator.cmd_level_interface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
-            # commands.append(cmds)
+            commands.append(cmds)
             # TODO: append from cluster_table
 
         # color
@@ -587,17 +588,13 @@ class Worker(QThread):
 
             # FIXING by @hipiphock
             # TODO: 바로 command의 member에 있는 attr list를 통해 바로 attribute를 가져온다.
-            attrs = []
-            attr_list = []
-            for attr in attr_list:
-                attr_id, attr_type = CLUSTER_TABLE[cluster][attr]
-                attrs.append(Attribute(cluster=cluster, id=attr_id, type=attr_type))
+            attrs = command.attr_list
 
     def stop(self):
         del self
 
 
-# TODO: fix Validator with 
+# TODO: fix Validator
 from Handler.Zigbee.constants import commands, attributes, clusters
 class Validator():
     def __init__(self, cmd, previous, current):
@@ -639,6 +636,7 @@ class Validator():
             return self.formatter(False, expected)
 
     def formatter(self, isValid, expected):
+        # TODO: fix formatter to appropriate one
         print(self.cmd)
         try:
             result = "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(

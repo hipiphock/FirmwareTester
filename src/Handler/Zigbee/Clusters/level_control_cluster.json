@@ -4,22 +4,22 @@
     "attributes"    :   [
         {   "id":"0x0000",
             "name":"LVL_CTRL_CURR_LVL_ATTR",
-            "type":"uint8"
+            "type":"0x20"
         },
         {
             "id":"0x0001",
             "name":"LVL_CTRL_REMAIN_TIME_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         },
         {
             "id":"0x0010",
             "name":"LVL_CTRL_ONOFF_TRANS_TIME_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         },
         {
             "id":"0x0011",
             "name":"LVL_CTRL_ON_LEVEL_ATTR",
-            "type":"uint8"
+            "type":"0x20"
         }
     ],
     "commands"      :   [
@@ -27,7 +27,7 @@
             "id":"0x00",
             "name":"MOVE_TO",
             "desc":"Move to Level",
-            "effected_attrs":[
+            "affected_attrs":[
                 "LVL_CTRL_CURR_LVL_ATTR"
             ]
         },
@@ -35,7 +35,7 @@
             "id":"0x01",
             "name":"MOVE",
             "desc":"Move",
-            "effected_attrs":[
+            "affected_attrs":[
                 "LVL_CTRL_CURR_LVL_ATTR"
             ]
         },
@@ -43,7 +43,7 @@
             "id":"0x02",
             "name":"STEP",
             "desc":"Step",
-            "effected_attrs":[
+            "affected_attrs":[
                 "LVL_CTRL_CURR_LVL_ATTR"
             ]
         },
@@ -51,7 +51,7 @@
             "id":"0x03",
             "name":"STOP",
             "desc":"Stop",
-            "effected_attrs":[
+            "affected_attrs":[
                 "LVL_CTRL_REMAIN_TIME_ATTR"
             ]
         },
@@ -59,7 +59,7 @@
             "id":"0x04",
             "name":"MOVE_TO_ONOFF",
             "desc":"Move to Level(with On/Off)",
-            "effected_attrs":[
+            "affected_attrs":[
                 "LVL_CTRL_CURR_LVL_ATTR"
             ]
         },
@@ -67,7 +67,7 @@
             "id":"0x05",
             "name":"MOVE_ONOFF",
             "desc":"Move(with On/Off)",
-            "effected_attrs":[
+            "affected_attrs":[
                 "LVL_CTRL_CURR_LVL_ATTR"
             ]
         },
@@ -75,7 +75,7 @@
             "id":"0x06",
             "name":"STEP_ONOFF",
             "cmd_desc":"Step(with On/Off)",
-            "effected_attrs":[
+            "affected_attrs":[
                 "LVL_CTRL_CURR_LVL_ATTR"
             ]
         },
@@ -83,7 +83,7 @@
             "id":"0x07",
             "name":"STOP_ONOFF",
             "cmd_desc":"Stop",
-            "effected_attrs":[
+            "affected_attrs":[
                 "LVL_CTRL_REMAIN_TIME_ATTR"
             ]
         }

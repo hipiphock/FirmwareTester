@@ -4,7 +4,24 @@ id      = value
 """
 import os
 import sys
-import json 
+import json
+import constants
+from zb_cli_wrapper.src.utils.zigbee_classes.clusters.attribute import Attribute
+
+class Attr:
+    def __init__(self, id, name, attr_type, min=None, max=None):
+        self.id = id
+        self.name = name
+        self.type = attr_type
+        self.min = min
+        self.max = max
+
+class Cmd:
+    def __init__(self, id, name, payload=None):
+        self.id = id
+        self.name = name
+        self.payload = None
+    # TODO: need to do something with payload
 
 class Cluster:
     """
@@ -40,8 +57,7 @@ class Cluster:
             # need to handle attr_table and cmd_table
             attr_table = {}
             for attr in cluster['attributes']:
-                attr_type = attr['type']    # TODO: convert element to attribute type
-                attr_obj = Attr(attr['id'], attr['name'], attr_type)
+                attr_obj = Attr(int(attr['id'], 16), attr['name'], int(attr['type'], 16))
                 attr_table[attr['name']] = attr_obj
             cmd_table = {}
             for cmd in cluster['commands']:
@@ -53,36 +69,16 @@ class Cluster:
     def writeClusterFile(self, filename):
         pass
 
-
-class Attr:
-    def __init__(self, id, name, attr_type, min=None, max=None):
-        self.id = id
-        self.name = name
-        self.type = attr_type
-        self.min = min
-        self.max = max
-
-
-class Cmd:
-    def __init__(self, id, name, payload=None):
-        self.id = id
-        self.name = name
-        self.payload = None
-    # TODO: need to do something with payload
-
-
 class TaskCmd:
     # class that is going to be used in main routine
-    def __init__(self, cluster_key, command_key, attrs):
+    def __init__(self, cluster_key, command_key, attrs, payloads=None):
         self.cluster_key = cluster_key
         self.command_key = command_key
-        self.attrs = attrs
-    
-    # get attribute lists
-    def getAttrList(self):
-        for attr in self.attrs:
-            # TODO: how do I find cluster?
-            pass
+        self.attr_list = []
+        for attr in attrs:
+            attr = CLUSTER_TABLE[self.cluster_key]['attributes'][attr]
+            attr_list.append(Attribute(CLUSTER_TABLE[self.cluster_key]['id'], id=attr['id'], type=attr['type']))
+        self.payloads = payloads
 
 
 # returns cluster files' name
