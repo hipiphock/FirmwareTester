@@ -51,6 +51,7 @@ class WindowClass(QMainWindow, main_class):
         self.comboBox_level_commands.currentIndexChanged.connect(self.func_level_interface)
         self.comboBox_color_commands.currentIndexChanged.connect(self.func_color_interface)
 
+        self.pushButton_edit_cmd.clicked.connect(self.func_btn_edit_cmd)
         self.pushButton_launch_chrome.clicked.connect(self.func_btn_launch_chrome)  
         self.pushButton_cmd_gen.clicked.connect(self.func_btn_command_generator)
         self.pushButton_save_cmd.clicked.connect(self.func_btn_save_command)
@@ -136,6 +137,10 @@ class WindowClass(QMainWindow, main_class):
         self.pushButton_zigbee_dongle_disconnect.setEnabled(True)
 
         del driver
+
+    def func_btn_edit_cmd(self):
+        protocol_type = self.protocols.currentIndex()
+        EditCmdWindow(self, type=protocol_type)
 
     def func_btn_command_generator(self):
         # FIXING
@@ -656,6 +661,194 @@ class Validator():
         finally:
             return result
         
+class EditCmdWindow(QMainWindow):
+    def __init__(self, parent, type):
+        super(EditCmdWindow, self).__init__(parent)
+        edit_ui = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'ui', 'edit_cmd_window.ui'))
+        uic.loadUi(edit_ui, self)
+        self.comboBox_cluster.addItem("ON OFF CLUSTER")
+        self.comboBox_cluster.addItem("LEVEL CLUSTER")
+        self.comboBox_cluster.addItem("COLOR OFF CLUSTER")
+        self.comboBox_cluster.currentIndexChanged.connect(self.func_cluster_changed)
+        if type == 0:#zigbee
+            self.groupBox_1.setTitle("command 수정")
+            self.groupBox_2.setTitle("attribute 수정")
+            self.pushButton_save.clicked.connect(self.func_btn_save_zigbee)
+
+            self.tableWidget_g1.setSelectionMode(QAbstractItemView.SingleSelection)
+            self.tableWidget_g1.setColumnCount(2)
+            self.tableWidget_g1.setRowCount(0)  # 파일에 있는 특정 cluster의 command 만큼
+            self.tableWidget_g1.setHorizontalHeaderLabels(["command id", "command description"])
+
+            self.tableWidget_g2.setSelectionMode(QAbstractItemView.SingleSelection)
+            self.tableWidget_g2.setColumnCount(3)
+            self.tableWidget_g2.setRowCount(0) # 파일에 있는 특정 cluster의 attribute 만큼
+            self.tableWidget_g2.setHorizontalHeaderLabels(["attribute id", "attribute name", "attribute type"])
+
+        else:#ble
+            #테이블 형식 모르겠어서 설정 안함
+            self.groupBox_1.setTitle("service 수정")
+            self.groupBox_2.setTitle("attribute 수정")
+            self.pushButton_save.clicked.connect(self.func_btn_save_ble)
+        self.pushButton_delete_g1.clicked.connect(self.func_delete_row_g1)
+        self.pushButton_add_g1.clicked.connect(self.func_add_g1)
+        self.pushButton_delete_g2.clicked.connect(self.func_delete_row_g2)
+        self.pushButton_add_g2.clicked.connect(self.func_add_g2)
+        self.pushButton_cancel.clicked.connect(self.func_btn_cancel)
+        self.show()
+
+    def func_cluster_changed(self, type):
+        cluster = self.comboBox_cluster.currentIndex()
+        # 각 클러스터에 맞는 명령 가져와 테이블에 추가하기
+        #tableWidget_g1 이 위쪽 테이블 g2가 아래쪽 테이블 
+        #zigbee라면 1이 커맨드, 2가 attribute
+        #ble라면 1이 서비스, 2가 attribute 
+        # 아래 예시처럼 추가하기
+        # self.tableWidget_g2.setItem(new_row_cnt-1,0,QTableWidgetItem(attr_id))
+        # self.tableWidget_g2.setItem(new_row_cnt-1,1,QTableWidgetItem(attr_name))
+        # self.tableWidget_g2.setItem(new_row_cnt-1,2,QTableWidgetItem(attr_type))
+        
+        # if type == 0:#zigbee
+        #     if cluster == 0: #on off
+        #     elif cluster == 1: #level
+        #     else: #color
+        # else: #ble
+
+    def func_add_g1(self, type):
+        if type==0: #zigbee
+            input_dialog = InputZigbeeDialog(self, 1)
+            input_dialog.exec_()
+            cmd_id = input_dialog.cmd_id
+            cmd_desc = input_dialog.cmd_desc
+            if cmd_id != "" and cmd_desc != "":
+                new_row_cnt = self.tableWidget_g1.rowCount() + 1
+                self.tableWidget_g1.setRowCount(new_row_cnt)
+                self.tableWidget_g1.setItem(new_row_cnt-1,0,QTableWidgetItem(cmd_id))
+                self.tableWidget_g1.setItem(new_row_cnt-1,1,QTableWidgetItem(cmd_id))
+                self.tableWidget_g1.resizeRowsToContents()
+        else: #ble
+            input_dialog = InputBLEDialog(self,1)
+
+    def func_add_g2(self, type):
+        if type==0: #zigbee
+            input_dialog = InputZigbeeDialog(self, 2)
+            input_dialog.exec_()
+            attr_id = input_dialog.attr_id
+            attr_name = input_dialog.attr_name
+            attr_type = input_dialog.attr_type
+            if attr_id!= "" and attr_name != ""and attr_type!= "":
+                new_row_cnt = self.tableWidget_g2.rowCount() + 1
+                self.tableWidget_g2.setRowCount(new_row_cnt)
+                self.tableWidget_g2.setItem(new_row_cnt-1,0,QTableWidgetItem(attr_id))
+                self.tableWidget_g2.setItem(new_row_cnt-1,1,QTableWidgetItem(attr_name))
+                self.tableWidget_g2.setItem(new_row_cnt-1,2,QTableWidgetItem(attr_type))
+        else: #ble
+            input_dialog = InputBLEDialog(self,2)
+    
+    def func_delete_row_g1(self):
+        row = self.tableWidget_g1.currentRow()
+        self.tableWidget_g1.removeRow(row)
+    
+    def func_delete_row_g2(self):
+        row = self.tableWidget_g2.currentRow()
+        self.tableWidget_g2.removeRow(row)
+
+    def func_btn_save_zigbee(self):
+        cluster = self.comboBox_cluster.currentIndex()
+        for i in range(self.tableWidget_g1.rowCount()):
+            cmd_id = self.tableWidget_g1.item(i, 0).text()
+            cmd_desc = self.tableWidget_g1.item(i, 1).text()
+            print(cmd_id, cmd_desc)
+            # cluster 에 맞게 파일 입출력 실행
+        for i in range(self.tableWidget_g2.rowCount()):
+            attr_id = self.tableWidget_g2.item(i, 0).text()
+            attr_name = self.tableWidget_g2.item(i, 1).text()
+            attr_type = self.tableWidget_g2.item(i, 2).text()
+            print(attr_id, attr_name, attr_type)
+            #cluster 에 맞게 파일 입출력 실행
+        self.close()
+    
+    def func_btn_save_ble(self):
+        #아직 미구현
+        self.close()
+
+    def func_btn_cancel(self):
+        self.close()
+
+class InputZigbeeDialog(QDialog):
+    def __init__(self, parent, choice):
+        super(InputZigbeeDialog, self).__init__(parent)
+        self.choice = choice
+        self.cmd_id = None
+        self.cmd_desc = None
+        self.attr_id = None
+        self.attr_name = None
+        self.attr_type = None
+
+        input_ui = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'ui', 'input_zigbee_dialog.ui'))
+        uic.loadUi(input_ui, self)
+        self.setAutoFillBackground(True)
+        if choice == 1:
+            self.groupBox_attr.setEnabled(False)
+            self.groupBox_cmd.setEnabled(True)
+        else:
+            self.groupBox_attr.setEnabled(True)
+            self.groupBox_cmd.setEnabled(False)
+        self.pushButton_add.clicked.connect(self.func_btn_add)
+        self.pushButton_cancel.clicked.connect(self.func_btn_cancel)
+        self.show()
+    
+    def func_btn_add(self):
+        if self.choice == 1:
+            self.cmd_id = str(self.lineEdit_cmd_id.text())
+            self.cmd_desc = str(self.lineEdit_cmd_desc.text())
+        else:
+            self.attr_id = self.lineEdit_attr_id.text()
+            self.attr_name = self.lineEdit_attr_name.text()
+            self.attr_type = self.lineEdit_attr_type.text()
+        self.close()
+    
+    def func_btn_cancel(self):
+        self.close()
+
+class InputBLEDialog(QDialog):
+    def __init__(self, parent, choice):
+        super(InputBLEDialog, self).__init__(parent)
+        self.choice = choice
+        self.service_id = None
+        self.service_desc = None
+        self.attr_id = None
+        self.attr_name = None
+        self.attr_type = None
+
+        input_ui = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'ui', 'input_ble_dialog.ui'))
+        uic.loadUi(input_ui, self)
+        self.setAutoFillBackground(True)
+        if choice == 1:
+            self.groupBox_attr.setEnabled(False)
+            self.groupBox_service.setEnabled(True)
+        else:
+            self.groupBox_attr.setEnabled(True)
+            self.groupBox_service.setEnabled(False)
+        self.pushButton_add.clicked.connect(self.func_btn_add)
+        self.pushButton_cancel.clicked.connect(self.func_btn_cancel)
+        self.show()
+    
+    def func_btn_add(self):
+        if self.choice == 1:
+            self.service_id = str(self.lineEdit_service_id.text())
+            self.service_desc = str(self.lineEdit_service_desc.text())
+        else:
+            self.attr_id = self.lineEdit_attr_id.text()
+            self.attr_name = self.lineEdit_attr_name.text()
+            self.attr_type = self.lineEdit_attr_type.text()
+        self.close()
+    
+    def func_btn_cancel(self):
+        self.close()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
