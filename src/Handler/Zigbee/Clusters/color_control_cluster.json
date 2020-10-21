@@ -4,57 +4,57 @@
     "attributes"    :   [
         {   "id":"0x0000",
             "name":"COLOR_CTRL_CURR_HUE_ATTR",
-            "type":"uint8"
+            "type":"0x20"
         },
         {
             "id":"0x0001",
             "name":"COLOR_CTRL_CURR_SAT_ATTR",
-            "type":"uint8"
+            "type":"0x20"
         },
         {
             "id":"0x0002",
             "name":"COLOR_CTRL_REMAIN_TIME_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         },
         {
             "id":"0x0003",
             "name":"COLOR_CTRL_CURR_X_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         },
         {
             "id":"0x0004",
             "name":"COLOR_CTRL_CURR_Y_ATTR",
-            "type":"uint8"
+            "type":"0x20"
         },
         {
             "id":"0x0007",
             "name":"COLOR_CTRL_COLOR_TEMP_MIRED_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         },
         {
             "id":"0x0008",
             "name":"COLOR_CTRL_COLOR_MODE_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         },
         {
             "id":"0x4001",
             "name":"COLOR_CTRL_ENHANCED_COLOR_MODE_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         },
         {
             "id":"0x400a",
             "name":"COLOR_CTRL_COLOR_CAPABILITY_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         },
         {
             "id":"0x400b",
             "name":"COLOR_CTRL_COLOR_TEMP_MIN_MIRED_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         },
         {
             "id":"0x400c",
             "name":"COLOR_CTRL_COLOR_TEMP_MAX_MIRED_ATTR",
-            "type":"uint16"
+            "type":"0x21"
         }
     ],
     "commands"      :   [

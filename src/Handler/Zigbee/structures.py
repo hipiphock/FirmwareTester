@@ -5,7 +5,6 @@ id      = value
 import os
 import sys
 import json
-import constants
 from zb_cli_wrapper.src.utils.zigbee_classes.clusters.attribute import Attribute
 
 class Attr:
@@ -61,7 +60,6 @@ class Cluster:
                 attr_table[attr['name']] = attr_obj
             cmd_table = {}
             for cmd in cluster['commands']:
-                print(cmd)
                 cmd_obj = Cmd(cmd['id'], cmd['name'])
                 cmd_table[cmd['name']] = cmd_obj
             return cls(cluster['id'], cluster['name'], attr_table, cmd_table)

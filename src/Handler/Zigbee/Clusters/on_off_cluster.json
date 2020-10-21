@@ -4,7 +4,7 @@
     "attributes":[
         {   "id":"0x0000",
             "name":"ON_OFF_ONOFF_ATTR",
-            "type":"bool"
+            "type":"0x10"
         }
     ],
     "commands":[
