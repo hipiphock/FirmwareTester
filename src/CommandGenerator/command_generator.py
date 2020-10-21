@@ -5,6 +5,7 @@ from Handler.Zigbee.zigbee_driver import ZigBeeDriver
 from Handler.Zigbee import constants
 from PyQt5.QtWidgets import *
 
+from Handler.Zigbee.structures import CLUSTER_TABLE, TaskCmd
 
 class CmdGenerator():
     def __init__(self):
@@ -93,6 +94,16 @@ class CmdGenerator():
         cmd['payloads'] = None
         return cmd
 
+    # TODO: make appropriate functions for TaskCmd
+    def new_cmd_onoff(self, **params):
+        cluster_key = 'ON_OFF_CLUSTER'
+        if params['on']:
+            new_cmd = TaskCmd(cluster_key, 'ON', CLUSTER_TABLE[cluster_key]['commands']['ON']['affected_attrs'])
+        elif params['off']:
+            new_cmd = TaskCmd(cluster_key, 'ON', CLUSTER_TABLE[cluster_key]['commands']['OFF']['affected_attrs'])
+        elif params['toggle']:
+            new_cmd = TaskCmd(cluster_key, 'ON', CLUSTER_TABLE[cluster_key]['commands']['TOGGLE']['affected_attrs'])
+        return new_cmd
 
     def cmd_level_interface(self, command, layout):
         params = {}

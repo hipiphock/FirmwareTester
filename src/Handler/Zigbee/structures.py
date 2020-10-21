@@ -60,7 +60,7 @@ class Cluster:
                 attr_table[attr['name']] = attr_obj
             cmd_table = {}
             for cmd in cluster['commands']:
-                cmd_obj = Cmd(cmd['id'], cmd['name'])
+                cmd_obj = Cmd(int(cmd['id'], 16), cmd['name'])
                 cmd_table[cmd['name']] = cmd_obj
             return cls(cluster['id'], cluster['name'], attr_table, cmd_table)
 
@@ -71,11 +71,13 @@ class TaskCmd:
     # class that is going to be used in main routine
     def __init__(self, cluster_key, command_key, attrs, payloads=None):
         self.cluster_key = cluster_key
+        self.cluster_id = CLUSTER_TABLE[cluster_key]
         self.command_key = command_key
+        self.command_id = CLUSTER_TABLE[cluster_key]['commands'][command_key]['id']
         self.attr_list = []
         for attr in attrs:
-            attr = CLUSTER_TABLE[self.cluster_key]['attributes'][attr]
-            attr_list.append(Attribute(CLUSTER_TABLE[self.cluster_key]['id'], id=attr['id'], type=attr['type']))
+            attr = CLUSTER_TABLE[cluster_key]['attributes'][attr]
+            attr_list.append(Attribute(CLUSTER_TABLE[cluster_key]['id'], id=attr['id'], type=attr['type']))
         self.payloads = payloads
 
 
@@ -94,8 +96,13 @@ def get_all_clusters():
 CLUSTER_TABLE = get_all_clusters()
 
 
-def test():
-    pass
+"""
+The following is for BLE commands.
+"""
+class Service:
+    def __init__(self):
+        pass
 
-if __name__ == "__main__":
-    test()
+class Characteristics:
+    def __init__(self):
+        pass
