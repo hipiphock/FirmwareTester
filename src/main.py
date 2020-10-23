@@ -3,6 +3,7 @@ import sys
 import json
 import csv
 import datetime
+import json     # for reading cluster configuration files
 
 import serial
 from PyQt5 import uic
@@ -13,6 +14,7 @@ from PyQt5.QtCore import *
 from WebCrawler import crawler
 from Handler.Zigbee.constants import *
 from Handler.Zigbee.zigbee_driver import ZigBeeDriver
+# from Handler.Zigbee.structures import get_all_clusters, TaskCmd, CLUSTER_TABLE
 
 from CommandGenerator.command_generator import CmdGenerator
 
@@ -141,21 +143,26 @@ class WindowClass(QMainWindow, main_class):
         EditCmdWindow(self, type=protocol_type)
 
     def func_btn_command_generator(self):
+        # FIXING
+        # commands will be a list of TaskCmd objects
         commands = []
         
         # try:
         # on/off
         for i in range(self.spinBox_count_onoff.value()):
-            commands.append(self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked()))
+            cmds = self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked())
+            commands.append(cmds)
+            # TODO: append from cluster_table
 
         # level
         for i in range(self.spinBox_count_level.value()):
-            cmds = self.cmd_generator.cmd_level_inteface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
+            cmds = self.cmd_generator.cmd_level_interface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
             commands.append(cmds)
+            # TODO: append from cluster_table
 
         # color
         for i in range(self.spinBox_count_color.value()):
-            cmds = self.cmd_generator.cmd_color_inteface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
+            cmds = self.cmd_generator.cmd_color_interface(self.comboBox_color_commands.currentText(), self.vlayout_color_widget.children())
             commands.append(cmds)
 
         
@@ -342,7 +349,7 @@ class WindowClass(QMainWindow, main_class):
 
         else:
             cmds = []
-        
+            # TODO: 
             for i in range(self.list_gen_cmd.count()):
                 cmds.append(json.loads(self.list_gen_cmd.item(i).text()))
             self.worker = Worker(connection_meta, cmds, parent=self)
@@ -537,6 +544,7 @@ class Worker(QThread):
 
 
     def create_attribute(self, command, isRemain=False):
+        # just get attribute from pre-defined command - attribute
         cluster = clusters[command['cluster']]
         cmd = commands[command['cluster']][command['command']]
 
@@ -551,35 +559,38 @@ class Worker(QThread):
             return attribute
 
         else: # read value
-            attrs = []
-            if cluster == ON_OFF_CLUSTER: # onoff cluster only need on_off_attr
-                attribute_id, attribute_type = attributes['ON_OFF_ONOFF_ATTR']
-                attr_name = "ON/OFF"
-                attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-            elif cluster == LVL_CTRL_CLUSTER: # update here
-                attribute_id, attribute_type = attributes['LVL_CTRL_CURR_LVL_ATTR']
-                attr_name = "밝기"
-                attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-            elif cluster == COLOR_CTRL_CLUSTER:
-                if cmd == COLOR_CTRL_MV_TO_COLOR_TEMP_CMD:
-                    attribute_id, attribute_type = attributes['COLOR_CTRL_COLOR_TEMP_MIRED_ATTR']
-                    attr_name = "온도" 
-                    attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-                elif cmd == COLOR_CTRL_MV_TO_COLOR_CMD:
-                    attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_X_ATTR']
-                    attr_name = "Color X"
-                    attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            # attrs = []
+            # if cluster == ON_OFF_CLUSTER: # onoff cluster only need on_off_attr
+            #     attribute_id, attribute_type = attributes['ON_OFF_ONOFF_ATTR']
+            #     attr_name = "ON/OFF"
+            #     attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            # elif cluster == LVL_CTRL_CLUSTER: # update here
+            #     attribute_id, attribute_type = attributes['LVL_CTRL_CURR_LVL_ATTR']
+            #     attr_name = "밝기"
+            #     attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            # elif cluster == COLOR_CTRL_CLUSTER:
+            #     if cmd == COLOR_CTRL_MV_TO_COLOR_TEMP_CMD:
+            #         attribute_id, attribute_type = attributes['COLOR_CTRL_COLOR_TEMP_MIRED_ATTR']
+            #         attr_name = "온도" 
+            #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            #     elif cmd == COLOR_CTRL_MV_TO_COLOR_CMD:
+            #         attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_X_ATTR']
+            #         attr_name = "Color X"
+            #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
                     
-                    attr_name = "Color Y"
-                    attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_Y_ATTR']
-                    attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-            
-            return attrs
+            #         attr_name = "Color Y"
+            #         attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_Y_ATTR']
+            #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+
+            # FIXING by @hipiphock
+            # TODO: 바로 command의 member에 있는 attr list를 통해 바로 attribute를 가져온다.
+            attrs = command.attr_list
 
     def stop(self):
         del self
 
 
+# TODO: fix Validator
 from Handler.Zigbee.constants import commands, attributes, clusters
 class Validator():
     def __init__(self, cmd, previous, current):
@@ -621,6 +632,7 @@ class Validator():
             return self.formatter(False, expected)
 
     def formatter(self, isValid, expected):
+        # TODO: fix formatter to appropriate one
         print(self.cmd)
         try:
             result = "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
@@ -639,46 +651,51 @@ class Validator():
                 )
         finally:
             return result
-        
+
+# written by @ninima0323
 class EditCmdWindow(QMainWindow):
     def __init__(self, parent, type):
         super(EditCmdWindow, self).__init__(parent)
         edit_ui = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..', 'ui', 'edit_cmd_window.ui'))
         uic.loadUi(edit_ui, self)
-        self.comboBox_cluster.addItem("ON OFF CLUSTER")
-        self.comboBox_cluster.addItem("LEVEL CLUSTER")
-        self.comboBox_cluster.addItem("COLOR OFF CLUSTER")
+        # for cluster_item in CLUSTER_TABLE.keys():
+        #     self.comboBox_cluster.addItem(cluster_item)
         self.comboBox_cluster.currentIndexChanged.connect(self.func_cluster_changed)
-        if type == 0:#zigbee
+
+        if type == 0: #zigbee
             self.groupBox_1.setTitle("command 수정")
             self.groupBox_2.setTitle("attribute 수정")
             self.pushButton_save.clicked.connect(self.func_btn_save_zigbee)
 
             self.tableWidget_g1.setSelectionMode(QAbstractItemView.SingleSelection)
-            self.tableWidget_g1.setColumnCount(2)
+            self.tableWidget_g1.setColumnCount(4)
             self.tableWidget_g1.setRowCount(0)  # 파일에 있는 특정 cluster의 command 만큼
-            self.tableWidget_g1.setHorizontalHeaderLabels(["command id", "command description"])
+            self.tableWidget_g1.setHorizontalHeaderLabels(["command id", "command name", "command desc", "affected_attrs"])
 
             self.tableWidget_g2.setSelectionMode(QAbstractItemView.SingleSelection)
             self.tableWidget_g2.setColumnCount(3)
             self.tableWidget_g2.setRowCount(0) # 파일에 있는 특정 cluster의 attribute 만큼
             self.tableWidget_g2.setHorizontalHeaderLabels(["attribute id", "attribute name", "attribute type"])
 
-        else:#ble
-            #테이블 형식 모르겠어서 설정 안함
+        else: #ble
+            # TODO: make automated routine for fetching service files
             self.groupBox_1.setTitle("service 수정")
-            self.groupBox_2.setTitle("attribute 수정")
+            self.groupBox_2.setTitle("characteristic 수정")
             self.pushButton_save.clicked.connect(self.func_btn_save_ble)
-        self.pushButton_delete_g1.clicked.connect(self.func_delete_row_g1)
-        self.pushButton_add_g1.clicked.connect(self.func_add_g1)
-        self.pushButton_delete_g2.clicked.connect(self.func_delete_row_g2)
-        self.pushButton_add_g2.clicked.connect(self.func_add_g2)
+
+        self.pushButton_delete_g1.clicked.connect(self.func_delete_row_command)
+        self.pushButton_add_g1.clicked.connect(self.func_add_command)
+        self.pushButton_delete_g2.clicked.connect(self.func_delete_row_attribute)
+        self.pushButton_add_g2.clicked.connect(self.func_add_attribute)
         self.pushButton_cancel.clicked.connect(self.func_btn_cancel)
         self.show()
 
-    def func_cluster_changed(self, type):
-        cluster = self.comboBox_cluster.currentIndex()
+    def func_cluster_changed(self):
+        # TODO: read CLUSTER_TABLE for each cluster key
+        cluster_key = self.comboBox_cluster.currentText()
+        cluster = CLUSTER_TABLE[cluster_key]
+        # self.tableWidget_g1.setItem(new_row_cnt - 1, 0, QTableWidgetItem(cluster['commands']))
         # 각 클러스터에 맞는 명령 가져와 테이블에 추가하기
         #tableWidget_g1 이 위쪽 테이블 g2가 아래쪽 테이블 
         #zigbee라면 1이 커맨드, 2가 attribute
@@ -688,35 +705,35 @@ class EditCmdWindow(QMainWindow):
         # self.tableWidget_g2.setItem(new_row_cnt-1,1,QTableWidgetItem(attr_name))
         # self.tableWidget_g2.setItem(new_row_cnt-1,2,QTableWidgetItem(attr_type))
         
-        # if type == 0:#zigbee
-        #     if cluster == 0: #on off
-        #     elif cluster == 1: #level
-        #     else: #color
-        # else: #ble
 
-    def func_add_g1(self, type):
+    def func_add_command(self, type):
+        # TODO: command needs four element when adding
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 1)
             input_dialog.exec_()
             cmd_id = input_dialog.cmd_id
+            cmd_name = input_dialog.cmd_name
             cmd_desc = input_dialog.cmd_desc
-            if cmd_id != "" and cmd_desc != "":
+            cmd_affected_attrs = input_dialog.cmd_affected_attrs
+            if cmd_id is not None and cmd_desc is not None and cmd_name is not None and cmd_affected_attrs is not None and cmd_id != "" and cmd_name!="" and cmd_desc!="" and cmd_affected_attrs!="":
                 new_row_cnt = self.tableWidget_g1.rowCount() + 1
                 self.tableWidget_g1.setRowCount(new_row_cnt)
                 self.tableWidget_g1.setItem(new_row_cnt-1,0,QTableWidgetItem(cmd_id))
-                self.tableWidget_g1.setItem(new_row_cnt-1,1,QTableWidgetItem(cmd_id))
+                self.tableWidget_g1.setItem(new_row_cnt-1,1,QTableWidgetItem(cmd_name))
+                self.tableWidget_g1.setItem(new_row_cnt-1,2,QTableWidgetItem(cmd_desc))
+                self.tableWidget_g1.setItem(new_row_cnt-1,3,QTableWidgetItem(cmd_affected_attrs))
                 self.tableWidget_g1.resizeRowsToContents()
         else: #ble
             input_dialog = InputBLEDialog(self,1)
 
-    def func_add_g2(self, type):
+    def func_add_attribute(self, type):
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 2)
             input_dialog.exec_()
             attr_id = input_dialog.attr_id
             attr_name = input_dialog.attr_name
             attr_type = input_dialog.attr_type
-            if attr_id!= "" and attr_name != ""and attr_type!= "":
+            if attr_id is not None and attr_name is not None and attr_type is not None and attr_id !="" and attr_name != "" and attr_type !="":
                 new_row_cnt = self.tableWidget_g2.rowCount() + 1
                 self.tableWidget_g2.setRowCount(new_row_cnt)
                 self.tableWidget_g2.setItem(new_row_cnt-1,0,QTableWidgetItem(attr_id))
@@ -725,11 +742,12 @@ class EditCmdWindow(QMainWindow):
         else: #ble
             input_dialog = InputBLEDialog(self,2)
     
-    def func_delete_row_g1(self):
+    def func_delete_row_command(self):
         row = self.tableWidget_g1.currentRow()
         self.tableWidget_g1.removeRow(row)
+        # TODO: write command to 
     
-    def func_delete_row_g2(self):
+    def func_delete_row_attribute(self):
         row = self.tableWidget_g2.currentRow()
         self.tableWidget_g2.removeRow(row)
 
@@ -737,8 +755,10 @@ class EditCmdWindow(QMainWindow):
         cluster = self.comboBox_cluster.currentIndex()
         for i in range(self.tableWidget_g1.rowCount()):
             cmd_id = self.tableWidget_g1.item(i, 0).text()
-            cmd_desc = self.tableWidget_g1.item(i, 1).text()
-            print(cmd_id, cmd_desc)
+            cmd_name = self.tableWidget_g1.item(i, 1).text()
+            cmd_desc = self.tableWidget_g1.item(i, 2).text()
+            cmd_affected_attrs = self.tableWidget_g1.item(i, 3).text()
+            affected_attrs = cmd_payloads.split(",") 
             # cluster 에 맞게 파일 입출력 실행
         for i in range(self.tableWidget_g2.rowCount()):
             attr_id = self.tableWidget_g2.item(i, 0).text()
@@ -760,7 +780,9 @@ class InputZigbeeDialog(QDialog):
         super(InputZigbeeDialog, self).__init__(parent)
         self.choice = choice
         self.cmd_id = None
+        self.cmd_name = None
         self.cmd_desc = None
+        self.cmd_affected_attrs = None
         self.attr_id = None
         self.attr_name = None
         self.attr_type = None
@@ -781,8 +803,10 @@ class InputZigbeeDialog(QDialog):
     
     def func_btn_add(self):
         if self.choice == 1:
-            self.cmd_id = str(self.lineEdit_cmd_id.text())
-            self.cmd_desc = str(self.lineEdit_cmd_desc.text())
+            self.cmd_id = self.lineEdit_cmd_id.text()
+            self.cmd_name = self.lineEdit_cmd_name.text()
+            self.cmd_desc = self.lineEdit_cmd_desc.text()
+            self.cmd_affected_attrs = self.lineEdit_cmd_affected_attrs.text()
         else:
             self.attr_id = self.lineEdit_attr_id.text()
             self.attr_name = self.lineEdit_attr_name.text()
