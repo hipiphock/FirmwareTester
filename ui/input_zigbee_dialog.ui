@@ -42,10 +42,10 @@
   <widget class="QGroupBox" name="groupBox_attr">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>200</y>
+     <x>40</x>
+     <y>250</y>
      <width>461</width>
-     <height>201</height>
+     <height>191</height>
     </rect>
    </property>
    <property name="title">
@@ -124,10 +124,10 @@
   <widget class="QGroupBox" name="groupBox_cmd">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>20</y>
+     <x>40</x>
+     <y>10</y>
      <width>461</width>
-     <height>151</height>
+     <height>231</height>
     </rect>
    </property>
    <property name="title">
@@ -137,7 +137,7 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>40</y>
+      <y>30</y>
       <width>231</width>
       <height>31</height>
      </rect>
@@ -146,8 +146,8 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>50</y>
+      <x>50</x>
+      <y>40</y>
       <width>101</width>
       <height>16</height>
      </rect>
@@ -159,8 +159,31 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>90</y>
+      <x>40</x>
+      <y>80</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>command name</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_cmd_desc">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>130</y>
+      <width>231</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>130</y>
       <width>131</width>
       <height>20</height>
      </rect>
@@ -169,11 +192,47 @@
      <string>command description</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_cmd_desc">
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>180</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>affected_attrs</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>200</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(, 로 구분)</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_cmd_name">
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>90</y>
+      <y>80</y>
+      <width>231</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_cmd_affected_attrs">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>180</y>
       <width>231</width>
       <height>31</height>
      </rect>
