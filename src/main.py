@@ -697,9 +697,9 @@ class EditCmdWindow(QMainWindow):
 
     def func_cluster_changed(self):
         # @hipiphock
-        # TODO: get cluster files on 
+        # TODO: need to clear all tables before filling in
         GUIlogger.debug("func_cluster_changed called.")
-        # TODO: read CLUSTER_TABLE for each cluster key
+        # TODO: read CLUSTER_TABLE for selected cluster
         cluster_key = self.comboBox_cluster.currentText()
         cluster = CLUSTER_TABLE[cluster_key]
         for cmd_key in cluster.cmd_table:
@@ -707,10 +707,8 @@ class EditCmdWindow(QMainWindow):
             self.tableWidget_g1.setRowCount(new_row_cnt)
             # id, name, desc, attr
             cmd = cluster.cmd_table[cmd_key]
-            GUIlogger.debug(cmd.id)
-            GUIlogger.debug(cmd.name)
-            self.tableWidget_g1.setItem(new_row_cnt, 0, QTableWidgetItem(cmd.id))
-            self.tableWidget_g1.setItem(new_row_cnt, 1, QTableWidgetItem(cmd.name))
+            self.tableWidget_g1.setItem(new_row_cnt - 1, 0, QTableWidgetItem(str(hex(cmd.id))))
+            self.tableWidget_g1.setItem(new_row_cnt - 1, 1, QTableWidgetItem(cmd.name))
             # self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.desc))
             # self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.attr))
         for attr_key in cluster.attr_table:
@@ -718,12 +716,9 @@ class EditCmdWindow(QMainWindow):
             self.tableWidget_g2.setRowCount(new_row_cnt)
             # id, name, type
             attr = cluster.attr_table[attr_key]
-            GUIlogger.debug(attr.id)
-            GUIlogger.debug(attr.name)
-            GUIlogger.debug(attr.type)
-            self.tableWidget_g2.setItem(new_row_cnt, 0, QTableWidgetItem(attr.id))
-            self.tableWidget_g2.setItem(new_row_cnt, 1, QTableWidgetItem(attr.name))
-            self.tableWidget_g2.setItem(new_row_cnt, 2, QTableWidgetItem(attr.type))
+            self.tableWidget_g2.setItem(new_row_cnt - 1, 0, QTableWidgetItem(str(hex(attr.id))))
+            self.tableWidget_g2.setItem(new_row_cnt - 1, 1, QTableWidgetItem(attr.name))
+            self.tableWidget_g2.setItem(new_row_cnt - 1, 2, QTableWidgetItem(attr.type))
 
         # @ninima0323
         # 각 클러스터에 맞는 명령 가져와 테이블에 추가하기
@@ -790,13 +785,13 @@ class EditCmdWindow(QMainWindow):
             cmd_name = self.tableWidget_g1.item(i, 1).text()
             cmd_desc = self.tableWidget_g1.item(i, 2).text()
             cmd_affected_attrs = self.tableWidget_g1.item(i, 3).text()
-            affected_attrs = cmd_payloads.split(",") 
+            affected_attrs = cmd_payloads.split(",")
+            # TODO: change cmd_table with 
             # cluster 에 맞게 파일 입출력 실행
         for i in range(self.tableWidget_g2.rowCount()):
             attr_id = self.tableWidget_g2.item(i, 0).text()
             attr_name = self.tableWidget_g2.item(i, 1).text()
             attr_type = self.tableWidget_g2.item(i, 2).text()
-            print(attr_id, attr_name, attr_type)
             #cluster 에 맞게 파일 입출력 실행
         self.close()
     
