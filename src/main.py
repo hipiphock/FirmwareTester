@@ -14,7 +14,7 @@ from PyQt5.QtCore import *
 from WebCrawler import crawler
 from Handler.Zigbee.constants import *
 from Handler.Zigbee.zigbee_driver import ZigBeeDriver
-from Handler.Zigbee.structures import get_all_clusters, Cluster, TaskCmd, CLUSTER_TABLE
+from Handler.Zigbee.structures import get_all_clusters, Cluster, Cmd, Attr, TaskCmd, CLUSTER_TABLE
 
 from CommandGenerator.command_generator import CmdGenerator
 
@@ -703,7 +703,7 @@ class EditCmdWindow(QMainWindow):
             self.tableWidget_g1.removeRow(0)
         while self.tableWidget_g2.rowCount() > 0:
             self.tableWidget_g2.removeRow(0)
-        # TODO: read CLUSTER_TABLE for selected cluster
+
         cluster_key = self.comboBox_cluster.currentText()
         cluster = CLUSTER_TABLE[cluster_key]
         for cmd_key in cluster.cmd_table:
@@ -726,7 +726,8 @@ class EditCmdWindow(QMainWindow):
         
 
     def func_add_command(self, type):
-        # TODO: command needs four element when adding
+        cluster_key = 'temp'
+        # TODO: add command to Cluster Table
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 1)
             input_dialog.exec_()
@@ -734,6 +735,8 @@ class EditCmdWindow(QMainWindow):
             cmd_name = input_dialog.cmd_name
             cmd_desc = input_dialog.cmd_desc
             cmd_affected_attrs = input_dialog.cmd_affected_attrs
+            new_cmd = Cmd(cmd_id, cmd_name, cmd_desc, cmd_affected_attrs)
+            CLUSTER_TABLE[cluster_key].cmd_table[cmd_name] = new_cmd
             if cmd_id != "" and cmd_desc != "":
                 new_row_cnt = self.tableWidget_g1.rowCount() + 1
                 self.tableWidget_g1.setRowCount(new_row_cnt)
@@ -746,12 +749,16 @@ class EditCmdWindow(QMainWindow):
             input_dialog = InputBLEDialog(self,1)
 
     def func_add_attribute(self, type):
+        cluster_key = 'temp'
+        # TODO: add attribute to Cluster Table
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 2)
             input_dialog.exec_()
             attr_id = input_dialog.attr_id
             attr_name = input_dialog.attr_name
             attr_type = input_dialog.attr_type
+            new_attr = Attr(attr_id, attr_name, attr_type)
+            CLUSTER_TABLE[cluster_key].attr_table[attr_name] = new_attr
             if attr_id is not None and attr_name is not None and attr_type is not None and attr_id !="" and attr_name != "" and attr_type !="":
                 new_row_cnt = self.tableWidget_g2.rowCount() + 1
                 self.tableWidget_g2.setRowCount(new_row_cnt)
