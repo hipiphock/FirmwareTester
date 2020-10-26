@@ -702,13 +702,28 @@ class EditCmdWindow(QMainWindow):
         # TODO: read CLUSTER_TABLE for each cluster key
         cluster_key = self.comboBox_cluster.currentText()
         cluster = CLUSTER_TABLE[cluster_key]
-        i = 0
-        for cmd in cluster.cmd_table:
+        for cmd_key in cluster.cmd_table:
+            new_row_cnt = self.tableWidget_g1.rowCount() + 1
+            self.tableWidget_g1.setRowCount(new_row_cnt)
             # id, name, desc, attr
-            self.tableWidget_g1.setItem(i, 0, QTableWidgetItem(cmd.id))
-            self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.name))
+            cmd = cluster.cmd_table[cmd_key]
+            GUIlogger.debug(cmd.id)
+            GUIlogger.debug(cmd.name)
+            self.tableWidget_g1.setItem(new_row_cnt, 0, QTableWidgetItem(cmd.id))
+            self.tableWidget_g1.setItem(new_row_cnt, 1, QTableWidgetItem(cmd.name))
             # self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.desc))
             # self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.attr))
+        for attr_key in cluster.attr_table:
+            new_row_cnt = self.tableWidget_g2.rowCount() + 1
+            self.tableWidget_g2.setRowCount(new_row_cnt)
+            # id, name, type
+            attr = cluster.attr_table[attr_key]
+            GUIlogger.debug(attr.id)
+            GUIlogger.debug(attr.name)
+            GUIlogger.debug(attr.type)
+            self.tableWidget_g2.setItem(new_row_cnt, 0, QTableWidgetItem(attr.id))
+            self.tableWidget_g2.setItem(new_row_cnt, 1, QTableWidgetItem(attr.name))
+            self.tableWidget_g2.setItem(new_row_cnt, 2, QTableWidgetItem(attr.type))
 
         # @ninima0323
         # 각 클러스터에 맞는 명령 가져와 테이블에 추가하기
