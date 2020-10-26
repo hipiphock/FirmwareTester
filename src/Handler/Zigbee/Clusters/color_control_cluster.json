@@ -61,42 +61,66 @@
         {
             "id":"0x00",
             "name":"MOVE_TO_HUE",
-            "desc":"Move to Hue"
+            "desc":"Move to Hue",
+            "affected_attrs":[
+
+            ]
         },
         {
             "id":"0x01",
             "name":"MOVE_TO_SAT",
-            "desc":"Move to Saturation"
+            "desc":"Move to Saturation",
+            "affected_attrs":[
+                
+            ]
         },
         {
             "id":"0x02",
             "name":"MOVE_TO_HUE_AND_SAT",
-            "desc":"Move to Hue and Saturation"
+            "desc":"Move to Hue and Saturation",
+            "affected_attrs":[
+                
+            ]
         },
         {
             "id":"0x03",
             "name":"MOVE_TO_COLOR",
-            "desc":"Move to color"
+            "desc":"Move to color",
+            "affected_attrs":[
+                
+            ]
         },
         {
             "id":"0x04",
             "name":"MOVE_COLOR",
-            "desc":"Move to Level(with On/Off)"
+            "desc":"Move to Level(with On/Off)",
+            "affected_attrs":[
+                
+            ]
         },
         {
             "id":"0x05",
             "name":"STEP_COLOR",
-            "desc":"Move(with On/Off)"
+            "desc":"Move(with On/Off)",
+            "affected_attrs":[
+                
+            ]
         },
         {
             "id":"0x06",
             "name":"MOVE_MIRED",
-            "cmd_desc":"Step(with On/Off)"
+            "desc":"Step(with On/Off)",
+            "affected_attrs":[
+                
+            ]
         },
         {
             "id":"0x07",
             "name":"STEP_MIRED",
-            "cmd_desc":"Stop"
+            "desc":"Stop",
+            "affected_attrs":[
+                
+            ]
         }
     ]
 }

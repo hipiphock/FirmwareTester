@@ -696,9 +696,13 @@ class EditCmdWindow(QMainWindow):
         self.show()
 
     def func_cluster_changed(self):
-        # @hipiphock
-        # TODO: need to clear all tables before filling in
         GUIlogger.debug("func_cluster_changed called.")
+        # @hipiphock
+        # clear table
+        while self.tableWidget_g1.rowCount() > 0:
+            self.tableWidget_g1.removeRow(0)
+        while self.tableWidget_g2.rowCount() > 0:
+            self.tableWidget_g2.removeRow(0)
         # TODO: read CLUSTER_TABLE for selected cluster
         cluster_key = self.comboBox_cluster.currentText()
         cluster = CLUSTER_TABLE[cluster_key]
@@ -709,7 +713,7 @@ class EditCmdWindow(QMainWindow):
             cmd = cluster.cmd_table[cmd_key]
             self.tableWidget_g1.setItem(new_row_cnt - 1, 0, QTableWidgetItem(str(hex(cmd.id))))
             self.tableWidget_g1.setItem(new_row_cnt - 1, 1, QTableWidgetItem(cmd.name))
-            # self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.desc))
+            self.tableWidget_g1.setItem(new_row_cnt - 1, 1, QTableWidgetItem(cmd.desc))
             # self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.attr))
         for attr_key in cluster.attr_table:
             new_row_cnt = self.tableWidget_g2.rowCount() + 1
@@ -718,17 +722,7 @@ class EditCmdWindow(QMainWindow):
             attr = cluster.attr_table[attr_key]
             self.tableWidget_g2.setItem(new_row_cnt - 1, 0, QTableWidgetItem(str(hex(attr.id))))
             self.tableWidget_g2.setItem(new_row_cnt - 1, 1, QTableWidgetItem(attr.name))
-            self.tableWidget_g2.setItem(new_row_cnt - 1, 2, QTableWidgetItem(attr.type))
-
-        # @ninima0323
-        # 각 클러스터에 맞는 명령 가져와 테이블에 추가하기
-        #tableWidget_g1 이 위쪽 테이블 g2가 아래쪽 테이블 
-        #zigbee라면 1이 커맨드, 2가 attribute
-        #ble라면 1이 서비스, 2가 attribute 
-        # 아래 예시처럼 추가하기
-        # self.tableWidget_g2.setItem(new_row_cnt-1,0,QTableWidgetItem(attr_id))
-        # self.tableWidget_g2.setItem(new_row_cnt-1,1,QTableWidgetItem(attr_name))
-        # self.tableWidget_g2.setItem(new_row_cnt-1,2,QTableWidgetItem(attr_type))
+            self.tableWidget_g2.setItem(new_row_cnt - 1, 2, QTableWidgetItem(str(hex(attr.type))))
         
 
     def func_add_command(self, type):

@@ -3,7 +3,7 @@
     "name"  :   "ON_OFF_CLUSTER",
     "attributes":[
         {   "id":"0x0000",
-            "name":"ON_OFF_ONOFF_ATTR",
+            "name":"ONOFF_ATTR",
             "type":"0x10"
         }
     ],
@@ -13,7 +13,7 @@
             "name":"OFF",
             "desc":"off",
             "affected_attrs":[
-                "ON_OFF_ONOFF_ATTR"
+                "ONOFF_ATTR"
             ]
         },
         {
@@ -21,7 +21,7 @@
             "name":"ON",
             "desc":"on",
             "affected_attrs":[
-                "ON_OFF_ONOFF_ATTR"
+                "ONOFF_ATTR"
             ]
         },
         {
@@ -29,7 +29,7 @@
             "name":"TOGGLE",
             "desc":"toggle",
             "affected_attrs":[
-                "ON_OFF_ONOFF_ATTR"
+                "ONOFF_ATTR"
             ]
         }
     ]

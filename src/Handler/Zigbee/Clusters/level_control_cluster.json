@@ -3,12 +3,12 @@
     "name"  :   "LVL_CTRL_CLUSTER",
     "attributes"    :   [
         {   "id":"0x0000",
-            "name":"LVL_CTRL_CURR_LVL_ATTR",
+            "name":"CURR_LVL_ATTR",
             "type":"0x20"
         },
         {
             "id":"0x0001",
-            "name":"LVL_CTRL_REMAIN_TIME_ATTR",
+            "name":"REMAIN_TIME_ATTR",
             "type":"0x21"
         },
         {
@@ -28,7 +28,7 @@
             "name":"MOVE_TO",
             "desc":"Move to Level",
             "affected_attrs":[
-                "LVL_CTRL_CURR_LVL_ATTR"
+                "CURR_LVL_ATTR"
             ]
         },
         {
@@ -36,7 +36,7 @@
             "name":"MOVE",
             "desc":"Move",
             "affected_attrs":[
-                "LVL_CTRL_CURR_LVL_ATTR"
+                "CURR_LVL_ATTR"
             ]
         },
         {
@@ -44,7 +44,7 @@
             "name":"STEP",
             "desc":"Step",
             "affected_attrs":[
-                "LVL_CTRL_CURR_LVL_ATTR"
+                "CURR_LVL_ATTR"
             ]
         },
         {
@@ -52,7 +52,7 @@
             "name":"STOP",
             "desc":"Stop",
             "affected_attrs":[
-                "LVL_CTRL_REMAIN_TIME_ATTR"
+                "REMAIN_TIME_ATTR"
             ]
         },
         {
@@ -60,7 +60,7 @@
             "name":"MOVE_TO_ONOFF",
             "desc":"Move to Level(with On/Off)",
             "affected_attrs":[
-                "LVL_CTRL_CURR_LVL_ATTR"
+                "CURR_LVL_ATTR"
             ]
         },
         {
@@ -68,23 +68,23 @@
             "name":"MOVE_ONOFF",
             "desc":"Move(with On/Off)",
             "affected_attrs":[
-                "LVL_CTRL_CURR_LVL_ATTR"
+                "CURR_LVL_ATTR"
             ]
         },
         {
             "id":"0x06",
             "name":"STEP_ONOFF",
-            "cmd_desc":"Step(with On/Off)",
+            "desc":"Step(with On/Off)",
             "affected_attrs":[
-                "LVL_CTRL_CURR_LVL_ATTR"
+                "CURR_LVL_ATTR"
             ]
         },
         {
             "id":"0x07",
             "name":"STOP_ONOFF",
-            "cmd_desc":"Stop",
+            "desc":"Stop",
             "affected_attrs":[
-                "LVL_CTRL_REMAIN_TIME_ATTR"
+                "REMAIN_TIME_ATTR"
             ]
         }
     ]

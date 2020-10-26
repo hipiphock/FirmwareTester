@@ -16,11 +16,11 @@ class Attr:
         self.max = max
 
 class Cmd:
-    def __init__(self, id, name, payload=None):
+    def __init__(self, id, name, desc, affected_attrs):
         self.id = id
         self.name = name
-        self.payload = None
-    # TODO: need to do something with payload
+        self.desc = desc
+        self.affected_attrs = affected_attrs
 
 class Cluster:
     """
@@ -60,7 +60,7 @@ class Cluster:
                 attr_table[attr['name']] = attr_obj
             cmd_table = {}
             for cmd in cluster['commands']:
-                cmd_obj = Cmd(int(cmd['id'], 16), cmd['name'])
+                cmd_obj = Cmd(int(cmd['id'], 16), cmd['name'], cmd['desc'], cmd['affected_attrs'])
                 cmd_table[cmd['name']] = cmd_obj
             return cls(cluster['id'], cluster['name'], attr_table, cmd_table)
 
@@ -78,7 +78,7 @@ class TaskCmd:
         self.attr_list = []
         for attr in attrs:
             attr = CLUSTER_TABLE[cluster_key]['attributes'][attr]
-            attr_list.append(Attribute(CLUSTER_TABLE[cluster_key]['id'], id=attr['id'], type=attr['type']))
+            self.attr_list.append(Attribute(CLUSTER_TABLE[cluster_key]['id'], id=attr['id'], type=attr['type']))
         self.payloads = payloads
 
 
