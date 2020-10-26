@@ -64,8 +64,9 @@ class Cluster:
                 cmd_table[cmd['name']] = cmd_obj
             return cls(cluster['id'], cluster['name'], attr_table, cmd_table)
 
-    def writeClusterFile(self, filename):
-        pass
+    def writeClusterFile(self, cluster, filename):
+        with open(filename, "w") as cluster_file:
+            json.dump(cluster, cluster_file)
 
 class TaskCmd:
     # class that is going to be used in main routine

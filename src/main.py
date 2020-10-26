@@ -1,9 +1,9 @@
 import os
 import sys
-import json
+import json     # for reading cluster configuration files
 import csv
 import datetime
-import json     # for reading cluster configuration files
+import logging
 
 import serial
 from PyQt5 import uic
@@ -14,7 +14,7 @@ from PyQt5.QtCore import *
 from WebCrawler import crawler
 from Handler.Zigbee.constants import *
 from Handler.Zigbee.zigbee_driver import ZigBeeDriver
-from Handler.Zigbee.structures import get_all_clusters, TaskCmd, CLUSTER_TABLE
+from Handler.Zigbee.structures import get_all_clusters, Cluster, TaskCmd, CLUSTER_TABLE
 
 from CommandGenerator.command_generator import CmdGenerator
 
@@ -22,6 +22,10 @@ ui_file = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', 'ui', 'new_main.ui'))
 
 main_class = uic.loadUiType(ui_file)[0]
+
+# for debugging
+GUIlogger = logging.getLogger("GUI")
+logging.basicConfig(level=logging.DEBUG)
 
 def get_enable_ports():
     if sys.platform.startswith('win'):   
@@ -666,7 +670,7 @@ class EditCmdWindow(QMainWindow):
         if type == 0: #zigbee
             self.groupBox_1.setTitle("command 수정")
             self.groupBox_2.setTitle("attribute 수정")
-            self.pushButton_save.clicked.connect(self.func_btn_save_zigbee)
+            self.pushButton_save.clicked.connect(self.func_btn_edit_zigbee)
 
             self.tableWidget_g1.setSelectionMode(QAbstractItemView.SingleSelection)
             self.tableWidget_g1.setColumnCount(4)
@@ -692,10 +696,21 @@ class EditCmdWindow(QMainWindow):
         self.show()
 
     def func_cluster_changed(self):
+        # @hipiphock
+        # TODO: get cluster files on 
+        GUIlogger.debug("func_cluster_changed called.")
         # TODO: read CLUSTER_TABLE for each cluster key
         cluster_key = self.comboBox_cluster.currentText()
         cluster = CLUSTER_TABLE[cluster_key]
-        # self.tableWidget_g1.setItem(new_row_cnt - 1, 0, QTableWidgetItem(cluster['commands']))
+        i = 0
+        for cmd in cluster.cmd_table:
+            # id, name, desc, attr
+            self.tableWidget_g1.setItem(i, 0, QTableWidgetItem(cmd.id))
+            self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.name))
+            # self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.desc))
+            # self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.attr))
+
+        # @ninima0323
         # 각 클러스터에 맞는 명령 가져와 테이블에 추가하기
         #tableWidget_g1 이 위쪽 테이블 g2가 아래쪽 테이블 
         #zigbee라면 1이 커맨드, 2가 attribute
@@ -712,9 +727,9 @@ class EditCmdWindow(QMainWindow):
             input_dialog = InputZigbeeDialog(self, 1)
             input_dialog.exec_()
             cmd_id = input_dialog.cmd_id
-            # cmd_name = input_dialog.cmd_name
+            cmd_name = input_dialog.cmd_name
             cmd_desc = input_dialog.cmd_desc
-            # cmd_affected_attrs = input_dialog.cmd_affected_attrs
+            cmd_affected_attrs = input_dialog.cmd_affected_attrs
             if cmd_id != "" and cmd_desc != "":
                 new_row_cnt = self.tableWidget_g1.rowCount() + 1
                 self.tableWidget_g1.setRowCount(new_row_cnt)
@@ -751,7 +766,9 @@ class EditCmdWindow(QMainWindow):
         row = self.tableWidget_g2.currentRow()
         self.tableWidget_g2.removeRow(row)
 
-    def func_btn_save_zigbee(self):
+    # @hipiphock
+    # changed func_btn_save_zigbee -> func_btn_edit_zigbee
+    def func_btn_edit_zigbee(self):
         cluster = self.comboBox_cluster.currentIndex()
         for i in range(self.tableWidget_g1.rowCount()):
             cmd_id = self.tableWidget_g1.item(i, 0).text()
@@ -769,7 +786,7 @@ class EditCmdWindow(QMainWindow):
         self.close()
     
     def func_btn_save_ble(self):
-        #아직 미구현
+        # TODO: implement save ble
         self.close()
 
     def func_btn_cancel(self):
