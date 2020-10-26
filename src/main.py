@@ -719,7 +719,9 @@ class EditCmdWindow(QMainWindow):
                 new_row_cnt = self.tableWidget_g1.rowCount() + 1
                 self.tableWidget_g1.setRowCount(new_row_cnt)
                 self.tableWidget_g1.setItem(new_row_cnt-1,0,QTableWidgetItem(cmd_id))
-                self.tableWidget_g1.setItem(new_row_cnt-1,1,QTableWidgetItem(cmd_id))
+                self.tableWidget_g1.setItem(new_row_cnt-1,1,QTableWidgetItem(cmd_name))
+                self.tableWidget_g1.setItem(new_row_cnt-1,2,QTableWidgetItem(cmd_desc))
+                self.tableWidget_g1.setItem(new_row_cnt-1,3,QTableWidgetItem(cmd_affected_attrs))
                 self.tableWidget_g1.resizeRowsToContents()
         else: #ble
             input_dialog = InputBLEDialog(self,1)
@@ -731,7 +733,7 @@ class EditCmdWindow(QMainWindow):
             attr_id = input_dialog.attr_id
             attr_name = input_dialog.attr_name
             attr_type = input_dialog.attr_type
-            if attr_id!= "" and attr_name != ""and attr_type!= "":
+            if attr_id is not None and attr_name is not None and attr_type is not None and attr_id !="" and attr_name != "" and attr_type !="":
                 new_row_cnt = self.tableWidget_g2.rowCount() + 1
                 self.tableWidget_g2.setRowCount(new_row_cnt)
                 self.tableWidget_g2.setItem(new_row_cnt-1,0,QTableWidgetItem(attr_id))
@@ -753,8 +755,10 @@ class EditCmdWindow(QMainWindow):
         cluster = self.comboBox_cluster.currentIndex()
         for i in range(self.tableWidget_g1.rowCount()):
             cmd_id = self.tableWidget_g1.item(i, 0).text()
-            cmd_desc = self.tableWidget_g1.item(i, 1).text()
-            print(cmd_id, cmd_desc)
+            cmd_name = self.tableWidget_g1.item(i, 1).text()
+            cmd_desc = self.tableWidget_g1.item(i, 2).text()
+            cmd_affected_attrs = self.tableWidget_g1.item(i, 3).text()
+            affected_attrs = cmd_payloads.split(",") 
             # cluster 에 맞게 파일 입출력 실행
         for i in range(self.tableWidget_g2.rowCount()):
             attr_id = self.tableWidget_g2.item(i, 0).text()
@@ -776,7 +780,9 @@ class InputZigbeeDialog(QDialog):
         super(InputZigbeeDialog, self).__init__(parent)
         self.choice = choice
         self.cmd_id = None
+        self.cmd_name = None
         self.cmd_desc = None
+        self.cmd_affected_attrs = None
         self.attr_id = None
         self.attr_name = None
         self.attr_type = None
@@ -797,8 +803,10 @@ class InputZigbeeDialog(QDialog):
     
     def func_btn_add(self):
         if self.choice == 1:
-            self.cmd_id = str(self.lineEdit_cmd_id.text())
-            self.cmd_desc = str(self.lineEdit_cmd_desc.text())
+            self.cmd_id = self.lineEdit_cmd_id.text()
+            self.cmd_name = self.lineEdit_cmd_name.text()
+            self.cmd_desc = self.lineEdit_cmd_desc.text()
+            self.cmd_affected_attrs = self.lineEdit_cmd_affected_attrs.text()
         else:
             self.attr_id = self.lineEdit_attr_id.text()
             self.attr_name = self.lineEdit_attr_name.text()
