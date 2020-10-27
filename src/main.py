@@ -712,8 +712,12 @@ class EditCmdWindow(QMainWindow):
             cmd = cluster.cmd_table[cmd_key]
             self.tableWidget_g1.setItem(new_row_cnt - 1, 0, QTableWidgetItem(str(hex(cmd.id))))
             self.tableWidget_g1.setItem(new_row_cnt - 1, 1, QTableWidgetItem(cmd.name))
-            self.tableWidget_g1.setItem(new_row_cnt - 1, 1, QTableWidgetItem(cmd.desc))
-            # self.tableWidget_g1.setItem(i, 1, QTableWidgetItem(cmd.attr))
+            self.tableWidget_g1.setItem(new_row_cnt - 1, 2, QTableWidgetItem(cmd.desc))
+            attr_str = str()
+            for attr in cmd.affected_attrs:
+                attr_str += attr
+                attr_str += ','
+            self.tableWidget_g1.setItem(new_row_cnt - 1, 3, QTableWidgetItem(attr_str))
         for attr_key in cluster.attr_table:
             new_row_cnt = self.tableWidget_g2.rowCount() + 1
             self.tableWidget_g2.setRowCount(new_row_cnt)
