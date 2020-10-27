@@ -67,18 +67,14 @@ class Cluster:
     def writeClusterFile(self, filename):
         with open(filename, "w") as cluster_file:
             json_to_write = {}
-            json_to_write[self.id] = self.id
-            json_to_write[self.name] = self.name
+            json_to_write['id'] = self.id
+            json_to_write['name'] = self.name
             # attribute
             json_to_write['attributes'] = []
-            # for attr_key in self.attr_table:
-                # attr_id = self.attr_table[attr_key].id
-                # attr_name = self.attr_table[attr_key].name
-                # attr_type = self.attr_table[attr_key].type
-            for attr in self.attr_table:
-                attr_id = attr.id
-                attr_name = attr.name
-                attr_type = attr.type
+            for attr_key in self.attr_table:
+                attr_id = self.attr_table[attr_key].id
+                attr_name = self.attr_table[attr_key].name
+                attr_type = self.attr_table[attr_key].type
                 json_to_write['attributes'].append({
                     'id':attr_id,
                     'name':attr_name,
@@ -86,11 +82,11 @@ class Cluster:
                 })
             # command
             json_to_write['commands'] = []
-            for cmd in self.cmd_table:
-                cmd_id = cmd.id
-                cmd_name = cmd.name
-                cmd_desc = cmd.desc
-                affected_attrs = cmd.affected_attrs
+            for cmd_key in self.cmd_table:
+                cmd_id = self.cmd_table[cmd_key].id
+                cmd_name = self.cmd_table[cmd_key].name
+                cmd_desc = self.cmd_table[cmd_key].desc
+                affected_attrs = self.cmd_table[cmd_key].affected_attrs
                 json_to_write['commands'].append({
                     'id':cmd_id,
                     'name':cmd_name,
@@ -130,14 +126,14 @@ def get_all_clusters():
 CLUSTER_TABLE, CLUSTER_FILE_TABLE = get_all_clusters()
 
 # for test
-if __name__ == "__main__":
-    attr_table = []
-    for i in range(5):
-        test = Attr(99, 'test', 99)
-        attr_table.append(test)
-    cmd_table = []
-    for i in range(5):
-        test = Cmd(99, 'test', 'for test', ['test', 'test'])
-        cmd_table.append(test)
-    test = Cluster(99, 'test', attr_table=attr_table, cmd_table=cmd_table)
-    test.writeClusterFile("test.json")
+# if __name__ == "__main__":
+#     attr_table = []
+#     for i in range(5):
+#         test = Attr(99, 'test', 99)
+#         attr_table.append(test)
+#     cmd_table = []
+#     for i in range(5):
+#         test = Cmd(99, 'test', 'for test', ['test', 'test'])
+#         cmd_table.append(test)
+#     test = Cluster(99, 'test', attr_table=attr_table, cmd_table=cmd_table)
+#     test.writeClusterFile("test.json")

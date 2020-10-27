@@ -729,7 +729,7 @@ class EditCmdWindow(QMainWindow):
         
 
     def func_add_command(self, type):
-        cluster_key = 'temp'
+        cluster_key = self.comboBox_cluster.currentText()
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 1)
             input_dialog.exec_()
@@ -751,7 +751,7 @@ class EditCmdWindow(QMainWindow):
             input_dialog = InputBLEDialog(self,1)
 
     def func_add_attribute(self, type):
-        cluster_key = 'temp'
+        cluster_key = self.comboBox_cluster.currentText()
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 2)
             input_dialog.exec_()
