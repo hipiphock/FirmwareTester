@@ -95,18 +95,12 @@ class Cluster:
                 })
             json.dump(json_to_write, cluster_file)
 
-class TaskCmd:
+class TaskCmd(Cmd):
     # class that is going to be used in main routine
-    def __init__(self, cluster_key, command_key, attrs, payloads=None):
-        self.cluster_key = cluster_key
-        self.cluster_id = CLUSTER_TABLE[cluster_key]
-        self.command_key = command_key
-        self.command_id = CLUSTER_TABLE[cluster_key]['commands'][command_key]['id']
-        self.attr_list = []
-        for attr in attrs:
-            attr = CLUSTER_TABLE[cluster_key]['attributes'][attr]
-            self.attr_list.append(Attribute(CLUSTER_TABLE[cluster_key]['id'], id=attr['id'], type=attr['type']))
+    def __init__(self, payloads=None):
+        super.__init__()
         self.payloads = payloads
+        
 
 # returns cluster files' name
 def get_all_clusters():

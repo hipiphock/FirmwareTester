@@ -3,57 +3,57 @@
     "name"  :   "COLOR_CTRL_CLUSTER",
     "attributes"    :   [
         {   "id":"0x0000",
-            "name":"COLOR_CTRL_CURR_HUE_ATTR",
+            "name":"CURR_HUE_ATTR",
             "type":"0x20"
         },
         {
             "id":"0x0001",
-            "name":"COLOR_CTRL_CURR_SAT_ATTR",
+            "name":"CURR_SAT_ATTR",
             "type":"0x20"
         },
         {
             "id":"0x0002",
-            "name":"COLOR_CTRL_REMAIN_TIME_ATTR",
+            "name":"REMAIN_TIME_ATTR",
             "type":"0x21"
         },
         {
             "id":"0x0003",
-            "name":"COLOR_CTRL_CURR_X_ATTR",
+            "name":"CURR_X_ATTR",
             "type":"0x21"
         },
         {
             "id":"0x0004",
-            "name":"COLOR_CTRL_CURR_Y_ATTR",
+            "name":"CURR_Y_ATTR",
             "type":"0x20"
         },
         {
             "id":"0x0007",
-            "name":"COLOR_CTRL_COLOR_TEMP_MIRED_ATTR",
+            "name":"COLOR_TEMP_MIRED_ATTR",
             "type":"0x21"
         },
         {
             "id":"0x0008",
-            "name":"COLOR_CTRL_COLOR_MODE_ATTR",
+            "name":"COLOR_MODE_ATTR",
             "type":"0x21"
         },
         {
             "id":"0x4001",
-            "name":"COLOR_CTRL_ENHANCED_COLOR_MODE_ATTR",
+            "name":"ENHANCED_COLOR_MODE_ATTR",
             "type":"0x21"
         },
         {
             "id":"0x400a",
-            "name":"COLOR_CTRL_COLOR_CAPABILITY_ATTR",
+            "name":"COLOR_CAPABILITY_ATTR",
             "type":"0x21"
         },
         {
             "id":"0x400b",
-            "name":"COLOR_CTRL_COLOR_TEMP_MIN_MIRED_ATTR",
+            "name":"COLOR_TEMP_MIN_MIRED_ATTR",
             "type":"0x21"
         },
         {
             "id":"0x400c",
-            "name":"COLOR_CTRL_COLOR_TEMP_MAX_MIRED_ATTR",
+            "name":"COLOR_TEMP_MAX_MIRED_ATTR",
             "type":"0x21"
         }
     ],
