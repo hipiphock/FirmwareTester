@@ -14,7 +14,7 @@ from PyQt5.QtCore import *
 from WebCrawler import crawler
 from Handler.Zigbee.constants import *
 from Handler.Zigbee.zigbee_driver import ZigBeeDriver
-from Handler.Zigbee.structures import get_all_clusters, Cluster, Cmd, Attr, TaskCmd, CLUSTER_TABLE
+from Handler.Zigbee.structures import get_all_clusters, Cluster, Cmd, Attr, TaskCmd, CLUSTER_TABLE, CLUSTER_FILE_TABLE
 
 from CommandGenerator.command_generator import CmdGenerator
 
@@ -587,7 +587,6 @@ class Worker(QThread):
             #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
 
             # FIXING by @hipiphock
-            # TODO: 바로 command의 member에 있는 attr list를 통해 바로 attribute를 가져온다.
             attrs = command.attr_list
 
     def stop(self):
@@ -769,7 +768,7 @@ class EditCmdWindow(QMainWindow):
     def func_delete_row_command(self):
         row = self.tableWidget_g1.currentRow()
         self.tableWidget_g1.removeRow(row)
-        # TODO: write command to 
+        # TODO: write command to
     
     def func_delete_row_attribute(self):
         row = self.tableWidget_g2.currentRow()
@@ -781,22 +780,7 @@ class EditCmdWindow(QMainWindow):
         # 그냥 바로 CLUSTER_TABLE을 저장하는 식으로 바꾼다.
         for cluster_key in CLUSTER_TABLE:
             cluster = CLUSTER_TABLE[cluster_key]
-            cluster.writeClusterFile('tempfilename')
-
-        # cluster = self.comboBox_cluster.currentIndex()
-        # for i in range(self.tableWidget_g1.rowCount()):
-        #     cmd_id = self.tableWidget_g1.item(i, 0).text()
-        #     cmd_name = self.tableWidget_g1.item(i, 1).text()
-        #     cmd_desc = self.tableWidget_g1.item(i, 2).text()
-        #     cmd_affected_attrs = self.tableWidget_g1.item(i, 3).text()
-        #     affected_attrs = cmd_payloads.split(",")
-        #     # TODO: change cmd_table with 
-        #     # cluster 에 맞게 파일 입출력 실행
-        # for i in range(self.tableWidget_g2.rowCount()):
-        #     attr_id = self.tableWidget_g2.item(i, 0).text()
-        #     attr_name = self.tableWidget_g2.item(i, 1).text()
-        #     attr_type = self.tableWidget_g2.item(i, 2).text()
-        #     #cluster 에 맞게 파일 입출력 실행
+            cluster.writeClusterFile(CLUSTER_FILE_TABLE[cluster_key])
         self.close()
     
     def func_btn_save_ble(self):

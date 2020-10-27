@@ -44,10 +44,10 @@ class Cluster:
     def addCmd(self, cmd_key, cmd):
         if self.cmd_table == None:
             self.cmd_table = {}
-        self.cmd_table[cmd_key] = cmd
+        cmd = cmd
 
     def removeCmd(self, cmd_key):
-        del self.cmd_table[cmd_key]
+        del cmd
 
     @classmethod
     def readClusterFile(cls, filename):
@@ -66,7 +66,38 @@ class Cluster:
 
     def writeClusterFile(self, filename):
         with open(filename, "w") as cluster_file:
-            json.dump(cluster, cluster_file)
+            json_to_write = {}
+            json_to_write[self.id] = self.id
+            json_to_write[self.name] = self.name
+            # attribute
+            json_to_write['attributes'] = []
+            # for attr_key in self.attr_table:
+                # attr_id = self.attr_table[attr_key].id
+                # attr_name = self.attr_table[attr_key].name
+                # attr_type = self.attr_table[attr_key].type
+            for attr in self.attr_table:
+                attr_id = attr.id
+                attr_name = attr.name
+                attr_type = attr.type
+                json_to_write['attributes'].append({
+                    'id':attr_id,
+                    'name':attr_name,
+                    'type':attr_type
+                })
+            # command
+            json_to_write['commands'] = []
+            for cmd in self.cmd_table:
+                cmd_id = cmd.id
+                cmd_name = cmd.name
+                cmd_desc = cmd.desc
+                affected_attrs = cmd.affected_attrs
+                json_to_write['commands'].append({
+                    'id':cmd_id,
+                    'name':cmd_name,
+                    'desc':cmd_desc,
+                    'affected_attrs':affected_attrs
+                })
+            json.dump(json_to_write, cluster_file)
 
 class TaskCmd:
     # class that is going to be used in main routine
@@ -81,17 +112,32 @@ class TaskCmd:
             self.attr_list.append(Attribute(CLUSTER_TABLE[cluster_key]['id'], id=attr['id'], type=attr['type']))
         self.payloads = payloads
 
-
 # returns cluster files' name
 def get_all_clusters():
     cluster_path = os.path.join(os.path.dirname(__file__), 'Clusters')
     cluster_file_list = [f for f in os.listdir(cluster_path) if os.path.isfile(os.path.join(cluster_path, f))]
     cluster_table = {}
+    cluster_file_table = {}
     for cluster_file in cluster_file_list:
         # read each cluster file, and save it to cluster table
-        cluster = Cluster.readClusterFile(os.path.join(cluster_path, cluster_file))
+        cluster_file_path = os.path.join(cluster_path, cluster_file)
+        cluster = Cluster.readClusterFile(cluster_file_path)
         cluster_table[cluster.name] = cluster
-    return cluster_table
+        cluster_file_table[cluster.name] = cluster_file_path
+    return cluster_table, cluster_file_table
 
 # FIXING
-CLUSTER_TABLE = get_all_clusters()
+CLUSTER_TABLE, CLUSTER_FILE_TABLE = get_all_clusters()
+
+# for test
+if __name__ == "__main__":
+    attr_table = []
+    for i in range(5):
+        test = Attr(99, 'test', 99)
+        attr_table.append(test)
+    cmd_table = []
+    for i in range(5):
+        test = Cmd(99, 'test', 'for test', ['test', 'test'])
+        cmd_table.append(test)
+    test = Cluster(99, 'test', attr_table=attr_table, cmd_table=cmd_table)
+    test.writeClusterFile("test.json")
