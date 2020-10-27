@@ -733,10 +733,11 @@ class EditCmdWindow(QMainWindow):
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 1)
             input_dialog.exec_()
-            cmd_id = input_dialog.cmd_id
+            cmd_id = int(input_dialog.cmd_id, 16)
             cmd_name = input_dialog.cmd_name
             cmd_desc = input_dialog.cmd_desc
             cmd_affected_attrs = input_dialog.cmd_affected_attrs
+            # TODO: split by comma
             new_cmd = Cmd(cmd_id, cmd_name, cmd_desc, cmd_affected_attrs)
             CLUSTER_TABLE[cluster_key].cmd_table[cmd_name] = new_cmd
             if cmd_id != "" and cmd_desc != "":
@@ -755,9 +756,9 @@ class EditCmdWindow(QMainWindow):
         if type==0: #zigbee
             input_dialog = InputZigbeeDialog(self, 2)
             input_dialog.exec_()
-            attr_id = input_dialog.attr_id
+            attr_id = int(input_dialog.attr_id, 16)
             attr_name = input_dialog.attr_name
-            attr_type = input_dialog.attr_type
+            attr_type = int(input_dialog.attr_type, 16)
             new_attr = Attr(attr_id, attr_name, attr_type)
             CLUSTER_TABLE[cluster_key].attr_table[attr_name] = new_attr
             if attr_id is not None and attr_name is not None and attr_type is not None and attr_id !="" and attr_name != "" and attr_type !="":
