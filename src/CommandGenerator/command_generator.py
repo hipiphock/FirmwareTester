@@ -52,7 +52,7 @@ class CmdGenerator():
                 return random.choice(abnormal_range)
 
 
-    def random_range(self, cmcd_type, isNormal):
+    def random_range(self, cmd_type, isNormal):
         if isNormal:
             pass
         else:

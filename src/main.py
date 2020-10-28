@@ -52,6 +52,7 @@ class WindowClass(QMainWindow, main_class):
     
         self.set_enable_ports()
         self.pushButton_zigbee_webcrwal.clicked.connect(self.func_btn_zigbee_crwaler)
+        # TODO: add automatic routine for adding cluster comboBox
         self.comboBox_level_commands.currentIndexChanged.connect(self.func_level_interface)
         self.comboBox_color_commands.currentIndexChanged.connect(self.func_color_interface)
 
@@ -175,11 +176,6 @@ class WindowClass(QMainWindow, main_class):
             for command in commands:
                 self.list_gen_cmd.addItem(json.dumps(command))
 
-        # except Exception:
-        #     print(str(Exception))
-        
-        # finally:
-        #     self.func_level_interface()
 
     def func_btn_save_command(self):
         file_name = QFileDialog.getSaveFileName(self, 'Save file', '', 'JSON (*.json)')
@@ -778,7 +774,7 @@ class EditCmdWindow(QMainWindow):
             cmd_name = input_dialog.cmd_name
             cmd_desc = input_dialog.cmd_desc
             cmd_affected_attrs = input_dialog.cmd_affected_attrs
-            # TODO: split by comma
+            # TODO: split affected attrs by comma
             new_cmd = Cmd(cmd_id, cmd_name, cmd_desc, cmd_affected_attrs)
             CLUSTER_TABLE[cluster_key].cmd_table[cmd_name] = new_cmd
             if cmd_id != "" and cmd_desc != "":
