@@ -922,7 +922,7 @@
    <widget class="QPushButton" name="pushButton_edit_cmd">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>300</x>
       <y>200</y>
       <width>141</width>
       <height>32</height>
@@ -930,6 +930,19 @@
     </property>
     <property name="text">
      <string>명령 수정 하기</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_edit_cluster">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>200</y>
+      <width>141</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>클러스터 수정 하기</string>
     </property>
    </widget>
   </widget>
