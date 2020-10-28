@@ -795,8 +795,9 @@ class EditCmdWindow(QMainWindow):
             input_dialog.exec_()
             attr_id = int(input_dialog.attr_id, 16)
             attr_name = input_dialog.attr_name
+            attr_desc = "temp"  # TODO: fix desc
             attr_type = int(input_dialog.attr_type, 16)
-            new_attr = Attr(attr_id, attr_name, attr_type)
+            new_attr = Attr(attr_id, attr_name, attr_desc, attr_type)
             CLUSTER_TABLE[cluster_key].attr_table[attr_name] = new_attr
             if attr_id is not None and attr_name is not None and attr_type is not None and attr_id !="" and attr_name != "" and attr_type !="":
                 new_row_cnt = self.tableWidget_g2.rowCount() + 1
@@ -808,15 +809,17 @@ class EditCmdWindow(QMainWindow):
             input_dialog = InputBLEDialog(self,2)
     
     def func_delete_row_command(self):
+        cluster_key = self.comboBox_cluster.currentText()
         row = self.tableWidget_g1.currentRow()
-        # TODO: Get row data, and remove corresponding command 
-        # with related to deleting row
+        cmd_key = self.tableWidget_g1.item(row, 1).text()
+        del CLUSTER_TABLE[cluster_key].cmd_table[cmd_key]
         self.tableWidget_g1.removeRow(row)
     
     def func_delete_row_attribute(self):
+        cluster_key = self.comboBox_cluster.currentText()
         row = self.tableWidget_g2.currentRow()
-        # TODO: Get row data, and remove corresponding attribute
-        # with related to deleting row
+        attr_key = self.tableWidget_g2.item(row, 1).text()
+        del CLUSTER_TABLE[cluster_key].attr_table[attr_key]
         self.tableWidget_g2.removeRow(row)
 
     # @hipiphock
