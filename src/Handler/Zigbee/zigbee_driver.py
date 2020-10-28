@@ -56,17 +56,13 @@ class ZigBeeDriver():
         return self.get_short_address()
 
     def write_attr_command(self, cmd):
-        # TODO: fix cmd?
         cluster = clusters[cmd['cluster']]
-
         if cluster == ON_OFF_CLUSTER:
             cmd_id = commands[cmd['cluster']][cmd['command']]
         elif cluster == LVL_CTRL_CLUSTER:
             cmd_id = commands[cmd['cluster']][cmd['command']]
         elif cluster == COLOR_CTRL_CLUSTER:
             cmd_id = commands[cmd['cluster']][cmd['command']]
-
-
         self.cli_instance.zcl.generic(
             eui64=self.target_id,
             ep=self.entry_point,

@@ -41,7 +41,32 @@ def get_enable_ports():
             result.append(port)   
         except:   
             pass   
-    return result   
+    return result
+
+# groupBox_cmd_gen 에다가 cluster를 만들어서 추가하면 될 듯
+def get_cluster_boxes():
+    """
+    Returns cluster GUI
+    """
+    cluster_box_list = []
+    y = 0
+    iter_y = 310
+    for cluster_key in CLUSTER_TABLE:
+        cluster_box = QGroupBox(cluster_key)
+        cluster_layout = QVBoxLayout()
+        cluster_box.x = 20
+        cluster_box.y = y
+        y += iter_y
+        cluster_box.width = 371
+        cluster_box.height = 221
+        # 대충 위치 높이 이런거 설정하고
+        # x = 20
+        # y를 얼마만큼 증가시켜야 하는가?
+        # width=371
+        # height=221
+        # cluster_box.setLayout()
+        cluster_box_list.append(cluster_box)
+    return cluster_box_list
 
 
 class WindowClass(QMainWindow, main_class):
@@ -53,6 +78,9 @@ class WindowClass(QMainWindow, main_class):
         self.set_enable_ports()
         self.pushButton_zigbee_webcrwal.clicked.connect(self.func_btn_zigbee_crwaler)
         # TODO: add automatic routine for adding cluster comboBox
+        # cluster_box_list = get_cluster_boxes()
+        # for cluster_box in cluster_box_list:
+        #     self.groupBox_cmd_gen.addWidget(cluster_box)
         self.comboBox_level_commands.currentIndexChanged.connect(self.func_level_interface)
         self.comboBox_color_commands.currentIndexChanged.connect(self.func_color_interface)
 
@@ -532,10 +560,8 @@ class Worker(QThread):
 
     def run(self): # communicate to zigbee driver class
         # TODO: make new routine for new structure
-        for task_cmd in self.commands:
-            pass
-
-        
+        # for task_cmd in self.commands:
+        #     pass
         # Original code
         for command in self.commands:
             currents = []
@@ -593,31 +619,31 @@ class Worker(QThread):
             return attribute
 
         else: # read value
-            # attrs = []
-            # if cluster == ON_OFF_CLUSTER: # onoff cluster only need on_off_attr
-            #     attribute_id, attribute_type = attributes['ON_OFF_ONOFF_ATTR']
-            #     attr_name = "ON/OFF"
-            #     attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-            # elif cluster == LVL_CTRL_CLUSTER: # update here
-            #     attribute_id, attribute_type = attributes['LVL_CTRL_CURR_LVL_ATTR']
-            #     attr_name = "밝기"
-            #     attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-            # elif cluster == COLOR_CTRL_CLUSTER:
-            #     if cmd == COLOR_CTRL_MV_TO_COLOR_TEMP_CMD:
-            #         attribute_id, attribute_type = attributes['COLOR_CTRL_COLOR_TEMP_MIRED_ATTR']
-            #         attr_name = "온도" 
-            #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
-            #     elif cmd == COLOR_CTRL_MV_TO_COLOR_CMD:
-            #         attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_X_ATTR']
-            #         attr_name = "Color X"
-            #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            attrs = []
+            if cluster == ON_OFF_CLUSTER: # onoff cluster only need on_off_attr
+                attribute_id, attribute_type = attributes['ON_OFF_ONOFF_ATTR']
+                attr_name = "ON/OFF"
+                attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            elif cluster == LVL_CTRL_CLUSTER: # update here
+                attribute_id, attribute_type = attributes['LVL_CTRL_CURR_LVL_ATTR']
+                attr_name = "밝기"
+                attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+            elif cluster == COLOR_CTRL_CLUSTER:
+                if cmd == COLOR_CTRL_MV_TO_COLOR_TEMP_CMD:
+                    attribute_id, attribute_type = attributes['COLOR_CTRL_COLOR_TEMP_MIRED_ATTR']
+                    attr_name = "온도" 
+                    attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+                elif cmd == COLOR_CTRL_MV_TO_COLOR_CMD:
+                    attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_X_ATTR']
+                    attr_name = "Color X"
+                    attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
                     
-            #         attr_name = "Color Y"
-            #         attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_Y_ATTR']
-            #         attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
+                    attr_name = "Color Y"
+                    attribute_id, attribute_type = attributes['COLOR_CTRL_CURR_Y_ATTR']
+                    attrs.append(Attribute(cluster=cluster, id=attribute_id, type=attribute_type, name=attr_name))
 
-            # FIXING by @hipiphock
-            attrs = command.attr_list
+            # @hipiphock
+            # attrs = command.attr_list
 
     def stop(self):
         del self
@@ -636,6 +662,8 @@ class Validator():
         new_validate_attribute function validates attributes
         based on cmd.affected_attrs lists.
         """
+        # self.cmd가 TaskCmd라고 가정하고 구현하자.
+        
         pass
 
     def vaildate_attribute(self):
