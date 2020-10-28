@@ -185,13 +185,17 @@ class WindowClass(QMainWindow, main_class):
         # try:
         # on/off
         for i in range(self.spinBox_count_onoff.value()):
-            cmds = self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked())
-            commands.append(cmds)
+            # cmds = self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked())
+            # commands.append(cmds)
+            cmd = self.cmd_generator.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', 20)
+            commands.append(cmd)
 
         # level
         for i in range(self.spinBox_count_level.value()):
-            cmds = self.cmd_generator.cmd_level_interface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
-            commands.append(cmds)
+            # cmds = self.cmd_generator.cmd_level_interface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
+            # commands.append(cmds)
+            cmd = self.cmd_generator.new_cmd('LVL_CTRL_CLUSTER', 'MOVE_TO', 20, 10)
+            commands.append(cmd)
 
         # color
         for i in range(self.spinBox_count_color.value()):
@@ -202,7 +206,9 @@ class WindowClass(QMainWindow, main_class):
         # show commands 
         for i in range(self.spinBox_iter_entire.value()):
             for command in commands:
-                self.list_gen_cmd.addItem(json.dumps(command))
+                # TODO: TaskCmd list should be 
+                # self.list_gen_cmd.addItem(json.dumps(command))
+                pass
 
 
     def func_btn_save_command(self):
@@ -557,47 +563,44 @@ class Worker(QThread):
         self.zigbee_id = meta['zigbee_id']
         self.channel = meta['channel']
         self.driver = ZigBeeDriver(self.port, self.channel, self.zigbee_id)
+    
 
     def run(self): # communicate to zigbee driver class
-        # TODO: make new routine for new structure
-        # for task_cmd in self.commands:
-        #     pass
-        # Original code
         for command in self.commands:
             currents = []
             prevs = []
-            command['timestamp'] = datetime.datetime.now().strftime('%m-%d %H:%M:%S.%f')    # add time stamp
+            timestamp = datetime.datetime.now().strftime('%m-%d %H:%M:%S.%f')    # add time stamp
 
-            if not "CONNECT" in command['command']:
-                try:
-                    # get current value of attributes
-                    attrs = self.create_attribute(command)    
-                    for attr in attrs:
-                        prevs.append(self.driver.read_attr_command(attr))
-                    
-                    # write command
-                    self.driver.write_attr_command(command)
+            # if not "CONNECT" in command['command']:
+            try:
+                # get current value of attributes
+                # attrs = self.create_attribute(command)
+                # for attr in attrs:
+                #     prevs.append(self.driver.read_attr_command(attr))
+                
+                # write command
+                self.driver.new_run_command(command)
 
-                    if command['cluster'] != 'ON_OFF_CLUSTER':    
-                        # then, wait until remaining_time == 0
-                        while True:
-                            attribute = self.create_attribute(command, isRemain=True)
-                            remain_time = self.driver.read_attr_command(attribute)
-                            time.sleep(0.1)
-                            if remain_time.value == 0:
-                                break
+                # if command['cluster'] != 'ON_OFF_CLUSTER':    
+                #     # then, wait until remaining_time == 0
+                #     while True:
+                #         attribute = self.create_attribute(command, isRemain=True)
+                #         remain_time = self.driver.read_attr_command(attribute)
+                #         time.sleep(0.1)
+                #         if remain_time.value == 0:
+                #             break
 
-                    attrs = self.create_attribute(command)
-                    for attr in attrs:
-                        currents.append(self.driver.read_attr_command(attr))
-                    
-                    # result validation and then, update result into the table
-                    for prev, current in list(zip(prevs, currents)):
-                        validator = Validator(command, prev, current)
-                        result = validator.vaildate_attribute()
-                        self.signal_command_complete.emit(result)
-                except:
-                    print("read attr is none")    
+                # attrs = self.create_attribute(command)
+                # for attr in attrs:
+                #     currents.append(self.driver.read_attr_command(attr))
+                
+                # result validation and then, update result into the table
+                # for prev, current in list(zip(prevs, currents)):
+                #     validator = Validator(command, prev, current)
+                #     result = validator.vaildate_attribute()
+                #     self.signal_command_complete.emit(result)
+            except:
+                print("read attr is none")    
 
         print("현재 명령셋 종료")
         del self.driver

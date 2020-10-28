@@ -96,7 +96,7 @@ class CmdGenerator():
                 break
             attr_type = cluster.attr_table[attr_key].type
             payloads.append((args, attr_type))
-        taskcmd = TaskCmd(cluster.cmd_table[cmd_key], payloads=payloads, waittime=waittime)
+        taskcmd = TaskCmd(cluster.cmd_table[cmd_key], cluster.id, payloads=payloads, waittime=waittime)
         return taskcmd
         
 

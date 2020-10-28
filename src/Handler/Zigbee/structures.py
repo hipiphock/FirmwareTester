@@ -100,8 +100,9 @@ class Cluster:
 
 
 class TaskCmd(Cmd):
-    def __init__(self, cmd, payloads=None, waittime=20.0):
+    def __init__(self, cmd, cluster_id, payloads=None, waittime=20.0):
         super().__init__(cmd.id, cmd.name, cmd.desc, cmd.affected_attrs)
+        self.cluster_id = cluster_id
         self.payloads = payloads
         self.waittime = waittime
         
