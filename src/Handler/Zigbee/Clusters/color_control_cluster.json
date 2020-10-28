@@ -2,17 +2,6 @@
     "id"    :   "0x0300",
     "name"  :   "COLOR_CTRL_CLUSTER",
     "attributes"    :   [
-        {   "id":"0x0000",
-            "name":"CURR_HUE_ATTR",
-            "desc":"will be filled soon...",
-            "type":"0x20"
-        },
-        {
-            "id":"0x0001",
-            "name":"CURR_SAT_ATTR",
-            "desc":"will be filled soon...",
-            "type":"0x20"
-        },
         {
             "id":"0x0002",
             "name":"REMAIN_TIME_ATTR",
@@ -70,67 +59,72 @@
     ],
     "commands"      :   [
         {
-            "id":"0x00",
-            "name":"MOVE_TO_HUE",
-            "desc":"Move to Hue",
+            "id":"0x07",
+            "name":"MOVE_TO_COLOR",
+            "desc":"Move to color",
+            "affected_attrs":[
+                "CURR_X_ATTR",
+                "CURR_Y_ATTR",
+                "REMAIN_TIME_ATTR"
+            ]
+        },
+        {
+            "id":"0x08",
+            "name":"MOVE_COLOR",
+            "desc":"Consistantly move color",
+            "affected_attrs":[
+                "CURR_X_ATTR",
+                "CURR_Y_ATTR"
+            ]
+        },
+        {
+            "id":"0x09",
+            "name":"STEP_COLOR",
+            "desc":"Move(with On/Off)",
+            "affected_attrs":[
+                "CURR_X_ATTR",
+                "CURR_Y_ATTR",
+                "REMAIN_TIME_ATTR"                
+            ]
+        },
+        {
+            "id":"0x0A",
+            "name":"MOVE_TO_COLOR_TEMP",
+            "desc":"Move to color temperature mireds",
+            "affected_attrs":[
+                "COLOR_TEMP_MIRED_ATTR",
+                "REMAIN_TIME_ATTR"                
+            ]
+        },
+        {
+            "id":"0x47",
+            "name":"STOP_MOVE_STEP",
+            "desc":"Stop",
             "affected_attrs":[
 
             ]
         },
         {
-            "id":"0x01",
-            "name":"MOVE_TO_SAT",
-            "desc":"Move to Saturation",
+            "id":"0x4B",
+            "name":"MOVE_COLOR_TEMP",
+            "desc":"Move color temperature with min/max value",
             "affected_attrs":[
-                
+                "COLOR_TEMP_MIRED_ATTR",
+                "REMAIN_TIME_ATTR",
+                "COLOR_TEMP_MIN_MIRED_ATTR",
+                "COLOR_TEMP_MAX_MIRED_ATTR"
             ]
         },
         {
-            "id":"0x02",
-            "name":"MOVE_TO_HUE_AND_SAT",
-            "desc":"Move to Hue and Saturation",
+            "id":"0x4C",
+            "name":"STEP_COLOR_TEMP",
+            "desc":"Move color temperature with min/max value",
             "affected_attrs":[
-                
-            ]
-        },
-        {
-            "id":"0x03",
-            "name":"MOVE_TO_COLOR",
-            "desc":"Move to color",
-            "affected_attrs":[
-                
-            ]
-        },
-        {
-            "id":"0x04",
-            "name":"MOVE_COLOR",
-            "desc":"Move to Level(with On/Off)",
-            "affected_attrs":[
-                
-            ]
-        },
-        {
-            "id":"0x05",
-            "name":"STEP_COLOR",
-            "desc":"Move(with On/Off)",
-            "affected_attrs":[
-                
-            ]
-        },
-        {
-            "id":"0x06",
-            "name":"MOVE_MIRED",
-            "desc":"Step(with On/Off)",
-            "affected_attrs":[
-                
-            ]
-        },
-        {
-            "id":"0x07",
-            "name":"STEP_MIRED",
-            "desc":"Stop",
-            "affected_attrs":[
-                
+                "COLOR_TEMP_MIRED_ATTR",
+                "COLOR_TEMP_MIRED_ATTR",
+                "REMAIN_TIME_ATTR",
+                "COLOR_TEMP_MIN_MIRED_ATTR",
+                "COLOR_TEMP_MAX_MIRED_ATTR"
             ]
         }
     ]

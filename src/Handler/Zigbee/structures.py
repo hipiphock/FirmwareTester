@@ -98,11 +98,8 @@ class Cluster:
                 })
             json.dump(json_to_write, cluster_file)
 
+
 class TaskCmd(Cmd):
-    # class that is going to be used in main routine
-    # def __init__(self, id, name, desc, affected_attrs, payloads=None):
-    #     super().__init__(id, name, desc, affected_attrs)
-    #     self.payloads = payloads
     def __init__(self, cmd, payloads=None, waittime=20.0):
         super().__init__(cmd.id, cmd.name, cmd.desc, cmd.affected_attrs)
         self.payloads = payloads
@@ -125,16 +122,3 @@ def get_all_clusters():
 
 # FIXING
 CLUSTER_TABLE, CLUSTER_FILE_TABLE = get_all_clusters()
-
-# for test
-# if __name__ == "__main__":
-#     attr_table = []
-#     for i in range(5):
-#         test = Attr(99, 'test', 99)
-#         attr_table.append(test)
-#     cmd_table = []
-#     for i in range(5):
-#         test = Cmd(99, 'test', 'for test', ['test', 'test'])
-#         cmd_table.append(test)
-#     test = Cluster(99, 'test', attr_table=attr_table, cmd_table=cmd_table)
-#     test.writeClusterFile("test.json")
