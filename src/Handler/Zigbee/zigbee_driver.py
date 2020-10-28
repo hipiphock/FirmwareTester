@@ -78,7 +78,7 @@ class ZigBeeDriver():
 
     # @hipiphock
     # made to run new command
-    def new_run_command(self,cluster, taskcmd):
+    def new_run_command(self, cluster, taskcmd):
         self.cli_instance.zcl.generic(
             eui64=self.target_id,
             ep=self.entry_point,

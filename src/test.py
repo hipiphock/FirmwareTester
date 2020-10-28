@@ -23,16 +23,19 @@
 # zb.write_attr_command(move_to)
 # time.sleep(1)
 # zb.write_attr_command(toggle)
-
+import logging
 from CommandGenerator.command_generator import CmdGenerator
 from Handler.Zigbee.zigbee_driver import ZigBeeDriver
 from Handler.Zigbee.structures import CLUSTER_TABLE, TaskCmd
 
-task_cmd_list = []
-cmdgen = CmdGenerator()
-zigbeedriver = ZigBeeDriver('COM14', 24, 9824354097448244232)
-task_cmd_list.append(cmdgen.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', None, 20))
-task_cmd_list.append(cmdgen.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', None, 20))
-task_cmd_list.append(cmdgen.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', None, 20))
-for task_cmd in task_cmd_list:
-    zigbeedriver.new_run_command(0, task_cmd)
+logging.basicConfig(level=logging.DEBUG)
+
+if __name__ == "__main__":
+    task_cmd_list = []
+    cmdgen = CmdGenerator()
+    zigbeedriver = ZigBeeDriver('COM14', 24, 9824354097448244232)
+    task_cmd_list.append(cmdgen.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', 20, None))
+    task_cmd_list.append(cmdgen.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', 20, None))
+    task_cmd_list.append(cmdgen.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', 20, None))
+    for task_cmd in task_cmd_list:
+        zigbeedriver.new_run_command(0, task_cmd)
