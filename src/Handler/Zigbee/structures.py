@@ -97,8 +97,11 @@ class Cluster:
 
 class TaskCmd(Cmd):
     # class that is going to be used in main routine
-    def __init__(self, payloads=None):
-        super.__init__()
+    # def __init__(self, id, name, desc, affected_attrs, payloads=None):
+    #     super().__init__(id, name, desc, affected_attrs)
+    #     self.payloads = payloads
+    def __init__(self, cmd, payloads=None):
+        super().__init__(cmd.id, cmd.name, cmd.desc, cmd.affected_attrs)
         self.payloads = payloads
         
 

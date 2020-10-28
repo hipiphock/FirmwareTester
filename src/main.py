@@ -76,6 +76,7 @@ class WindowClass(QMainWindow, main_class):
 
 
     def init_commands(self):
+        # TODO: automatically initialize cluster commands
         try:
             # init level commands
             level_commands = list(commands['LVL_CTRL_CLUSTER'].keys())
@@ -149,6 +150,7 @@ class WindowClass(QMainWindow, main_class):
     def func_btn_command_generator(self):
         # FIXING
         # commands will be a list of TaskCmd objects
+        # TODO: append commands from cluster_table
         commands = []
         
         # try:
@@ -156,13 +158,11 @@ class WindowClass(QMainWindow, main_class):
         for i in range(self.spinBox_count_onoff.value()):
             cmds = self.cmd_generator.cmd_onoff(on=self.radioButton_on.isChecked(), off=self.radioButton_off.isChecked(), toggle=self.radioButton_toggle.isChecked())
             commands.append(cmds)
-            # TODO: append from cluster_table
 
         # level
         for i in range(self.spinBox_count_level.value()):
             cmds = self.cmd_generator.cmd_level_interface(self.comboBox_level_commands.currentText(), self.vlayout_level_widget.children())
             commands.append(cmds)
-            # TODO: append from cluster_table
 
         # color
         for i in range(self.spinBox_count_color.value()):
@@ -353,7 +353,6 @@ class WindowClass(QMainWindow, main_class):
 
         else:
             cmds = []
-            # TODO: 
             for i in range(self.list_gen_cmd.count()):
                 cmds.append(json.loads(self.list_gen_cmd.item(i).text()))
             self.worker = Worker(connection_meta, cmds, parent=self)
@@ -507,6 +506,12 @@ class Worker(QThread):
         self.driver = ZigBeeDriver(self.port, self.channel, self.zigbee_id)
 
     def run(self): # communicate to zigbee driver class
+        # TODO: make new routine for new structure
+        for task_cmd in self.commands:
+            pass
+
+        
+        # Original code
         for command in self.commands:
             currents = []
             prevs = []
@@ -601,6 +606,13 @@ class Validator():
         self.previous = previous
         self.current = current
 
+    def new_validate_attribute(self):
+        """
+        new_validate_attribute function validates attributes
+        based on cmd.affected_attrs lists.
+        """
+        pass
+
     def vaildate_attribute(self):
         cluster = clusters[self.cmd['cluster']]
         cmd = commands[self.cmd['cluster']][self.cmd['command']]
@@ -655,7 +667,7 @@ class Validator():
         finally:
             return result
 
-# written by @ninima0323
+
 class EditCmdWindow(QMainWindow):
     def __init__(self, parent, type):
         super(EditCmdWindow, self).__init__(parent)
@@ -772,11 +784,14 @@ class EditCmdWindow(QMainWindow):
     
     def func_delete_row_command(self):
         row = self.tableWidget_g1.currentRow()
+        # TODO: Get row data, and remove corresponding command 
+        # with related to deleting row
         self.tableWidget_g1.removeRow(row)
-        # TODO: write command to
     
     def func_delete_row_attribute(self):
         row = self.tableWidget_g2.currentRow()
+        # TODO: Get row data, and remove corresponding attribute
+        # with related to deleting row
         self.tableWidget_g2.removeRow(row)
 
     # @hipiphock

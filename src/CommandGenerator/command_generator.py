@@ -80,6 +80,25 @@ class CmdGenerator():
         
         return cmd
 
+    # Appropriate function for changed structures (TaskCmd)
+    def new_cmd(self, cluster_key, cmd_key, *args):
+        """
+        params
+        생각할 점: parameter를 tuple로 만든 채로 받아야 하나?
+        아니면 그냥 값을 받고 나서 함수 내부적으로 처리해야하나?
+        """
+        cluster = CLUSTER_TABLE[cluster_key]
+        payloads = []
+        for args, attr_key in zip(args, cluster.cmd_table[cmd_key].affected_attrs):
+            if args == None:
+                # there are commands that have more affected attrs tha
+                break
+            attr_type = cluster.attr_table[attr_key].type
+            payloads.append((args, attr_type))
+        cmd = TaskCmd(cluster.cmd_table[cmd_key], payloads=payloads)
+        return cmd
+        
+
     def cmd_onoff(self, **params):
         cmd = {}
         cmd['cluster'] = 'ON_OFF_CLUSTER'
@@ -93,17 +112,6 @@ class CmdGenerator():
             cmd['command'] = 'TOGGLE'
         cmd['payloads'] = None
         return cmd
-
-    # TODO: make appropriate functions for TaskCmd
-    def new_cmd_onoff(self, **params):
-        cluster_key = 'ON_OFF_CLUSTER'
-        if params['on']:
-            new_cmd = TaskCmd(cluster_key, 'ON', CLUSTER_TABLE[cluster_key]['commands']['ON']['affected_attrs'])
-        elif params['off']:
-            new_cmd = TaskCmd(cluster_key, 'ON', CLUSTER_TABLE[cluster_key]['commands']['OFF']['affected_attrs'])
-        elif params['toggle']:
-            new_cmd = TaskCmd(cluster_key, 'ON', CLUSTER_TABLE[cluster_key]['commands']['TOGGLE']['affected_attrs'])
-        return new_cmd
 
     def cmd_level_interface(self, command, layout):
         params = {}
