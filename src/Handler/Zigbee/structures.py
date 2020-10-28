@@ -5,6 +5,7 @@ id      = value
 import os
 import sys
 import json
+from collections import OrderedDict
 from zb_cli_wrapper.src.utils.zigbee_classes.clusters.attribute import Attribute
 
 class Attr:
@@ -55,17 +56,26 @@ class Cluster:
             cluster = json.load(cluster_file)
             # need to handle attr_table and cmd_table
             attr_table = {}
-            for attr in cluster['attributes']:
-                attr_obj = Attr(int(attr['id'], 16), attr['name'], int(attr['type'], 16))
-                attr_table[attr['name']] = attr_obj
+            if cluster['attributes'] is not None:
+                for attr in cluster['attributes']:
+                    attr_obj = Attr(int(attr['id'], 16), attr['name'], int(attr['type'], 16))
+                    attr_table[attr['name']] = attr_obj
             cmd_table = {}
-            for cmd in cluster['commands']:
-                cmd_obj = Cmd(int(cmd['id'], 16), cmd['name'])
-                cmd_table[cmd['name']] = cmd_obj
+            if cluster['commands'] is not None:
+                for cmd in cluster['commands']:
+                    cmd_obj = Cmd(int(cmd['id'], 16), cmd['name'])
+                    cmd_table[cmd['name']] = cmd_obj
             return cls(cluster['id'], cluster['name'], attr_table, cmd_table)
 
-    def writeClusterFile(self, filename):
-        pass
+    @classmethod
+    def writeClusterFile(self, filename, input_cluster):
+        new_cluster = OrderedDict()
+        new_cluster['id'] = input_cluster.id
+        new_cluster['name'] = input_cluster.name
+        new_cluster['attributes'] = input_cluster.attr_table
+        new_cluster['commands'] = input_cluster.cmd_table
+        with open(filename, "w", encoding="utf-8") as make_file:
+            json.dump(new_cluster, make_file,  ensure_ascii=False, indent="\t")
 
 class TaskCmd:
     # class that is going to be used in main routine

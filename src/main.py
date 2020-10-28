@@ -4,7 +4,6 @@ import json
 import csv
 import datetime
 import json     # for reading cluster configuration files
-from collections import OrderedDict
 
 import serial
 from PyQt5 import uic
@@ -703,7 +702,7 @@ class EditCmdWindow(QMainWindow):
         self.tableWidget_g2.setRowCount(0)
         # TODO: read CLUSTER_TABLE for each cluster key
         cluster_key = self.comboBox_cluster.currentText()
-        cluster = CLUSTER_TABLE[cluster_key]
+        cluster = get_all_clusters()[cluster_key]#CLUSTER_TABLE 사용시 변경한 클러스터내역이 보이지 않음
         attributes = cluster.attr_table
         commands = cluster.cmd_table
         self.tableWidget_g1.setRowCount(len(commands))
@@ -816,14 +815,10 @@ class EditClusterWindow(QMainWindow):
         if cluster_id is not None and cluster_name is not None and cluster_id != "" and cluster_name != "":
             cluster_path = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..', 'src', 'Handler', 'Zigbee', 'Clusters'))
-            filename = os.path.join(cluster_path, cluster_name.upper()+".json")
-            new_cluster = OrderedDict()
-            new_cluster['id'] = cluster_id
-            new_cluster['name'] = cluster_name.upper()
-            new_cluster['attributes'] = []
-            new_cluster['commands'] = []
-            with open(filename, "w", encoding="utf-8") as make_file:
-                json.dump(new_cluster, make_file,  ensure_ascii=False, indent="\t")
+            upper_name = cluster_name.upper()
+            filename = os.path.join(cluster_path, upper_name+".json")
+            new_cluster = Cluster(cluster_id, upper_name, None, None)
+            Cluster.writeClusterFile(filename, new_cluster)
             self.listWidget.addItem(QListWidgetItem(cluster_name))
 
     def func_btn_delete(self):
