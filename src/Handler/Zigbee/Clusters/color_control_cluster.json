@@ -4,56 +4,67 @@
     "attributes"    :   [
         {   "id":"0x0000",
             "name":"CURR_HUE_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x20"
         },
         {
             "id":"0x0001",
             "name":"CURR_SAT_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x20"
         },
         {
             "id":"0x0002",
             "name":"REMAIN_TIME_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x21"
         },
         {
             "id":"0x0003",
             "name":"CURR_X_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x21"
         },
         {
             "id":"0x0004",
             "name":"CURR_Y_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x20"
         },
         {
             "id":"0x0007",
             "name":"COLOR_TEMP_MIRED_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x21"
         },
         {
             "id":"0x0008",
             "name":"COLOR_MODE_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x21"
         },
         {
             "id":"0x4001",
             "name":"ENHANCED_COLOR_MODE_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x21"
         },
         {
             "id":"0x400a",
             "name":"COLOR_CAPABILITY_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x21"
         },
         {
             "id":"0x400b",
             "name":"COLOR_TEMP_MIN_MIRED_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x21"
         },
         {
             "id":"0x400c",
             "name":"COLOR_TEMP_MAX_MIRED_ATTR",
+            "desc":"will be filled soon...",
             "type":"0x21"
         }
     ],

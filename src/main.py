@@ -228,10 +228,39 @@ class WindowClass(QMainWindow, main_class):
         # except:
         #    pass # put error messages here
 
+    # flexible layout function
+    def func_overall_interface(self):
+        # @hipiphock
+        # TODO: think of commands such as STOP.
+        # first, get cluster key.
+        cluster_key = "tempkey"
+        # then, get command key.
+        command_key = "tempkey"
+        # Cluster will be the 
+        cluster = CLUSTER_TABLE[cluster_key]
+        hlayout = []
+        for attr_key in cluster.cmd_table[command_key].affected_attrs:
+            attr_desc = cluster.attr_table[attr_key].desc
+            attr_type = cluster.attr_table[attr_key].type
+            temp_layout = QHBoxLayout()
+            temp_label = QLabel(attr_desc)
+            # get appropriate input box according to attr_type
+            input_layout = None
+            if attr_type == 0x20:
+                input_layout = QSpinBox()
+            elif attr_type == 0x30:
+                pass
+            # for random value
+            hlayout_random = self.func_layout_random()
+            hlayout.append(hlayout_random)
+        for element in hlayout:
+            self.vlayout_level_widget.addLayout(element) 
+
+
     def func_level_interface(self):
         try:
             current_cmd = self.comboBox_level_commands.currentText()
-            self.clear_layout(self.vlayout_level_widget)
+            self.clear_layout(self.vlayout_level_widget)                                
 
             if commands['LVL_CTRL_CLUSTER'][current_cmd] == LVL_CTRL_MV_TO_LVL_CMD or commands['LEVEL'][current_cmd] == LVL_CTRL_MV_TO_LVL_ONOFF_CMD:
                 hlayout_brightness = QHBoxLayout()
@@ -598,7 +627,6 @@ class Worker(QThread):
         del self
 
 
-# TODO: fix Validator
 from Handler.Zigbee.constants import commands, attributes, clusters
 class Validator():
     def __init__(self, cmd, previous, current):
@@ -607,6 +635,7 @@ class Validator():
         self.current = current
 
     def new_validate_attribute(self):
+        # TODO: fix Validator
         """
         new_validate_attribute function validates attributes
         based on cmd.affected_attrs lists.
@@ -795,7 +824,6 @@ class EditCmdWindow(QMainWindow):
         self.tableWidget_g2.removeRow(row)
 
     # @hipiphock
-    # changed func_btn_save_zigbee -> func_btn_edit_zigbee
     def func_btn_edit_zigbee(self):
         # 그냥 바로 CLUSTER_TABLE을 저장하는 식으로 바꾼다.
         for cluster_key in CLUSTER_TABLE:

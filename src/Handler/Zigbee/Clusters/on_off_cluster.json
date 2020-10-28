@@ -4,6 +4,7 @@
     "attributes":[
         {   "id":"0x0000",
             "name":"ONOFF_ATTR",
+            "desc":"Shows on/off",
             "type":"0x10"
         }
     ],

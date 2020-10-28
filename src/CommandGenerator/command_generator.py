@@ -81,22 +81,23 @@ class CmdGenerator():
         return cmd
 
     # Appropriate function for changed structures (TaskCmd)
-    def new_cmd(self, cluster_key, cmd_key, *args):
+    def new_cmd(self, cluster_key, cmd_key, waittime, *args):
         """
-        params
-        생각할 점: parameter를 tuple로 만든 채로 받아야 하나?
+        생각할 점: args를 tuple로 만든 채로 받아야 하나?
         아니면 그냥 값을 받고 나서 함수 내부적으로 처리해야하나?
         """
+        # TODO: implement with TaskCmd
         cluster = CLUSTER_TABLE[cluster_key]
         payloads = []
         for args, attr_key in zip(args, cluster.cmd_table[cmd_key].affected_attrs):
             if args == None:
                 # there are commands that have more affected attrs tha
+                payloads = None
                 break
             attr_type = cluster.attr_table[attr_key].type
             payloads.append((args, attr_type))
-        cmd = TaskCmd(cluster.cmd_table[cmd_key], payloads=payloads)
-        return cmd
+        taskcmd = TaskCmd(cluster.cmd_table[cmd_key], payloads=payloads, waittime=waittime)
+        return taskcmd
         
 
     def cmd_onoff(self, **params):

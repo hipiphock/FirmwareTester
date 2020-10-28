@@ -79,6 +79,23 @@ class ZigBeeDriver():
             time.sleep(cmd['wait'] / 1000) # waiting for the transition
         except KeyError:
             pass
+
+    # @hipiphock
+    # made to run new command
+    def new_run_command(self,cluster, taskcmd):
+        self.cli_instance.zcl.generic(
+            eui64=self.target_id,
+            ep=self.entry_point,
+            profile=DEFAULT_ZIGBEE_PROFILE_ID,
+            cluster=cluster,
+            cmd_id=taskcmd.id,
+            payload=taskcmd.payloads
+        )
+        try:
+            time.sleep(taskcmd.waittime / 1000)
+        except KeyError:
+            pass
+        
         
     def read_attr_command(self, attribute):
         try:

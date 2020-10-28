@@ -8,9 +8,10 @@ import json
 from zb_cli_wrapper.src.utils.zigbee_classes.clusters.attribute import Attribute
 
 class Attr:
-    def __init__(self, id, name, attr_type, min=None, max=None):
+    def __init__(self, id, name, desc, attr_type, min=None, max=None):
         self.id = id
         self.name = name
+        self.desc = desc
         self.type = attr_type
         self.min = min
         self.max = max
@@ -56,7 +57,7 @@ class Cluster:
             # need to handle attr_table and cmd_table
             attr_table = {}
             for attr in cluster['attributes']:
-                attr_obj = Attr(int(attr['id'], 16), attr['name'], int(attr['type'], 16))
+                attr_obj = Attr(int(attr['id'], 16), attr['name'], attr['desc'], int(attr['type'], 16))
                 attr_table[attr['name']] = attr_obj
             cmd_table = {}
             for cmd in cluster['commands']:
@@ -72,18 +73,20 @@ class Cluster:
             # attribute
             json_to_write['attributes'] = []
             for attr_key in self.attr_table:
-                attr_id = self.attr_table[attr_key].id
+                attr_id = str(hex(self.attr_table[attr_key].id))
                 attr_name = self.attr_table[attr_key].name
-                attr_type = self.attr_table[attr_key].type
+                attr_desc = self.attr_table[attr_key].desc
+                attr_type = str(hex(self.attr_table[attr_key].type))
                 json_to_write['attributes'].append({
-                    'id':attr_id,
-                    'name':attr_name,
-                    'type':attr_type
+                    'id':   attr_id,
+                    'name': attr_name,
+                    'desc': attr_desc,
+                    'type': attr_type
                 })
             # command
             json_to_write['commands'] = []
             for cmd_key in self.cmd_table:
-                cmd_id = self.cmd_table[cmd_key].id
+                cmd_id = str(hex(self.cmd_table[cmd_key].id))
                 cmd_name = self.cmd_table[cmd_key].name
                 cmd_desc = self.cmd_table[cmd_key].desc
                 affected_attrs = self.cmd_table[cmd_key].affected_attrs
@@ -100,9 +103,10 @@ class TaskCmd(Cmd):
     # def __init__(self, id, name, desc, affected_attrs, payloads=None):
     #     super().__init__(id, name, desc, affected_attrs)
     #     self.payloads = payloads
-    def __init__(self, cmd, payloads=None):
+    def __init__(self, cmd, payloads=None, waittime=20.0):
         super().__init__(cmd.id, cmd.name, cmd.desc, cmd.affected_attrs)
         self.payloads = payloads
+        self.waittime = waittime
         
 
 # returns cluster files' name
