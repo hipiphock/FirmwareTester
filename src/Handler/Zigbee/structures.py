@@ -5,6 +5,7 @@ id      = value
 import os
 import sys
 import json
+from collections import OrderedDict
 from zb_cli_wrapper.src.utils.zigbee_classes.clusters.attribute import Attribute
 
 class Attr:
@@ -66,7 +67,7 @@ class Cluster:
             return cls(cluster['id'], cluster['name'], attr_table, cmd_table)
 
     def writeClusterFile(self, filename):
-        with open(filename, "w") as cluster_file:
+        with open(filename, "w", encoding="utf-8") as cluster_file:
             json_to_write = {}
             json_to_write['id'] = self.id
             json_to_write['name'] = self.name
@@ -96,7 +97,7 @@ class Cluster:
                     'desc':cmd_desc,
                     'affected_attrs':affected_attrs
                 })
-            json.dump(json_to_write, cluster_file)
+            json.dump(json_to_write, cluster_file, ensure_ascii=False, indent="\t")
 
 
 class TaskCmd(Cmd):
