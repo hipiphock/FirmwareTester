@@ -24,6 +24,22 @@
 				"test_attr1",
 				"test_attr2"
 			]
+		},
+		{
+			"id": "0xff",
+			"name": "dummy",
+			"desc": "dummy cmd",
+			"affected_attrs": [
+				"test_attr1"
+			]
+		},
+		{
+			"id": "0x4f",
+			"name": "dummy49",
+			"desc": "dummy2",
+			"affected_attrs": [
+				""
+			]
 		}
 	]
 }

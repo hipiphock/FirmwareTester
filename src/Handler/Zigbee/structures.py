@@ -18,7 +18,7 @@ class Attr:
         self.max = max
 
 class Cmd:
-    def __init__(self, id, name, desc, affected_attrs):
+    def __init__(self, id, name, desc, affected_attrs=None):
         self.id = id
         self.name = name
         self.desc = desc
