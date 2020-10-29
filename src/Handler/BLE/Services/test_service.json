@@ -1,0 +1,16 @@
+{
+    "uuid":"0x1001",
+    "test":{
+        "desc":"GAP",
+        "characteristics":[
+            {
+                "uuid":"0x2a00",
+                "properties":{
+                    "read":"true",
+                    "const":"true"
+                },
+                "value":"0x1041"
+            }
+        ]
+    }
+}

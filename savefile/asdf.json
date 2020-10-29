@@ -1,0 +1,9 @@
+{
+    "commands": [
+        "{\"cluster\": \"ON_OFF_CLUSTER\", \"command\": \"TOGGLE\", \"payloads\": null}",
+        "{\"cluster\": \"ON_OFF_CLUSTER\", \"command\": \"TOGGLE\", \"payloads\": null}",
+        "{\"cluster\": \"ON_OFF_CLUSTER\", \"command\": \"TOGGLE\", \"payloads\": null}",
+        "{\"cluster\": \"ON_OFF_CLUSTER\", \"command\": \"TOGGLE\", \"payloads\": null}",
+        "{\"cluster\": \"ON_OFF_CLUSTER\", \"command\": \"TOGGLE\", \"payloads\": null}"
+    ]
+}

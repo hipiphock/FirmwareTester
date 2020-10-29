@@ -1,10 +1,14 @@
 import time
+import logging
 
 from serial.serialutil import SerialTimeoutException
 from zb_cli_wrapper.zb_cli_dev import ZbCliDevice
 from zb_cli_wrapper.src.utils.communicator import CommandError
 from zb_cli_wrapper.src.utils.zigbee_classes.clusters.attribute import Attribute
 from Handler.Zigbee.constants import DEFAULT_ZIGBEE_PROFILE_ID, clusters, commands, attributes, ON_OFF_CLUSTER, LVL_CTRL_CLUSTER, COLOR_CTRL_CLUSTER
+
+driverlogger = logging.getLogger("ZigbeeDriver")
+driverlogger.setLevel(logging.INFO)
 
 class ZigBeeDriver():
     def __init__(self, port, channel, target_id):
@@ -53,15 +57,12 @@ class ZigBeeDriver():
 
     def write_attr_command(self, cmd):
         cluster = clusters[cmd['cluster']]
-
         if cluster == ON_OFF_CLUSTER:
             cmd_id = commands[cmd['cluster']][cmd['command']]
         elif cluster == LVL_CTRL_CLUSTER:
             cmd_id = commands[cmd['cluster']][cmd['command']]
         elif cluster == COLOR_CTRL_CLUSTER:
             cmd_id = commands[cmd['cluster']][cmd['command']]
-
-
         self.cli_instance.zcl.generic(
             eui64=self.target_id,
             ep=self.entry_point,
@@ -74,6 +75,23 @@ class ZigBeeDriver():
             time.sleep(cmd['wait'] / 1000) # waiting for the transition
         except KeyError:
             pass
+
+    # @hipiphock
+    # made to run new command
+    def new_run_command(self, cluster, taskcmd):
+        self.cli_instance.zcl.generic(
+            eui64=self.target_id,
+            ep=self.entry_point,
+            profile=DEFAULT_ZIGBEE_PROFILE_ID,
+            cluster=cluster,
+            cmd_id=taskcmd.id,
+            payload=taskcmd.payloads
+        )
+        try:
+            time.sleep(taskcmd.waittime / 1000)
+        except KeyError:
+            pass
+        
         
     def read_attr_command(self, attribute):
         try:

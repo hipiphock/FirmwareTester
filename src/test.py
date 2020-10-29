@@ -3,10 +3,7 @@
 # from CommandGenerator.command_generator import CmdGenerator
 # from main import Worker
 # import time
-import sys
 
-print (sys.argv)
-print (bool(sys.argv[1]))
 # zb = ZigBeeDriver('COM13', 19, int("88571DFFFE0E5408", 16))
 
 # # command test
@@ -26,4 +23,19 @@ print (bool(sys.argv[1]))
 # zb.write_attr_command(move_to)
 # time.sleep(1)
 # zb.write_attr_command(toggle)
+import logging
+from CommandGenerator.command_generator import CmdGenerator
+from Handler.Zigbee.zigbee_driver import ZigBeeDriver
+from Handler.Zigbee.structures import CLUSTER_TABLE, TaskCmd
 
+logging.basicConfig(level=logging.DEBUG)
+
+if __name__ == "__main__":
+    task_cmd_list = []
+    cmdgen = CmdGenerator()
+    zigbeedriver = ZigBeeDriver('COM14', 24, 9824354097448244232)
+    task_cmd_list.append(cmdgen.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', 20, None))
+    task_cmd_list.append(cmdgen.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', 20, None))
+    task_cmd_list.append(cmdgen.new_cmd('ON_OFF_CLUSTER', 'TOGGLE', 20, None))
+    for task_cmd in task_cmd_list:
+        zigbeedriver.new_run_command(0, task_cmd)

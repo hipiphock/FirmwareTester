@@ -5,6 +5,7 @@ from Handler.Zigbee.zigbee_driver import ZigBeeDriver
 from Handler.Zigbee import constants
 from PyQt5.QtWidgets import *
 
+from Handler.Zigbee.structures import CLUSTER_TABLE, TaskCmd
 
 class CmdGenerator():
     def __init__(self):
@@ -51,7 +52,7 @@ class CmdGenerator():
                 return random.choice(abnormal_range)
 
 
-    def random_range(self, cmcd_type, isNormal):
+    def random_range(self, cmd_type, isNormal):
         if isNormal:
             pass
         else:
@@ -79,6 +80,26 @@ class CmdGenerator():
         
         return cmd
 
+    # Appropriate function for changed structures (TaskCmd)
+    def new_cmd(self, cluster_key, cmd_key, waittime, *args):
+        """
+        생각할 점: args를 tuple로 만든 채로 받아야 하나?
+        아니면 그냥 값을 받고 나서 함수 내부적으로 처리해야하나?
+        """
+        # TODO: implement with TaskCmd
+        cluster = CLUSTER_TABLE[cluster_key]
+        payloads = []
+        for args, attr_key in zip(args, cluster.cmd_table[cmd_key].affected_attrs):
+            if args == None:
+                # there are commands that have more affected attrs tha
+                payloads = None
+                break
+            attr_type = cluster.attr_table[attr_key].type
+            payloads.append((args, attr_type))
+        taskcmd = TaskCmd(cluster.cmd_table[cmd_key], payloads=payloads, waittime=waittime)
+        return taskcmd
+        
+
     def cmd_onoff(self, **params):
         cmd = {}
         cmd['cluster'] = 'ON_OFF_CLUSTER'
@@ -93,8 +114,7 @@ class CmdGenerator():
         cmd['payloads'] = None
         return cmd
 
-
-    def cmd_level_inteface(self, command, layout):
+    def cmd_level_interface(self, command, layout):
         params = {}
         params['command'] = command
         poped_values = []
@@ -128,6 +148,41 @@ class CmdGenerator():
                             
             if params['transition'] >= params['wait']:
                 params['wait'] = params['transition'] + 1
+        
+        elif command == 'MOVE' or command == 'MOVE_ONOFF':
+            # TODO: ComboBox 형태로 move 표현 (enum 자료형이니까)
+            for child in layout:
+                if isinstance(child, QHBoxLayout):  # start of row
+                    for i in range(child.count()):
+                        widget = child.itemAt(i).widget()
+                        if widget.objectName() == "spinbox_brightness":
+                            params['level'] = widget.value()        
+                        elif widget.objectName() == "spinbox_transition":
+                            params['transition'] = widget.value()   
+                        elif widget.objectName() == "spinbox_wait":
+                            params['wait'] = widget.value()
+
+                        if isinstance(widget, QCheckBox):
+                            if widget.objectName() == "checkbox_normal" and widget.isChecked() :
+                                poped_values.append(self.get_random_value(cluster='LVL_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=True
+                                )) # get value from normal range
+                            if widget.objectName() == "checkbox_abnormal" and widget.isChecked() :
+                                poped_values.append(self.get_random_value(cluster='LVL_CTRL_CLUSTER', 
+                                                    command=command, 
+                                                    isNormal=False
+                                )) # get value from abnormal range
+                            if len(poped_values) > 0 :
+                                print(poped_values)
+                                params['level'] = random.choice(poped_values)
+                            
+            if params['transition'] >= params['wait']:
+                params['wait'] = params['transition'] + 1
+
+        elif command == 'STEP' or command == 'STEP_ONOFF':
+            # TODO: ComboBox 형태로 step 표현 (enum 자료형이니까)
+            pass
 
         elif command == "STOP":
             pass
@@ -144,6 +199,17 @@ class CmdGenerator():
             level = (params['level'], constants.TYPES.UINT8)
             transition = (params['transition'], constants.TYPES.UINT16)
             cmd['payloads'] = [level, transition]
+
+        elif cmd['command'] == 'MOVE' or cmd['command'] == 'MOVE_ONOFF':
+            mode = (params['mode', constants.TYPES.ENUM8])
+            rate = (params['rate', constants.TYPES.UINT8])
+            cmd['payloads'] = [mode, rate]
+
+        elif cmd['command'] == 'STEP' or cmd['command'] == 'STEP_ONOFF':
+            mode = (params['mode', constants.TYPES.ENUM8])
+            size = (params['size', constants.TYPES.UINT8])
+            transition = (params['transition', constants.TYPES.UINT16])
+            cmd['payloades'] = [mode, size, transition]
         
         elif cmd['command'] == 'STOP':
             cmd['payloads'] = None
@@ -152,7 +218,7 @@ class CmdGenerator():
         
         return cmd
 
-    def cmd_color_inteface(self, command, layout):
+    def cmd_color_interface(self, command, layout):
         params = {}
         params['command'] = command
         poped_values = []

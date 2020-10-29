@@ -1,0 +1,95 @@
+{
+    "id"    :   "0x0008",
+    "name"  :   "LVL_CTRL_CLUSTER",
+    "attributes"    :   [
+        {   "id":"0x0000",
+            "name":"CURR_LVL_ATTR",
+            "desc":"will be filled soon...",
+            "type":"0x20"
+        },
+        {
+            "id":"0x0001",
+            "name":"REMAIN_TIME_ATTR",
+            "desc":"will be filled soon...",
+            "type":"0x21"
+        },
+        {
+            "id":"0x0010",
+            "name":"ONOFF_TRANS_TIME_ATTR",
+            "desc":"will be filled soon...",
+            "type":"0x21"
+        },
+        {
+            "id":"0x0011",
+            "name":"ON_LEVEL_ATTR",
+            "desc":"will be filled soon...",
+            "type":"0x20"
+        }
+    ],
+    "commands"      :   [
+        {
+            "id":"0x00",
+            "name":"MOVE_TO",
+            "desc":"Move to Level",
+            "affected_attrs":[
+                "CURR_LVL_ATTR"
+            ]
+        },
+        {
+            "id":"0x01",
+            "name":"MOVE",
+            "desc":"Move",
+            "affected_attrs":[
+                "CURR_LVL_ATTR"
+            ]
+        },
+        {
+            "id":"0x02",
+            "name":"STEP",
+            "desc":"Step",
+            "affected_attrs":[
+                "CURR_LVL_ATTR"
+            ]
+        },
+        {
+            "id":"0x03",
+            "name":"STOP",
+            "desc":"Stop",
+            "affected_attrs":[
+                "REMAIN_TIME_ATTR"
+            ]
+        },
+        {
+            "id":"0x04",
+            "name":"MOVE_TO_ONOFF",
+            "desc":"Move to Level(with On/Off)",
+            "affected_attrs":[
+                "CURR_LVL_ATTR"
+            ]
+        },
+        {
+            "id":"0x05",
+            "name":"MOVE_ONOFF",
+            "desc":"Move(with On/Off)",
+            "affected_attrs":[
+                "CURR_LVL_ATTR"
+            ]
+        },
+        {
+            "id":"0x06",
+            "name":"STEP_ONOFF",
+            "desc":"Step(with On/Off)",
+            "affected_attrs":[
+                "CURR_LVL_ATTR"
+            ]
+        },
+        {
+            "id":"0x07",
+            "name":"STOP_ONOFF",
+            "desc":"Stop",
+            "affected_attrs":[
+                "REMAIN_TIME_ATTR"
+            ]
+        }
+    ]
+}
