@@ -14,7 +14,8 @@ from PyQt5.QtCore import *
 from WebCrawler import crawler
 from Handler.Zigbee.constants import *
 from Handler.Zigbee.zigbee_driver import ZigBeeDriver
-from Handler.Zigbee.structures import get_all_clusters, Cluster, Cmd, Attr, TaskCmd, CLUSTER_TABLE, CLUSTER_FILE_TABLE
+from Handler.Zigbee.structures import get_all_clusters, update_cluster_table,\
+                Cluster, Cmd, Attr, TaskCmd, CLUSTER_TABLE, CLUSTER_FILE_TABLE
 
 from CommandGenerator.command_generator import CmdGenerator
 
@@ -726,7 +727,7 @@ class Validator():
         finally:
             return result
 
-
+# 명령 바꾸는 애들
 class EditCmdWindow(QMainWindow):
     def __init__(self, parent, type):
         super(EditCmdWindow, self).__init__(parent)
@@ -734,14 +735,15 @@ class EditCmdWindow(QMainWindow):
             os.path.dirname(__file__), '..', 'ui', 'edit_cmd_window.ui'))
         uic.loadUi(edit_ui, self)
         # TODO: CLUSTER_TABLE의 주기적인 업데이트, 그 이후에 get_all_cluster call을 CLUSTER_TABLE로 변경
-        for cluster_item in get_all_clusters().keys(): #CLUSTER_TABLE 사용시 변경한 클러스터내역이 보이지 않음
-            self.comboBox_cluster.addItem(cluster_item)
+        update_cluster_table()
+        for cluster_key in CLUSTER_TABLE.keys():
+            self.comboBox_cluster.addItem(cluster_key)
         self.comboBox_cluster.currentIndexChanged.connect(self.func_cluster_changed)
 
         if type == 0: #zigbee
             self.groupBox_1.setTitle("command 수정")
             self.groupBox_2.setTitle("attribute 수정")
-            self.pushButton_save.clicked.connect(self.func_btn_edit_zigbee)
+            self.pushButton_save.clicked.connect(self.func_btn_save_zigbee)
 
             self.tableWidget_g1.setSelectionMode(QAbstractItemView.SingleSelection)
             self.tableWidget_g1.setColumnCount(4)
@@ -769,9 +771,9 @@ class EditCmdWindow(QMainWindow):
     def func_cluster_changed(self):
         self.tableWidget_g1.setRowCount(0)
         self.tableWidget_g2.setRowCount(0)
-        # TODO: read CLUSTER_TABLE for each cluster key
         cluster_key = self.comboBox_cluster.currentText()
-        cluster = get_all_clusters()[cluster_key] #CLUSTER_TABLE 사용시 변경한 클러스터내역이 보이지 않음
+        # update_cluster_table()
+        cluster = CLUSTER_TABLE[cluster_key]
         attributes = cluster.attr_table
         commands = cluster.cmd_table
         self.tableWidget_g1.setRowCount(len(commands))
@@ -781,7 +783,7 @@ class EditCmdWindow(QMainWindow):
             command = commands[cmd_key]
             self.tableWidget_g1.setItem(cnt, 0, QTableWidgetItem(str(command.id)))
             self.tableWidget_g1.setItem(cnt, 1, QTableWidgetItem(command.name))
-            self.tableWidget_g1.setItem(cnt, 2, QTableWidgetItem(cmd.desc))
+            self.tableWidget_g1.setItem(cnt, 2, QTableWidgetItem(command.desc))
             # type, payloads????
             cnt += 1
         cnt = 0
@@ -789,9 +791,9 @@ class EditCmdWindow(QMainWindow):
             attribute = attributes[attr_key]
             self.tableWidget_g2.setItem(cnt, 0, QTableWidgetItem(str(attribute.id)))
             self.tableWidget_g2.setItem(cnt, 1, QTableWidgetItem(str(attribute.name)))
+            self.tableWidget_g2.setItem(cnt, 2, QTableWidgetItem(str(attribute.type)))
             # type??
             cnt += 1
-# =======
 #         GUIlogger.debug("func_cluster_changed called.")
 #         # @hipiphock
 #         # clear table
@@ -823,7 +825,6 @@ class EditCmdWindow(QMainWindow):
 #             self.tableWidget_g2.setItem(new_row_cnt - 1, 0, QTableWidgetItem(str(hex(attr.id))))
 #             self.tableWidget_g2.setItem(new_row_cnt - 1, 1, QTableWidgetItem(attr.name))
 #             self.tableWidget_g2.setItem(new_row_cnt - 1, 2, QTableWidgetItem(str(hex(attr.type))))
-# >>>>>>> master
         
 
     def func_add_command(self, type):
@@ -885,6 +886,7 @@ class EditCmdWindow(QMainWindow):
 
 # <<<<<<< master
     def func_btn_save_zigbee(self):
+        # TODO: attr이 없는 애들
         cluster = self.comboBox_cluster.currentIndex()
         for i in range(self.tableWidget_g1.rowCount()):
             cmd_id = self.tableWidget_g1.item(i, 0).text()
@@ -916,8 +918,9 @@ class EditClusterWindow(QMainWindow):
             os.path.dirname(__file__), '..', 'ui', 'edit_cluster_window.ui'))
         uic.loadUi(input_ui, self)
         self.listWidget.itemDoubleClicked.connect(self.func_btn_delete)
-        for cluster_item in get_all_clusters().keys(): #CLUSTER_TABLE 사용시 변경한 클러스터내역이 보이지 않음
-            self.listWidget.addItem(QListWidgetItem(cluster_item))
+        update_cluster_table()
+        for cluster_key in CLUSTER_TABLE.keys():
+            self.listWidget.addItem(QListWidgetItem(cluster_key))
         self.pushButton_add.clicked.connect(self.func_btn_add)
         self.pushButton_cancel.clicked.connect(self.func_btn_cancel)
         self.pushButton_delete.clicked.connect(self.func_btn_delete)
@@ -928,13 +931,18 @@ class EditClusterWindow(QMainWindow):
         input_dialog.exec_()
         cluster_id = input_dialog.cluster_id
         cluster_name = input_dialog.cluster_name
+        # udate CLUSTER_TABLE, CLUSTER_FILE_TABLE
         if cluster_id is not None and cluster_name is not None and cluster_id != "" and cluster_name != "":
+            new_cluster = Cluster(cluster_id, cluster_name)
+            CLUSTER_TABLE[cluster_name] = new_cluster
             cluster_path = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..', 'src', 'Handler', 'Zigbee', 'Clusters'))
+                os.path.dirname(__file__), '..', 'src', 'Handler', 'Zigbee', 'Clusters'))
             upper_name = cluster_name.upper()
             filename = os.path.join(cluster_path, upper_name+".json")
-            new_cluster = Cluster(cluster_id, upper_name, None, None)
-            Cluster.writeClusterFile(filename, new_cluster)
+            # Cluster.writeClusterFile(filename, new_cluster)
+            # TODO: 새로운 cluster에 대해서 경로 설정
+            new_cluster.writeClusterFile(filename)
+            CLUSTER_FILE_TABLE[cluster_name] = filename
             self.listWidget.addItem(QListWidgetItem(cluster_name))
 
     def func_btn_delete(self):
@@ -947,6 +955,7 @@ class EditClusterWindow(QMainWindow):
 
     
     def func_btn_cancel(self):
+        self.close()
 # =======
 #     # @hipiphock
 #     def func_btn_edit_zigbee(self):
@@ -958,10 +967,8 @@ class EditClusterWindow(QMainWindow):
     
 #     def func_btn_save_ble(self):
 #         # TODO: implement save ble
+#        self.close()
 # >>>>>>> master
-        self.close()
-
-        
 
 
 class InputClusterDialog(QDialog):

@@ -71,8 +71,13 @@ class Cluster:
             json_to_write = {}
             json_to_write['id'] = self.id
             json_to_write['name'] = self.name
-            # attribute
             json_to_write['attributes'] = []
+            json_to_write['commands'] = []
+            # case: initial clusters - they do not have attrs or cmds
+            if self.attr_table is None or self.cmd_table is None:
+                json.dump(json_to_write, cluster_file, ensure_ascii=False, indent="\t")
+                return
+
             for attr_key in self.attr_table:
                 attr_id = str(hex(self.attr_table[attr_key].id))
                 attr_name = self.attr_table[attr_key].name
@@ -85,7 +90,6 @@ class Cluster:
                     'type': attr_type
                 })
             # command
-            json_to_write['commands'] = []
             for cmd_key in self.cmd_table:
                 cmd_id = str(hex(self.cmd_table[cmd_key].id))
                 cmd_name = self.cmd_table[cmd_key].name
@@ -123,3 +127,7 @@ def get_all_clusters():
 
 # FIXING
 CLUSTER_TABLE, CLUSTER_FILE_TABLE = get_all_clusters()
+
+def update_cluster_table():
+    global CLUSTER_TABLE, CLUSTER_FILE_TABLE
+    CLUSTER_TABLE, CLUSTER_FILE_TABLE = get_all_clusters()
