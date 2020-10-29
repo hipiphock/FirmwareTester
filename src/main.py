@@ -727,6 +727,11 @@ class Validator():
         finally:
             return result
 
+# Cluster, commands
+# CLUSTER_TABLE과 CLUSTER_FILE_TABLE들을 이용해서 cluster들을 관리한다.
+# 새로운 cluster가 생성되면 이를 CLUSTER_TABLE에다가 넣는다.
+# attr이나 cmd를 읽거나 써올 때에는 tas
+
 # 명령 바꾸는 애들
 class EditCmdWindow(QMainWindow):
     def __init__(self, parent, type):
@@ -769,6 +774,9 @@ class EditCmdWindow(QMainWindow):
         self.show()
 
     def func_cluster_changed(self):
+        """
+        CLUSTER_TABEL에 저장된 정보를 기반으로 cluster 정보를 읽어들인다.
+        """
         self.tableWidget_g1.setRowCount(0)
         self.tableWidget_g2.setRowCount(0)
         cluster_key = self.comboBox_cluster.currentText()
@@ -884,7 +892,6 @@ class EditCmdWindow(QMainWindow):
         del CLUSTER_TABLE[cluster_key].attr_table[attr_key]
         self.tableWidget_g2.removeRow(row)
 
-# <<<<<<< master
     def func_btn_save_zigbee(self):
         # TODO: attr이 없는 애들
         cluster = self.comboBox_cluster.currentIndex()
@@ -903,8 +910,7 @@ class EditCmdWindow(QMainWindow):
         self.close()
     
     def func_btn_save_ble(self):
-        #아직 미구현
-
+        # TODO: implement
         self.close()
 
     def func_btn_cancel(self):
@@ -939,7 +945,6 @@ class EditClusterWindow(QMainWindow):
                 os.path.dirname(__file__), '..', 'src', 'Handler', 'Zigbee', 'Clusters'))
             upper_name = cluster_name.upper()
             filename = os.path.join(cluster_path, upper_name+".json")
-            # Cluster.writeClusterFile(filename, new_cluster)
             # TODO: 새로운 cluster에 대해서 경로 설정
             new_cluster.writeClusterFile(filename)
             CLUSTER_FILE_TABLE[cluster_name] = filename
