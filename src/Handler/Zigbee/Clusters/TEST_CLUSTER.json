@@ -20,7 +20,10 @@
 			"id": "0x4",
 			"name": "test",
 			"desc": "test cmd",
-			"affected_attrs": "test_attr1,test_attr2"
+			"affected_attrs": [
+				"test_attr1",
+				"test_attr2"
+			]
 		}
 	]
 }

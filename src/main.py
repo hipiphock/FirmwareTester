@@ -847,8 +847,8 @@ class EditCmdWindow(QMainWindow):
             cmd_id = int(input_dialog.cmd_id, 16)
             cmd_name = input_dialog.cmd_name
             cmd_desc = input_dialog.cmd_desc
-            cmd_affected_attrs = input_dialog.cmd_affected_attrs
-            # TODO: split affected attrs by comma
+            affected_attr_str = input_dialog.cmd_affected_attrs
+            cmd_affected_attrs = affected_attr_str.split(',')
             new_cmd = Cmd(cmd_id, cmd_name, cmd_desc, cmd_affected_attrs)
             CLUSTER_TABLE[cluster_key].cmd_table[cmd_name] = new_cmd
             if cmd_id != "" and cmd_desc != "":
@@ -857,7 +857,7 @@ class EditCmdWindow(QMainWindow):
                 self.tableWidget_g1.setItem(new_row_cnt-1,0,QTableWidgetItem(cmd_id))
                 self.tableWidget_g1.setItem(new_row_cnt-1,1,QTableWidgetItem(cmd_name))
                 self.tableWidget_g1.setItem(new_row_cnt-1,2,QTableWidgetItem(cmd_desc))
-                self.tableWidget_g1.setItem(new_row_cnt-1,3,QTableWidgetItem(cmd_affected_attrs))
+                self.tableWidget_g1.setItem(new_row_cnt-1,3,QTableWidgetItem(affected_attr_str))
                 self.tableWidget_g1.resizeRowsToContents()
         else: #ble
             input_dialog = InputBLEDialog(self,1)
@@ -904,20 +904,6 @@ class EditCmdWindow(QMainWindow):
             cluster = CLUSTER_TABLE[cluster_key]
             cluster.writeClusterFile(CLUSTER_FILE_TABLE[cluster_key])
         self.close()
-        # cluster = self.comboBox_cluster.currentIndex()
-        # for i in range(self.tableWidget_g1.rowCount()):
-        #     cmd_id = self.tableWidget_g1.item(i, 0).text()
-        #     cmd_name = self.tableWidget_g1.item(i, 1).text()
-        #     cmd_desc = self.tableWidget_g1.item(i, 2).text()
-        #     cmd_affected_attrs = self.tableWidget_g1.item(i, 3).text()
-            
-        #     # cluster 에 맞게 파일 입출력 실행
-        # for i in range(self.tableWidget_g2.rowCount()):
-        #     attr_id = self.tableWidget_g2.item(i, 0).text()
-        #     attr_name = self.tableWidget_g2.item(i, 1).text()
-        #     attr_type = self.tableWidget_g2.item(i, 2).text()
-        #     #cluster 에 맞게 파일 입출력 실행
-        # self.close()
     
     def func_btn_save_ble(self):
         # TODO: implement
